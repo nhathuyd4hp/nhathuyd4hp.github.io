@@ -8,21 +8,51 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="icon" type="image/png" href="cv.png">
     <style>
+        /* --- 1. SETUP VARIABLES (THEMES) --- */
         :root {
+            /* Light Mode (Default) */
+            --bg-body: #555555;
+            --bg-paper: #ffffff;
+            --text-main: #000000;
+            --text-link: #000000;
             --accent-title: #0e6e55;
+            /* Dark Green */
             --accent-text: #0e6e55;
             --accent-line: #a16f0b;
+            /* Gold */
+            --shadow-paper: rgba(0, 0, 0, 0.5);
             --font-main: 'Times New Roman', Times, serif;
+        }
+
+        /* Dark Mode Override */
+        body.dark-mode {
+            --bg-body: #121212;
+            /* Nền trang web tối */
+            --bg-paper: #1e1e1e;
+            /* Nền tờ giấy CV tối */
+            --text-main: #e0e0e0;
+            /* Chữ trắng xám */
+            --text-link: #ffffff;
+            /* Link trắng sáng */
+            --accent-title: #4db6ac;
+            /* Green sáng hơn để nổi trên nền đen */
+            --accent-text: #4db6ac;
+            --accent-line: #ffd54f;
+            /* Gold sáng hơn */
+            --shadow-paper: rgba(0, 0, 0, 0.8);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            /* Hiệu ứng chuyển màu mượt */
         }
 
         body {
-            background-color: #555;
+            background-color: var(--bg-body);
+            color: var(--text-main);
             font-family: var(--font-main);
             font-size: 10pt;
             line-height: 1.4;
@@ -32,17 +62,43 @@
         }
 
         .page {
-            background-color: white;
+            background-color: var(--bg-paper);
             width: 216mm;
             max-width: 100%;
             min-height: 279mm;
             padding: 1.5cm;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 10px var(--shadow-paper);
             position: relative;
         }
 
+        /* --- TOGGLE BUTTON STYLE --- */
+        .theme-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--accent-title);
+            color: white;
+            border: 2px solid white;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            z-index: 1000;
+            transition: transform 0.2s;
+        }
+
+        .theme-toggle-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* --- CONTENT STYLES --- */
         a {
-            color: black;
+            color: var(--text-link);
             text-decoration: none;
         }
 
@@ -85,7 +141,6 @@
             justify-content: space-between;
             align-items: baseline;
             padding-left: 10pt;
-            /* Indent for headings */
         }
 
         .row-bf {
@@ -115,10 +170,13 @@
             margin-bottom: 1px;
         }
 
+        /* Dấu gạch đầu dòng */
         .resume-list>li::before {
             content: "--";
             position: absolute;
             left: -15pt;
+            color: var(--text-main);
+            /* Màu dấu gạch cũng đổi theo theme */
         }
 
         .resume-list ul {
@@ -149,23 +207,56 @@
             margin-bottom: 4pt;
         }
 
+        /* --- PRINT SETTINGS (ALWAYS LIGHT MODE) --- */
         @media print {
             body {
                 background: none;
                 padding: 0;
+                -webkit-print-color-adjust: exact;
             }
 
+            /* Ẩn nút toggle khi in */
+            .theme-toggle-btn {
+                display: none !important;
+            }
+
+            /* Ép về màu trắng đen khi in dù đang bật Dark Mode */
             .page {
                 width: 100%;
                 box-shadow: none;
                 margin: 0;
                 padding: 1.5cm;
+                background-color: #fff !important;
+                color: #000 !important;
+            }
+
+            /* Reset biến màu về Light Mode */
+            body.dark-mode {
+                --text-main: #000;
+                --text-link: #000;
+                --accent-title: #0e6e55;
+                --accent-text: #0e6e55;
+                --accent-line: #a16f0b;
+            }
+
+            a {
+                color: #000 !important;
+                text-decoration: none !important;
+            }
+
+            h1,
+            h2 {
+                color: #0e6e55 !important;
             }
         }
     </style>
 </head>
 
 <body>
+
+    <button class="theme-toggle-btn" id="theme-toggle" title="Switch Light/Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
 
     <div class="page">
         <h1>VAN NGOC NHAT HUY</h1>
@@ -181,7 +272,7 @@
             </a>
             &nbsp; | &nbsp;
             <a href="https://github.com/nhathuyd4hp">
-                <i class="fab fa-github" style="font-size: 0.8em;"></i> github.com/nhathuyd4hp
+                <i class="fab fa-github" style="font-size: 0.8em;"></i> nhathuyd4hp
             </a>
         </div>
         <div class="header-separator"></div>
@@ -327,6 +418,42 @@
         <div style="margin-top: 3pt;"></div>
     </div>
 
+    <script>
+        // Lấy nút toggle
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = toggleBtn.querySelector('i');
+        const body = document.body;
+
+        // Hàm kiểm tra và đổi icon
+        function updateIcon() {
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        }
+
+        // Kiểm tra Local Storage khi load trang
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            updateIcon();
+        }
+
+        // Sự kiện click nút
+        toggleBtn.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            updateIcon();
+
+            // Lưu trạng thái vào Local Storage
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
 </body>
 
 </html>
