@@ -11,26 +11,20 @@
     <link rel="icon" type="image/png" href="cv.png">
 
     <style>
-        /* --- 1. SETUP VARIABLES --- */
         :root {
-            /* Light Mode (Default) */
             --bg-body: #555555;
             --bg-paper: #ffffff;
             --text-main: #000000;
             --text-muted: #333333;
             --text-link: #000000;
             --accent-title: #0e6e55;
-            /* Dark Green */
             --accent-text: #0e6e55;
             --accent-line: #a16f0b;
-            /* Gold */
             --shadow-paper: rgba(0, 0, 0, 0.5);
             --font-main: 'Times New Roman', Times, serif;
             --hover-highlight: rgba(14, 110, 85, 0.08);
-            /* Màu nền khi hover nhẹ */
         }
 
-        /* Dark Mode Override */
         body.dark-mode {
             --bg-body: #121212;
             --bg-paper: #1e1e1e;
@@ -62,7 +56,6 @@
             padding: 20px;
         }
 
-        /* --- PAGE LAYOUT & ANIMATION --- */
         .page {
             background-color: var(--bg-paper);
             width: 216mm;
@@ -71,7 +64,6 @@
             padding: 1.5cm;
             box-shadow: 0 0 15px var(--shadow-paper);
             position: relative;
-            /* Animation: Fade In Up */
             animation: fadeInUp 0.8s ease-out forwards;
             opacity: 0;
             transform: translateY(20px);
@@ -84,7 +76,6 @@
             }
         }
 
-        /* --- FLOATING ACTIONS --- */
         .actions-container {
             position: fixed;
             top: 20px;
@@ -115,7 +106,6 @@
             transform: scale(1.1);
         }
 
-        /* --- TYPOGRAPHY & LINKS --- */
         a {
             color: var(--text-link);
             text-decoration: none;
@@ -156,7 +146,6 @@
             margin-bottom: 2pt;
         }
 
-        /* --- LAYOUT UTILITIES --- */
         .row {
             display: flex;
             justify-content: space-between;
@@ -177,11 +166,9 @@
             margin-top: 5pt;
         }
 
-        /* Hiệu ứng Hover cho các block kinh nghiệm */
         .hover-block {
             padding: 2px 5px;
             margin-left: -5px;
-            /* Bù lại padding để thẳng hàng */
             border-radius: 4px;
             transition: background-color 0.2s;
         }
@@ -190,7 +177,6 @@
             background-color: var(--hover-highlight);
         }
 
-        /* --- LISTS --- */
         ul {
             list-style-type: none;
             padding-left: 0;
@@ -224,7 +210,6 @@
             margin-left: 10pt;
         }
 
-        /* --- SKILLS SECTION (STYLE UPGRADE BUT KEEP CONTENT) --- */
         .skills-container {
             column-count: 2;
             column-gap: 20px;
@@ -238,7 +223,6 @@
             break-inside: avoid;
         }
 
-        /* Làm đẹp phần label (Languages, Backend...) */
         .skills-container li strong {
             display: inline-block;
             min-width: 80px;
@@ -251,7 +235,6 @@
             margin-bottom: 4pt;
         }
 
-        /* --- PRINT SETTINGS (ALWAYS STANDARD LIGHT) --- */
         @media print {
             body {
                 background: none;
@@ -263,7 +246,6 @@
                 display: none !important;
             }
 
-            /* Ẩn nút khi in */
             .page {
                 width: 100%;
                 box-shadow: none;
@@ -489,7 +471,6 @@
             }
         }
 
-        // Kiểm tra Local Storage
         if (localStorage.getItem('theme') === 'dark') {
             body.classList.add('dark-mode');
             updateIcon();
