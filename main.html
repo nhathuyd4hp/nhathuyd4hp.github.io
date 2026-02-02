@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Van Ngoc Nhat Huy - Resume</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- Cấu hình chung --- */
+        :root {
+            --accent-title: #0e6e55;
+            /* Dark Green từ LaTeX */
+            --accent-line: #a16f0b;
+            /* Earthy Gold từ LaTeX */
+            --text-color: #333;
+        }
+
+        body {
+            background-color: #f0f0f0;
+            font-family: "Times New Roman", Times, serif;
+            /* Font Mathptmx tương đương */
+            line-height: 1.4;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* --- Khung trang giấy A4 --- */
+        .page {
+            background: white;
+            width: 210mm;
+            min-height: 297mm;
+            padding: 15mm;
+            /* Canh lề 1.5cm như LaTeX */
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        /* --- Header --- */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: var(--accent-title);
+            font-size: 28pt;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+        }
+
+        .contact-info {
+            border-top: 1px solid var(--accent-line);
+            border-bottom: 1px solid var(--accent-line);
+            padding: 5px 0;
+            font-size: 10pt;
+        }
+
+        .contact-info a {
+            color: black;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .contact-info i {
+            margin-right: 4px;
+        }
+
+        /* --- Section Titles --- */
+        h2 {
+            color: var(--accent-title);
+            font-size: 14pt;
+            border-bottom: 1px solid var(--accent-line);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            padding-bottom: 2px;
+        }
+
+        /* --- Layout Jobs/Projects --- */
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2px;
+        }
+
+        .job-title {
+            font-weight: bold;
+            font-size: 11pt;
+        }
+
+        .job-time {
+            font-weight: bold;
+        }
+
+        .job-sub {
+            display: flex;
+            justify-content: space-between;
+            font-style: italic;
+            margin-bottom: 4px;
+        }
+
+        /* --- Lists --- */
+        ul {
+            margin-top: 0;
+            padding-left: 30px;
+            /* Thụt đầu dòng */
+            margin-bottom: 10px;
+        }
+
+        li {
+            margin-bottom: 2px;
+        }
+
+        /* --- Skills Section (Multicolumn) --- */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .skills-list {
+            list-style: none;
+            padding-left: 10px;
+        }
+
+        .skills-list li {
+            margin-bottom: 4px;
+        }
+
+        /* --- Links --- */
+        a {
+            color: var(--accent-title);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Responsive cho Mobile --- */
+        @media (max-width: 210mm) {
+            .page {
+                width: 100%;
+                height: auto;
+                padding: 10px;
+            }
+
+            .job-header,
+            .job-sub {
+                flex-direction: column;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* --- Chế độ In ấn (Ctrl + P) --- */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+
+            .page {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                height: auto;
+            }
+
+            @page {
+                margin: 0;
+                size: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page">
+        <header>
+            <h1>VAN NGOC NHAT HUY</h1>
+            <div class="contact-info">
+                <a href="tel:0867617246"><i class="fas fa-phone"></i> (+84) 86-761-7246</a> |
+                <a href="mailto:work.nhathuyd4hp@gmail.com"><i class="fas fa-envelope"></i>
+                    work.nhathuyd4hp@gmail.com</a> |
+                <a href="https://github.com/nhathuyd4hp"><i class="fab fa-github"></i> github.com/nhathuyd4hp</a>
+            </div>
+        </header>
+
+        <section>
+            <h2>Education</h2>
+            <div class="job-header">
+                <span class="job-title">University of Information Technology (VNU-HCM)</span>
+                <span class="job-time"></span>
+            </div>
+            <div class="job-sub">
+                <span>Major: Data Science</span>
+            </div>
+        </section>
+
+        <section>
+            <h2>Technical Skills</h2>
+            <div class="skills-grid">
+                <ul class="skills-list">
+                    <li><strong>Languages:</strong> Python, Dart/Flutter, Javascript/Typescript</li>
+                    <li><strong>Backend:</strong> FastAPI, NestJS</li>
+                </ul>
+                <ul class="skills-list">
+                    <li><strong>Databases:</strong> PostgreSQL, MongoDB, MySQL, Redis</li>
+                    <li><strong>DevOps:</strong> Docker, CI/CD, MinIO, Nginx, Grafana Stack</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Work Experience</h2>
+
+            <div class="job-header">
+                <span class="job-title">A.S.T.R Co., Ltd.</span>
+                <span class="job-time">03/2025 -- Present</span>
+            </div>
+            <div class="job-sub">
+                <span>RPA Developer (Python & Flutter)</span>
+            </div>
+            <ul>
+                <li><strong>System Architecture:</strong>
+                    <ul>
+                        <li>Built a central server using <strong>FastAPI</strong> and <strong>Celery</strong> to manage
+                            multiple robots and handle background tasks.</li>
+                        <li>Integrated <strong>Redis</strong> and <strong>WebSockets</strong> for real-time status
+                            updates.</li>
+                        <li>Configured <strong>MinIO</strong> for data storage and <strong>APScheduler</strong> for
+                            automation.</li>
+                    </ul>
+                </li>
+                <li><strong>Automation Tools:</strong> Automated business processes using <strong>Playwright</strong>,
+                    <strong>Selenium</strong>, and <strong>OCR</strong>.
+                </li>
+                <li><strong>Desktop Application:</strong> Developed a Windows app using <strong>Flutter</strong> [Fluent
+                    UI] with <strong>Provider</strong> state management.</li>
+            </ul>
+
+            <div class="job-header">
+                <span class="job-title">Oryza Systems</span>
+                <span class="job-time">10/2024 -- 03/2025</span>
+            </div>
+            <div class="job-sub">
+                <span>Backend Developer</span>
+            </div>
+            <ul>
+                <li><u>Project: Oryza AI Backend</u></li>
+                <li><strong>Oryza AI Service:</strong> RESTful APIs with <strong>FastAPI</strong>,
+                    <strong>Redis</strong> caching, and observability via <strong>Grafana/Loki</strong>.
+                </li>
+                <li><strong>OA-Tools Service:</strong> Integrated <strong>MinIO</strong> and Face Recognition (Yunet).
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Key Projects</h2>
+
+            <div class="job-header">
+                <span class="job-title">Hang Duong Cemetery</span>
+                <span class="job-time"><a href="https://nghiatranghangduong.digifund.tech/vi/home">Website</a></span>
+            </div>
+            <div class="job-sub">
+                <span>Technologies: NestJS, Prisma, PostgreSQL</span>
+            </div>
+            <div style="margin-bottom: 10px;"></div>
+
+            <div class="job-header">
+                <span class="job-title">Business Management System</span>
+                <span class="job-time"><a href="https://github.com/qrbusiness/qrapp-backend">GitHub</a></span>
+            </div>
+            <div class="job-sub">
+                <span>Backend Developer (Python/FastAPI)</span>
+            </div>
+            <ul>
+                <li>Built a security administration system allowing flexible employee permission assignment.</li>
+                <li>Developed <strong>Real-time Order Processing</strong> using WebSockets.</li>
+            </ul>
+
+            <div class="job-header">
+                <span class="job-title">EventHub</span>
+                <span class="job-time"><a href="https://github.com/nhathuyd4hp/EventHub">GitHub</a></span>
+            </div>
+            <ul>
+                <li><strong>Technologies:</strong> ExpressJS, FastAPI, Kafka, Docker, Tyk Gateway.</li>
+                <li><strong>Highlights:</strong> Asynchronous communication via <strong>Kafka</strong> and VNPay
+                    integration.</li>
+            </ul>
+        </section>
+    </div>
+
+</body>
+
+</html>
