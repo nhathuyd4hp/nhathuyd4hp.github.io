@@ -5,15 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Văn Ngọc Nhật Huy</title>
+    <meta name="description" content="Resume of Van Ngoc Nhat Huy - Backend Developer">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="icon" type="image/png" href="cv.png">
+
     <style>
-        /* --- 1. SETUP VARIABLES (THEMES) --- */
+        /* --- 1. SETUP VARIABLES --- */
         :root {
             /* Light Mode (Default) */
             --bg-body: #555555;
             --bg-paper: #ffffff;
             --text-main: #000000;
+            --text-muted: #333333;
             --text-link: #000000;
             --accent-title: #0e6e55;
             /* Dark Green */
@@ -22,32 +26,29 @@
             /* Gold */
             --shadow-paper: rgba(0, 0, 0, 0.5);
             --font-main: 'Times New Roman', Times, serif;
+            --hover-highlight: rgba(14, 110, 85, 0.08);
+            /* Màu nền khi hover nhẹ */
         }
 
         /* Dark Mode Override */
         body.dark-mode {
             --bg-body: #121212;
-            /* Nền trang web tối */
             --bg-paper: #1e1e1e;
-            /* Nền tờ giấy CV tối */
             --text-main: #e0e0e0;
-            /* Chữ trắng xám */
+            --text-muted: #b0b0b0;
             --text-link: #ffffff;
-            /* Link trắng sáng */
             --accent-title: #4db6ac;
-            /* Green sáng hơn để nổi trên nền đen */
             --accent-text: #4db6ac;
             --accent-line: #ffd54f;
-            /* Gold sáng hơn */
-            --shadow-paper: rgba(0, 0, 0, 0.8);
+            --shadow-paper: rgba(0, 0, 0, 0.9);
+            --hover-highlight: rgba(77, 182, 172, 0.15);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            /* Hiệu ứng chuyển màu mượt */
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
         body {
@@ -61,23 +62,42 @@
             padding: 20px;
         }
 
+        /* --- PAGE LAYOUT & ANIMATION --- */
         .page {
             background-color: var(--bg-paper);
             width: 216mm;
             max-width: 100%;
             min-height: 279mm;
             padding: 1.5cm;
-            box-shadow: 0 0 10px var(--shadow-paper);
+            box-shadow: 0 0 15px var(--shadow-paper);
             position: relative;
+            /* Animation: Fade In Up */
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
         }
 
-        /* --- TOGGLE BUTTON STYLE --- */
-        .theme-toggle-btn {
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- FLOATING ACTIONS --- */
+        .actions-container {
             position: fixed;
             top: 20px;
             right: 20px;
-            width: 50px;
-            height: 50px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .action-btn {
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background-color: var(--accent-title);
             color: white;
@@ -87,16 +107,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            z-index: 1000;
+            font-size: 1.1rem;
             transition: transform 0.2s;
         }
 
-        .theme-toggle-btn:hover {
+        .action-btn:hover {
             transform: scale(1.1);
         }
 
-        /* --- CONTENT STYLES --- */
+        /* --- TYPOGRAPHY & LINKS --- */
         a {
             color: var(--text-link);
             text-decoration: none;
@@ -104,6 +123,7 @@
 
         a:hover {
             text-decoration: underline;
+            color: var(--accent-title);
         }
 
         h1 {
@@ -136,6 +156,7 @@
             margin-bottom: 2pt;
         }
 
+        /* --- LAYOUT UTILITIES --- */
         .row {
             display: flex;
             justify-content: space-between;
@@ -149,12 +170,27 @@
 
         .row-it {
             font-style: italic;
+            color: var(--text-muted);
         }
 
         .mt-small {
             margin-top: 5pt;
         }
 
+        /* Hiệu ứng Hover cho các block kinh nghiệm */
+        .hover-block {
+            padding: 2px 5px;
+            margin-left: -5px;
+            /* Bù lại padding để thẳng hàng */
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .hover-block:hover {
+            background-color: var(--hover-highlight);
+        }
+
+        /* --- LISTS --- */
         ul {
             list-style-type: none;
             padding-left: 0;
@@ -170,13 +206,11 @@
             margin-bottom: 1px;
         }
 
-        /* Dấu gạch đầu dòng */
         .resume-list>li::before {
             content: "--";
             position: absolute;
             left: -15pt;
             color: var(--text-main);
-            /* Màu dấu gạch cũng đổi theo theme */
         }
 
         .resume-list ul {
@@ -190,6 +224,7 @@
             margin-left: 10pt;
         }
 
+        /* --- SKILLS SECTION (STYLE UPGRADE BUT KEEP CONTENT) --- */
         .skills-container {
             column-count: 2;
             column-gap: 20px;
@@ -198,7 +233,16 @@
         }
 
         .skills-container li {
-            margin-bottom: 2px;
+            margin-bottom: 4px;
+            padding: 2px 0;
+            break-inside: avoid;
+        }
+
+        /* Làm đẹp phần label (Languages, Backend...) */
+        .skills-container li strong {
+            display: inline-block;
+            min-width: 80px;
+            color: var(--accent-title);
         }
 
         .underline {
@@ -207,7 +251,7 @@
             margin-bottom: 4pt;
         }
 
-        /* --- PRINT SETTINGS (ALWAYS LIGHT MODE) --- */
+        /* --- PRINT SETTINGS (ALWAYS STANDARD LIGHT) --- */
         @media print {
             body {
                 background: none;
@@ -215,12 +259,11 @@
                 -webkit-print-color-adjust: exact;
             }
 
-            /* Ẩn nút toggle khi in */
-            .theme-toggle-btn {
+            .actions-container {
                 display: none !important;
             }
 
-            /* Ép về màu trắng đen khi in dù đang bật Dark Mode */
+            /* Ẩn nút khi in */
             .page {
                 width: 100%;
                 box-shadow: none;
@@ -228,25 +271,21 @@
                 padding: 1.5cm;
                 background-color: #fff !important;
                 color: #000 !important;
+                animation: none;
+                opacity: 1;
+                transform: none;
             }
 
-            /* Reset biến màu về Light Mode */
             body.dark-mode {
                 --text-main: #000;
-                --text-link: #000;
+                --text-muted: #000;
                 --accent-title: #0e6e55;
                 --accent-text: #0e6e55;
-                --accent-line: #a16f0b;
             }
 
             a {
                 color: #000 !important;
                 text-decoration: none !important;
-            }
-
-            h1,
-            h2 {
-                color: #0e6e55 !important;
             }
         }
     </style>
@@ -254,9 +293,14 @@
 
 <body>
 
-    <button class="theme-toggle-btn" id="theme-toggle" title="Switch Light/Dark Mode">
-        <i class="fas fa-moon"></i>
-    </button>
+    <div class="actions-container">
+        <button class="action-btn" onclick="window.print()" title="Download PDF">
+            <i class="fas fa-file-download"></i>
+        </button>
+        <button class="action-btn" id="theme-toggle" title="Switch Theme">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
 
     <div class="page">
         <h1>VAN NGOC NHAT HUY</h1>
@@ -272,38 +316,42 @@
             </a>
             &nbsp; | &nbsp;
             <a href="https://github.com/nhathuyd4hp">
-                <i class="fab fa-github" style="font-size: 0.8em;"></i> nhathuyd4hp
+                <i class="fab fa-github" style="font-size: 0.8em;"></i> github.com/nhathuyd4hp
             </a>
         </div>
         <div class="header-separator"></div>
 
         <h2>Education</h2>
-        <div class="row row-bf">
-            <span>University of Information Technology (VNU-HCM)</span>
-            <span></span>
-        </div>
-        <div class="row row-it">
-            <span>Major: Data Science</span>
-            <span></span>
+        <div class="hover-block">
+            <div class="row row-bf">
+                <span>University of Information Technology (VNU-HCM)</span>
+                <span></span>
+            </div>
+            <div class="row row-it">
+                <span>Major: Data Science</span>
+                <span></span>
+            </div>
         </div>
 
         <h2>Technical Skills</h2>
-        <ul class="skills-container">
-            <li><strong>Languages:</strong> Python, Dart/Flutter, Javascript/Typescript</li>
-            <li><strong>Backend:</strong> FastAPI, NestJS</li>
-            <li><strong>Databases:</strong> PostgreSQL, MongoDB, MySQL, Redis</li>
-            <li><strong>DevOps:</strong> Docker, CI/CD, MinIO, Nginx, Grafana Stack</li>
+        <ul class="skills-container hover-block">
+            <li><strong>Languages</strong> Python, Dart/Flutter, Javascript/Typescript</li>
+            <li><strong>Backend</strong> FastAPI, NestJS</li>
+            <li><strong>Databases</strong> PostgreSQL, MongoDB, MySQL, Redis</li>
+            <li><strong>DevOps</strong> Docker, CI/CD, MinIO, Nginx, Grafana Stack</li>
         </ul>
 
         <h2>Work Experience</h2>
 
-        <div class="row row-bf">
-            <span>A.S.T.R Co., Ltd.</span>
-            <span>03/2025 -- Present</span>
-        </div>
-        <div class="row row-it">
-            <span>RPA Developer (Python & Flutter)</span>
-            <span></span>
+        <div class="hover-block">
+            <div class="row row-bf">
+                <span>A.S.T.R Co., Ltd.</span>
+                <span>03/2025 -- Present</span>
+            </div>
+            <div class="row row-it">
+                <span>RPA Developer (Python & Flutter)</span>
+                <span></span>
+            </div>
         </div>
         <ul class="resume-list">
             <li>
@@ -339,13 +387,15 @@
 
         <div class="mt-small"></div>
 
-        <div class="row row-bf">
-            <span>Oryza Systems</span>
-            <span>10/2024 -- 03/2025</span>
-        </div>
-        <div class="row row-it">
-            <span>Backend Developer</span>
-            <span></span>
+        <div class="hover-block">
+            <div class="row row-bf">
+                <span>Oryza Systems</span>
+                <span>10/2024 -- 03/2025</span>
+            </div>
+            <div class="row row-it">
+                <span>Backend Developer</span>
+                <span></span>
+            </div>
         </div>
         <ul class="resume-list">
             <li style="list-style: none; margin-left: -15px;">
@@ -376,23 +426,27 @@
 
         <h2>Key Projects</h2>
 
-        <div class="row row-bf">
-            <span>Hang Duong Cemetery</span>
-            <span><a href="https://nghiatranghangduong.digifund.tech/vi/home">Website</a></span>
-        </div>
-        <div class="row row-it">
-            <span>Technologies: NestJS, Prisma, PostgreSQL</span>
-            <span></span>
+        <div class="hover-block">
+            <div class="row row-bf">
+                <span>Hang Duong Cemetery</span>
+                <span><a href="https://nghiatranghangduong.digifund.tech/vi/home">Website</a></span>
+            </div>
+            <div class="row row-it">
+                <span>Technologies: NestJS, Prisma, PostgreSQL</span>
+                <span></span>
+            </div>
         </div>
         <div class="mt-small"></div>
 
-        <div class="row row-bf">
-            <span>Business Management System</span>
-            <span><a href="https://github.com/qrbusiness/qrapp-backend">GitHub</a></span>
-        </div>
-        <div class="row row-it">
-            <span>Backend Developer (Python/FastAPI)</span>
-            <span></span>
+        <div class="hover-block">
+            <div class="row row-bf">
+                <span>Business Management System</span>
+                <span><a href="https://github.com/qrbusiness/qrapp-backend">GitHub</a></span>
+            </div>
+            <div class="row row-it">
+                <span>Backend Developer (Python/FastAPI)</span>
+                <span></span>
+            </div>
         </div>
         <ul class="resume-list">
             <li>Built a security administration system allowing business owners to <strong>flexibly assign employee
@@ -404,9 +458,11 @@
                 reports.</li>
         </ul>
 
-        <div class="row row-bf">
-            <span>EventHub</span>
-            <span><a href="https://github.com/nhathuyd4hp/EventHub">GitHub</a></span>
+        <div class="hover-block">
+            <div class="row row-bf">
+                <span>EventHub</span>
+                <span><a href="https://github.com/nhathuyd4hp/EventHub">GitHub</a></span>
+            </div>
         </div>
         <ul class="resume-list">
             <li><strong>Description:</strong> A distributed system supporting event organization and ticket sales.</li>
@@ -419,12 +475,10 @@
     </div>
 
     <script>
-        // Lấy nút toggle
         const toggleBtn = document.getElementById('theme-toggle');
         const icon = toggleBtn.querySelector('i');
         const body = document.body;
 
-        // Hàm kiểm tra và đổi icon
         function updateIcon() {
             if (body.classList.contains('dark-mode')) {
                 icon.classList.remove('fa-moon');
@@ -435,18 +489,15 @@
             }
         }
 
-        // Kiểm tra Local Storage khi load trang
+        // Kiểm tra Local Storage
         if (localStorage.getItem('theme') === 'dark') {
             body.classList.add('dark-mode');
             updateIcon();
         }
 
-        // Sự kiện click nút
         toggleBtn.addEventListener('click', () => {
             body.classList.toggle('dark-mode');
             updateIcon();
-
-            // Lưu trạng thái vào Local Storage
             if (body.classList.contains('dark-mode')) {
                 localStorage.setItem('theme', 'dark');
             } else {
