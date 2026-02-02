@@ -4,134 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Van Ngoc Nhat Huy - Resume</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Resume - Van Ngoc Nhat Huy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* --- Cấu hình chung --- */
+        /* --- General Settings --- */
         :root {
             --accent-title: #0e6e55;
-            /* Dark Green từ LaTeX */
+            /* Dark Green */
+            --accent-text: #0e6e55;
             --accent-line: #a16f0b;
-            /* Earthy Gold từ LaTeX */
-            --text-color: #333;
+            /* Earthy Gold */
+            --font-main: 'Times New Roman', Times, serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            background-color: #f0f0f0;
-            font-family: "Times New Roman", Times, serif;
-            /* Font Mathptmx tương đương */
+            background-color: #555;
+            font-family: var(--font-main);
+            font-size: 10pt;
             line-height: 1.4;
-            color: var(--text-color);
-            margin: 0;
+            display: flex;
+            justify-content: center;
             padding: 20px;
         }
 
-        /* --- Khung trang giấy A4 --- */
+        /* --- Page Layout --- */
         .page {
-            background: white;
-            width: 210mm;
-            min-height: 297mm;
-            padding: 15mm;
-            /* Canh lề 1.5cm như LaTeX */
-            margin: 0 auto;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-        }
-
-        /* --- Header --- */
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            color: var(--accent-title);
-            font-size: 28pt;
-            margin: 0 0 10px 0;
-            text-transform: uppercase;
-        }
-
-        .contact-info {
-            border-top: 1px solid var(--accent-line);
-            border-bottom: 1px solid var(--accent-line);
-            padding: 5px 0;
-            font-size: 10pt;
-        }
-
-        .contact-info a {
-            color: black;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-
-        .contact-info i {
-            margin-right: 4px;
-        }
-
-        /* --- Section Titles --- */
-        h2 {
-            color: var(--accent-title);
-            font-size: 14pt;
-            border-bottom: 1px solid var(--accent-line);
-            margin-top: 20px;
-            margin-bottom: 10px;
-            padding-bottom: 2px;
-        }
-
-        /* --- Layout Jobs/Projects --- */
-        .job-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 2px;
-        }
-
-        .job-title {
-            font-weight: bold;
-            font-size: 11pt;
-        }
-
-        .job-time {
-            font-weight: bold;
-        }
-
-        .job-sub {
-            display: flex;
-            justify-content: space-between;
-            font-style: italic;
-            margin-bottom: 4px;
-        }
-
-        /* --- Lists --- */
-        ul {
-            margin-top: 0;
-            padding-left: 30px;
-            /* Thụt đầu dòng */
-            margin-bottom: 10px;
-        }
-
-        li {
-            margin-bottom: 2px;
-        }
-
-        /* --- Skills Section (Multicolumn) --- */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .skills-list {
-            list-style: none;
-            padding-left: 10px;
-        }
-
-        .skills-list li {
-            margin-bottom: 4px;
+            background-color: white;
+            width: 216mm;
+            max-width: 100%;
+            min-height: 279mm;
+            padding: 1.5cm;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            position: relative;
         }
 
         /* --- Links --- */
         a {
-            color: var(--accent-title);
+            color: black;
             text-decoration: none;
         }
 
@@ -139,25 +54,117 @@
             text-decoration: underline;
         }
 
-        /* --- Responsive cho Mobile --- */
-        @media (max-width: 210mm) {
-            .page {
-                width: 100%;
-                height: auto;
-                padding: 10px;
-            }
-
-            .job-header,
-            .job-sub {
-                flex-direction: column;
-            }
-
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
+        /* --- Typography --- */
+        h1 {
+            color: var(--accent-title);
+            font-size: 24pt;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10pt;
+            text-transform: uppercase;
         }
 
-        /* --- Chế độ In ấn (Ctrl + P) --- */
+        h2 {
+            color: var(--accent-text);
+            font-size: 12pt;
+            font-weight: bold;
+            border-bottom: 1px solid var(--accent-line);
+            margin-top: 10pt;
+            margin-bottom: 5pt;
+            padding-bottom: 2px;
+        }
+
+        .header-separator {
+            border-top: 1px solid var(--accent-line);
+            margin: 2pt 0;
+        }
+
+        .contact-info {
+            text-align: center;
+            font-size: 9pt;
+            margin-bottom: 2pt;
+        }
+
+        /* --- Layout Utilities --- */
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding-left: 10pt;
+            /* Indent for headings */
+        }
+
+        .row-bf {
+            font-weight: bold;
+        }
+
+        .row-it {
+            font-style: italic;
+        }
+
+        .mt-small {
+            margin-top: 5pt;
+        }
+
+        /* --- Lists --- */
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        /* Resume List (Experience/Projects) */
+        .resume-list {
+            margin-top: -3px;
+            padding-left: 30pt;
+            /* Standard indent for main list */
+        }
+
+        .resume-list>li {
+            position: relative;
+            margin-bottom: 1px;
+        }
+
+        .resume-list>li::before {
+            content: "--";
+            position: absolute;
+            left: -15pt;
+        }
+
+        /* Nested List */
+        .resume-list ul {
+            padding-left: 15pt;
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+
+        .resume-list ul li {
+            list-style-type: disc;
+            margin-left: 10pt;
+        }
+
+        /* --- SKILLS SECTION (FIXED) --- */
+        .skills-container {
+            column-count: 2;
+            column-gap: 20px;
+            /* Đã sửa: Xóa padding 75pt gây thụt lề */
+            padding-left: 10pt;
+            /* Canh lề nhẹ giống các tiêu đề khác */
+            margin-top: 0;
+        }
+
+        .skills-container li {
+            margin-bottom: 2px;
+            /* Không dùng dấu gạch ngang (--) cho phần này */
+        }
+
+        /* Helper */
+        .underline {
+            text-decoration: underline;
+            display: inline-block;
+            margin-bottom: 4pt;
+        }
+
+        /* Print Settings */
         @media print {
             body {
                 background: none;
@@ -165,15 +172,10 @@
             }
 
             .page {
+                width: 100%;
                 box-shadow: none;
                 margin: 0;
-                width: 100%;
-                height: auto;
-            }
-
-            @page {
-                margin: 0;
-                size: auto;
+                padding: 1.5cm;
             }
         }
     </style>
@@ -182,120 +184,163 @@
 <body>
 
     <div class="page">
-        <header>
-            <h1>VAN NGOC NHAT HUY</h1>
-            <div class="contact-info">
-                <a href="tel:0867617246"><i class="fas fa-phone"></i> (+84) 86-761-7246</a> |
-                <a href="mailto:work.nhathuyd4hp@gmail.com"><i class="fas fa-envelope"></i>
-                    work.nhathuyd4hp@gmail.com</a> |
-                <a href="https://github.com/nhathuyd4hp"><i class="fab fa-github"></i> github.com/nhathuyd4hp</a>
-            </div>
-        </header>
+        <h1>VAN NGOC NHAT HUY</h1>
 
-        <section>
-            <h2>Education</h2>
-            <div class="job-header">
-                <span class="job-title">University of Information Technology (VNU-HCM)</span>
-                <span class="job-time"></span>
-            </div>
-            <div class="job-sub">
-                <span>Major: Data Science</span>
-            </div>
-        </section>
+        <div class="header-separator"></div>
+        <div class="contact-info">
+            <a href="tel:0867617246">
+                <i class="fas fa-phone" style="font-size: 0.8em;"></i> (+84) 86-761-7246
+            </a>
+            &nbsp; | &nbsp;
+            <a href="mailto:work.nhathuyd4hp@gmail.com">
+                <i class="fas fa-envelope" style="font-size: 0.8em;"></i> work.nhathuyd4hp@gmail.com
+            </a>
+            &nbsp; | &nbsp;
+            <a href="https://github.com/nhathuyd4hp">
+                <i class="fab fa-github" style="font-size: 0.8em;"></i> github.com/nhathuyd4hp
+            </a>
+        </div>
+        <div class="header-separator"></div>
 
-        <section>
-            <h2>Technical Skills</h2>
-            <div class="skills-grid">
-                <ul class="skills-list">
-                    <li><strong>Languages:</strong> Python, Dart/Flutter, Javascript/Typescript</li>
-                    <li><strong>Backend:</strong> FastAPI, NestJS</li>
+        <h2>Education</h2>
+        <div class="row row-bf">
+            <span>University of Information Technology (VNU-HCM)</span>
+            <span></span>
+        </div>
+        <div class="row row-it">
+            <span>Major: Data Science</span>
+            <span></span>
+        </div>
+
+        <h2>Technical Skills</h2>
+        <ul class="skills-container">
+            <li><strong>Languages:</strong> Python, Dart/Flutter, Javascript/Typescript</li>
+            <li><strong>Backend:</strong> FastAPI, NestJS</li>
+            <li><strong>Databases:</strong> PostgreSQL, MongoDB, MySQL, Redis</li>
+            <li><strong>DevOps:</strong> Docker, CI/CD, MinIO, Nginx, Grafana Stack</li>
+        </ul>
+
+        <h2>Work Experience</h2>
+
+        <div class="row row-bf">
+            <span>A.S.T.R Co., Ltd.</span>
+            <span>03/2025 -- Present</span>
+        </div>
+        <div class="row row-it">
+            <span>RPA Developer (Python & Flutter)</span>
+            <span></span>
+        </div>
+        <ul class="resume-list">
+            <li>
+                <strong>System Architecture:</strong>
+                <ul>
+                    <li>Built a central server using <strong>FastAPI</strong> and <strong>Celery</strong> to manage
+                        multiple robots and handle background tasks.</li>
+                    <li>Integrated <strong>Redis</strong> and <strong>WebSockets</strong> to update robot status and
+                        display real-time logs with low latency.</li>
+                    <li>Configured <strong>MinIO</strong> for storing data files for robots.</li>
+                    <li>Integrated scheduling features using <strong>APScheduler</strong>, allowing users to set
+                        automated run times for robots.</li>
                 </ul>
-                <ul class="skills-list">
-                    <li><strong>Databases:</strong> PostgreSQL, MongoDB, MySQL, Redis</li>
-                    <li><strong>DevOps:</strong> Docker, CI/CD, MinIO, Nginx, Grafana Stack</li>
+            </li>
+            <li>
+                <strong>Automation Tools:</strong>
+                <ul>
+                    <li>Automated business processes using <strong>Playwright</strong>, <strong>Selenium</strong>, and
+                        <strong>OCR</strong>.
+                    </li>
                 </ul>
-            </div>
-        </section>
+            </li>
+            <li>
+                <strong>Desktop Application:</strong>
+                <ul>
+                    <li>Developed a Windows application using <strong>Flutter</strong> [<strong>Fluent UI</strong>].
+                    </li>
+                    <li>Used <strong>Provider</strong> for state management to seamlessly display real-time data
+                        directly from the server.</li>
+                </ul>
+            </li>
+        </ul>
 
-        <section>
-            <h2>Work Experience</h2>
+        <div class="mt-small"></div>
 
-            <div class="job-header">
-                <span class="job-title">A.S.T.R Co., Ltd.</span>
-                <span class="job-time">03/2025 -- Present</span>
-            </div>
-            <div class="job-sub">
-                <span>RPA Developer (Python & Flutter)</span>
-            </div>
-            <ul>
-                <li><strong>System Architecture:</strong>
-                    <ul>
-                        <li>Built a central server using <strong>FastAPI</strong> and <strong>Celery</strong> to manage
-                            multiple robots and handle background tasks.</li>
-                        <li>Integrated <strong>Redis</strong> and <strong>WebSockets</strong> for real-time status
-                            updates.</li>
-                        <li>Configured <strong>MinIO</strong> for data storage and <strong>APScheduler</strong> for
-                            automation.</li>
-                    </ul>
-                </li>
-                <li><strong>Automation Tools:</strong> Automated business processes using <strong>Playwright</strong>,
-                    <strong>Selenium</strong>, and <strong>OCR</strong>.
-                </li>
-                <li><strong>Desktop Application:</strong> Developed a Windows app using <strong>Flutter</strong> [Fluent
-                    UI] with <strong>Provider</strong> state management.</li>
-            </ul>
+        <div class="row row-bf">
+            <span>Oryza Systems</span>
+            <span>10/2024 -- 03/2025</span>
+        </div>
+        <div class="row row-it">
+            <span>Backend Developer</span>
+            <span></span>
+        </div>
+        <ul class="resume-list">
+            <li style="list-style: none; margin-left: -15px;">
+                <span class="underline">Project: Oryza AI Backend</span>
+            </li>
+            <li>
+                <strong>Oryza AI Service:</strong>
+                <ul>
+                    <li>Developed RESTful APIs to handle camera data and system configurations using
+                        <strong>FastAPI</strong>.
+                    </li>
+                    <li>Optimized API performance by implementing <strong>Redis</strong> caching for high-frequency
+                        requests.</li>
+                    <li>Established a centralized observability system using <strong>Grafana, Loki, and
+                            Promtail</strong>.</li>
+                    <li>Containerized applications using <strong>Docker</strong> and managed deployment to the Staging
+                        environment.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>OA-Tools Service:</strong>
+                <ul>
+                    <li>Integrated <strong>MinIO (S3)</strong> for large-scale image storage management.</li>
+                    <li>Implemented Face Recognition features using the <strong>Yunet</strong> engine.</li>
+                </ul>
+            </li>
+        </ul>
 
-            <div class="job-header">
-                <span class="job-title">Oryza Systems</span>
-                <span class="job-time">10/2024 -- 03/2025</span>
-            </div>
-            <div class="job-sub">
-                <span>Backend Developer</span>
-            </div>
-            <ul>
-                <li><u>Project: Oryza AI Backend</u></li>
-                <li><strong>Oryza AI Service:</strong> RESTful APIs with <strong>FastAPI</strong>,
-                    <strong>Redis</strong> caching, and observability via <strong>Grafana/Loki</strong>.
-                </li>
-                <li><strong>OA-Tools Service:</strong> Integrated <strong>MinIO</strong> and Face Recognition (Yunet).
-                </li>
-            </ul>
-        </section>
+        <h2>Key Projects</h2>
 
-        <section>
-            <h2>Key Projects</h2>
+        <div class="row row-bf">
+            <span>Hang Duong Cemetery</span>
+            <span><a href="https://nghiatranghangduong.digifund.tech/vi/home">Website</a></span>
+        </div>
+        <div class="row row-it">
+            <span>Technologies: NestJS, Prisma, PostgreSQL</span>
+            <span></span>
+        </div>
+        <div class="mt-small"></div>
 
-            <div class="job-header">
-                <span class="job-title">Hang Duong Cemetery</span>
-                <span class="job-time"><a href="https://nghiatranghangduong.digifund.tech/vi/home">Website</a></span>
-            </div>
-            <div class="job-sub">
-                <span>Technologies: NestJS, Prisma, PostgreSQL</span>
-            </div>
-            <div style="margin-bottom: 10px;"></div>
+        <div class="row row-bf">
+            <span>Business Management System</span>
+            <span><a href="https://github.com/qrbusiness/qrapp-backend">GitHub</a></span>
+        </div>
+        <div class="row row-it">
+            <span>Backend Developer (Python/FastAPI)</span>
+            <span></span>
+        </div>
+        <ul class="resume-list">
+            <li>Built a security administration system allowing business owners to <strong>flexibly assign employee
+                    permissions</strong>. Owners can grant specific rights to roles (e.g., Cashiers can sell but cannot
+                modify prices), ensuring strict data control.</li>
+            <li>Developed <strong>Real-time Order Processing</strong> using WebSockets, ensuring sellers receive
+                immediate sales notifications.</li>
+            <li>Built APIs to manage complex business data including multi-branch inventory, products, and revenue
+                reports.</li>
+        </ul>
 
-            <div class="job-header">
-                <span class="job-title">Business Management System</span>
-                <span class="job-time"><a href="https://github.com/qrbusiness/qrapp-backend">GitHub</a></span>
-            </div>
-            <div class="job-sub">
-                <span>Backend Developer (Python/FastAPI)</span>
-            </div>
-            <ul>
-                <li>Built a security administration system allowing flexible employee permission assignment.</li>
-                <li>Developed <strong>Real-time Order Processing</strong> using WebSockets.</li>
-            </ul>
+        <div class="row row-bf">
+            <span>EventHub</span>
+            <span><a href="https://github.com/nhathuyd4hp/EventHub">GitHub</a></span>
+        </div>
+        <ul class="resume-list">
+            <li><strong>Description:</strong> A distributed system supporting event organization and ticket sales.</li>
+            <li><strong>Technologies:</strong> ExpressJS, FastAPI, Kafka, Docker, Tyk Gateway.</li>
+            <li><strong>Highlights:</strong> Handled asynchronous communication via <strong>Kafka</strong> (Notification
+                Service) and integrated the VNPay payment gateway.</li>
+        </ul>
 
-            <div class="job-header">
-                <span class="job-title">EventHub</span>
-                <span class="job-time"><a href="https://github.com/nhathuyd4hp/EventHub">GitHub</a></span>
-            </div>
-            <ul>
-                <li><strong>Technologies:</strong> ExpressJS, FastAPI, Kafka, Docker, Tyk Gateway.</li>
-                <li><strong>Highlights:</strong> Asynchronous communication via <strong>Kafka</strong> and VNPay
-                    integration.</li>
-            </ul>
-        </section>
+        <div style="margin-top: 3pt;"></div>
     </div>
 
 </body>
