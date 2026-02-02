@@ -4,16 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume - Van Ngoc Nhat Huy</title>
+    <title>Văn Ngọc Nhật Huy</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" type="image/png" href="cv.png">
     <style>
-        /* --- General Settings --- */
         :root {
             --accent-title: #0e6e55;
-            /* Dark Green */
             --accent-text: #0e6e55;
             --accent-line: #a16f0b;
-            /* Earthy Gold */
             --font-main: 'Times New Roman', Times, serif;
         }
 
@@ -33,7 +31,6 @@
             padding: 20px;
         }
 
-        /* --- Page Layout --- */
         .page {
             background-color: white;
             width: 216mm;
@@ -44,7 +41,6 @@
             position: relative;
         }
 
-        /* --- Links --- */
         a {
             color: black;
             text-decoration: none;
@@ -54,7 +50,6 @@
             text-decoration: underline;
         }
 
-        /* --- Typography --- */
         h1 {
             color: var(--accent-title);
             font-size: 24pt;
@@ -85,7 +80,6 @@
             margin-bottom: 2pt;
         }
 
-        /* --- Layout Utilities --- */
         .row {
             display: flex;
             justify-content: space-between;
@@ -106,17 +100,14 @@
             margin-top: 5pt;
         }
 
-        /* --- Lists --- */
         ul {
             list-style-type: none;
             padding-left: 0;
         }
 
-        /* Resume List (Experience/Projects) */
         .resume-list {
             margin-top: -3px;
             padding-left: 30pt;
-            /* Standard indent for main list */
         }
 
         .resume-list>li {
@@ -130,7 +121,6 @@
             left: -15pt;
         }
 
-        /* Nested List */
         .resume-list ul {
             padding-left: 15pt;
             margin-top: 2px;
@@ -142,29 +132,23 @@
             margin-left: 10pt;
         }
 
-        /* --- SKILLS SECTION (FIXED) --- */
         .skills-container {
             column-count: 2;
             column-gap: 20px;
-            /* Đã sửa: Xóa padding 75pt gây thụt lề */
             padding-left: 10pt;
-            /* Canh lề nhẹ giống các tiêu đề khác */
             margin-top: 0;
         }
 
         .skills-container li {
             margin-bottom: 2px;
-            /* Không dùng dấu gạch ngang (--) cho phần này */
         }
 
-        /* Helper */
         .underline {
             text-decoration: underline;
             display: inline-block;
             margin-bottom: 4pt;
         }
 
-        /* Print Settings */
         @media print {
             body {
                 background: none;
