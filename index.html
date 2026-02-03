@@ -4,38 +4,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Văn Ngọc Nhật Huy</title>
+    <title>Văn Ngọc Nhật Huy - Resume</title>
     <meta name="description" content="Resume of Van Ngoc Nhat Huy - Backend Developer">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="cv.png">
 
     <style>
         :root {
-            --bg-body: #555555;
+            /* Light Theme */
+            --bg-body: #f0f2f5;
             --bg-paper: #ffffff;
-            --text-main: #000000;
-            --text-muted: #333333;
-            --text-link: #000000;
-            --accent-title: #0e6e55;
-            --accent-text: #0e6e55;
-            --accent-line: #a16f0b;
-            --shadow-paper: rgba(0, 0, 0, 0.5);
-            --font-main: 'Times New Roman', Times, serif;
-            --hover-highlight: rgba(14, 110, 85, 0.08);
+            --text-main: #2d3748;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --accent-primary: #0e6e55;
+            /* Teal Green */
+            --accent-secondary: #e6fffa;
+            --border-color: #e2e8f0;
+            --shadow-paper: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --font-main: 'Roboto', sans-serif;
+            --timeline-color: #cbd5e0;
         }
 
         body.dark-mode {
-            --bg-body: #121212;
-            --bg-paper: #1e1e1e;
-            --text-main: #e0e0e0;
-            --text-muted: #b0b0b0;
-            --text-link: #ffffff;
-            --accent-title: #4db6ac;
-            --accent-text: #4db6ac;
-            --accent-line: #ffd54f;
-            --shadow-paper: rgba(0, 0, 0, 0.9);
-            --hover-highlight: rgba(77, 182, 172, 0.15);
+            /* Dark Theme */
+            --bg-body: #1a202c;
+            --bg-paper: #2d3748;
+            --text-main: #edf2f7;
+            --text-secondary: #cbd5e0;
+            --text-muted: #a0aec0;
+            --accent-primary: #4fd1c5;
+            --accent-secondary: #285e61;
+            --border-color: #4a5568;
+            --shadow-paper: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --timeline-color: #4a5568;
         }
 
         * {
@@ -49,33 +57,214 @@
             background-color: var(--bg-body);
             color: var(--text-main);
             font-family: var(--font-main);
-            font-size: 10pt;
-            line-height: 1.4;
+            font-size: 14px;
+            line-height: 1.6;
             display: flex;
             justify-content: center;
-            padding: 20px;
+            padding: 40px 20px;
+            min-height: 100vh;
         }
 
+        /* A4 Page Styling */
         .page {
             background-color: var(--bg-paper);
-            width: 216mm;
-            max-width: 100%;
-            min-height: 279mm;
-            padding: 1.5cm;
-            box-shadow: 0 0 15px var(--shadow-paper);
+            width: 210mm;
+            /* Standard A4 width */
+            min-height: 297mm;
+            /* Standard A4 height */
+            padding: 40px 50px;
+            box-shadow: var(--shadow-paper);
             position: relative;
-            animation: fadeInUp 0.8s ease-out forwards;
-            opacity: 0;
-            transform: translateY(20px);
+            animation: fadeIn 0.6s ease-out;
+            border-radius: 4px;
         }
 
-        @keyframes fadeInUp {
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
+        /* Links */
+        a {
+            color: var(--text-main);
+            text-decoration: none;
+            position: relative;
+            font-weight: 500;
+        }
+
+        a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--accent-primary);
+            font-size: 32px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .contact-info a {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .contact-info a:hover {
+            background-color: var(--accent-secondary);
+            color: var(--accent-primary);
+        }
+
+        .separator {
+            width: 1px;
+            height: 14px;
+            background-color: var(--border-color);
+            display: inline-block;
+        }
+
+        /* Sections */
+        h2 {
+            color: var(--accent-primary);
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--border-color);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Experience Items & Timeline */
+        .experience-item {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 20px;
+            border-left: 2px solid var(--timeline-color);
+        }
+
+        .experience-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--bg-paper);
+            border: 2px solid var(--accent-primary);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+
+        .company-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .duration {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .job-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--accent-primary);
+            margin-bottom: 8px;
+        }
+
+        /* Lists */
+        ul {
+            list-style-type: none;
+        }
+
+        .resume-list li {
+            position: relative;
+            margin-bottom: 6px;
+            padding-left: 15px;
+            color: var(--text-secondary);
+        }
+
+        .resume-list li::before {
+            content: "•";
+            color: var(--accent-primary);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Nested Lists */
+        .resume-list ul {
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        .resume-list ul li {
+            font-size: 0.95em;
+            color: var(--text-muted);
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 30px;
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: baseline;
+        }
+
+        .skill-label {
+            font-weight: 700;
+            min-width: 90px;
+            color: var(--text-main);
+            font-size: 13px;
+        }
+
+        .skill-value {
+            color: var(--text-secondary);
+        }
+
+        /* Buttons (Fixed) */
         .actions-container {
             position: fixed;
             top: 20px;
@@ -90,184 +279,118 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            background-color: var(--accent-title);
-            color: white;
-            border: 2px solid white;
+            background-color: var(--bg-paper);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
-            transition: transform 0.2s;
+            font-size: 1.2rem;
+            transition: all 0.2s;
         }
 
         .action-btn:hover {
-            transform: scale(1.1);
+            transform: translateY(-2px);
+            background-color: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
         }
 
-        a {
-            color: var(--text-link);
-            text-decoration: none;
+        /* Helper Classes */
+        .project-link {
+            font-size: 12px;
+            padding: 2px 6px;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            margin-left: 8px;
         }
 
-        a:hover {
-            text-decoration: underline;
-            color: var(--accent-title);
+        .project-link:hover {
+            background-color: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
         }
 
-        h1 {
-            color: var(--accent-title);
-            font-size: 24pt;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 10pt;
-            text-transform: uppercase;
-        }
-
-        h2 {
-            color: var(--accent-text);
-            font-size: 12pt;
-            font-weight: bold;
-            border-bottom: 1px solid var(--accent-line);
-            margin-top: 10pt;
-            margin-bottom: 5pt;
-            padding-bottom: 2px;
-        }
-
-        .header-separator {
-            border-top: 1px solid var(--accent-line);
-            margin: 2pt 0;
-        }
-
-        .contact-info {
-            text-align: center;
-            font-size: 9pt;
-            margin-bottom: 2pt;
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            padding-left: 10pt;
-        }
-
-        .row-bf {
-            font-weight: bold;
-        }
-
-        .row-it {
-            font-style: italic;
-            color: var(--text-muted);
-        }
-
-        .mt-small {
-            margin-top: 5pt;
-        }
-
-        .hover-block {
-            padding: 2px 5px;
-            margin-left: -5px;
-            border-radius: 4px;
-            transition: background-color 0.2s;
-        }
-
-        .hover-block:hover {
-            background-color: var(--hover-highlight);
-        }
-
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-
-        .resume-list {
-            margin-top: -3px;
-            padding-left: 30pt;
-        }
-
-        .resume-list>li {
-            position: relative;
-            margin-bottom: 1px;
-        }
-
-        .resume-list>li::before {
-            content: "--";
-            position: absolute;
-            left: -15pt;
-            color: var(--text-main);
-        }
-
-        .resume-list ul {
-            padding-left: 15pt;
-            margin-top: 2px;
-            margin-bottom: 2px;
-        }
-
-        .resume-list ul li {
-            list-style-type: disc;
-            margin-left: 10pt;
-        }
-
-        .skills-container {
-            column-count: 2;
-            column-gap: 20px;
-            padding-left: 10pt;
-            margin-top: 0;
-        }
-
-        .skills-container li {
-            margin-bottom: 4px;
-            padding: 2px 0;
-            break-inside: avoid;
-        }
-
-        .skills-container li strong {
-            display: inline-block;
-            min-width: 80px;
-            color: var(--accent-title);
-        }
-
-        .underline {
-            text-decoration: underline;
-            display: inline-block;
-            margin-bottom: 4pt;
-        }
-
+        /* Print Styles */
         @media print {
             body {
                 background: none;
                 padding: 0;
-                -webkit-print-color-adjust: exact;
-            }
-
-            .actions-container {
-                display: none !important;
             }
 
             .page {
                 width: 100%;
                 box-shadow: none;
+                padding: 0;
                 margin: 0;
-                padding: 1.5cm;
-                background-color: #fff !important;
-                color: #000 !important;
-                animation: none;
-                opacity: 1;
-                transform: none;
+                border: none;
             }
 
-            body.dark-mode {
-                --text-main: #000;
-                --text-muted: #000;
-                --accent-title: #0e6e55;
-                --accent-text: #0e6e55;
+            .actions-container {
+                display: none;
+            }
+
+            /* Force colors for print */
+            body,
+            .page {
+                background-color: #fff !important;
+                color: #000 !important;
             }
 
             a {
                 color: #000 !important;
                 text-decoration: none !important;
+            }
+
+            h1,
+            h2,
+            .job-title,
+            .company-name {
+                color: #000 !important;
+            }
+
+            .project-link {
+                border: 1px solid #ccc;
+                color: #000 !important;
+            }
+
+            /* Break Handling */
+            h2 {
+                break-after: avoid;
+            }
+
+            .experience-item {
+                break-inside: avoid;
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .page {
+                width: 100%;
+                padding: 20px;
+                min-height: auto;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .job-header {
+                flex-direction: column;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .actions-container {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+                flex-direction: row;
             }
         }
     </style>
@@ -285,175 +408,184 @@
     </div>
 
     <div class="page">
-        <h1>VAN NGOC NHAT HUY</h1>
-
-        <div class="header-separator"></div>
-        <div class="contact-info">
-            <a href="tel:0867617246">
-                <i class="fas fa-phone" style="font-size: 0.8em;"></i> (+84) 86-761-7246
-            </a>
-            &nbsp; | &nbsp;
-            <a href="mailto:work.nhathuyd4hp@gmail.com">
-                <i class="fas fa-envelope" style="font-size: 0.8em;"></i> work.nhathuyd4hp@gmail.com
-            </a>
-            &nbsp; | &nbsp;
-            <a href="https://github.com/nhathuyd4hp">
-                <i class="fab fa-github" style="font-size: 0.8em;"></i> github.com/nhathuyd4hp
-            </a>
-        </div>
-        <div class="header-separator"></div>
-
-        <h2>Education</h2>
-        <div class="hover-block">
-            <div class="row row-bf">
-                <span>University of Information Technology (VNU-HCM)</span>
-                <span></span>
+        <header>
+            <h1>Van Ngoc Nhat Huy</h1>
+            <div class="contact-info">
+                <a href="tel:0867617246">
+                    <i class="fas fa-phone-alt"></i> (+84) 86-761-7246
+                </a>
+                <span class="separator"></span>
+                <a href="mailto:work.nhathuyd4hp@gmail.com">
+                    <i class="fas fa-envelope"></i> work.nhathuyd4hp@gmail.com
+                </a>
+                <span class="separator"></span>
+                <a href="https://github.com/nhathuyd4hp" target="_blank">
+                    <i class="fab fa-github"></i> github.com/nhathuyd4hp
+                </a>
             </div>
-            <div class="row row-it">
-                <span>Major: Data Science</span>
-                <span></span>
-            </div>
-        </div>
+        </header>
 
-        <h2>Technical Skills</h2>
-        <ul class="skills-container hover-block">
-            <li><strong>Languages</strong> Python, Dart/Flutter, Javascript/Typescript</li>
-            <li><strong>Backend</strong> FastAPI, NestJS</li>
-            <li><strong>Databases</strong> PostgreSQL, MongoDB, MySQL, Redis</li>
-            <li><strong>DevOps</strong> Docker, CI/CD, MinIO, Nginx, Grafana Stack</li>
-        </ul>
-
-        <h2>Work Experience</h2>
-
-        <div class="hover-block">
-            <div class="row row-bf">
-                <span>A.S.T.R Co., Ltd.</span>
-                <span>03/2025 -- Present</span>
+        <section>
+            <h2>Education</h2>
+            <div class="experience-item" style="border-left-color: transparent; padding-left: 0;">
+                <div style="border-left: 2px solid var(--accent-primary); padding-left: 15px;">
+                    <div class="job-header">
+                        <span class="company-name">University of Information Technology (VNU-HCM)</span>
+                    </div>
+                    <div class="job-title" style="margin-bottom: 0;">Major: Data Science</div>
+                </div>
             </div>
-            <div class="row row-it">
-                <span>RPA Developer (Python & Flutter)</span>
-                <span></span>
+        </section>
+
+        <section>
+            <h2>Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <span class="skill-label">Languages</span>
+                    <span class="skill-value">Python, Dart/Flutter, Javascript/Typescript</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-label">Backend</span>
+                    <span class="skill-value">FastAPI, NestJS</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-label">Databases</span>
+                    <span class="skill-value">PostgreSQL, MongoDB, MySQL, Redis</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-label">DevOps</span>
+                    <span class="skill-value">Docker, CI/CD, MinIO, Nginx, Grafana Stack</span>
+                </div>
             </div>
-        </div>
-        <ul class="resume-list">
-            <li>
-                <strong>System Architecture:</strong>
-                <ul>
-                    <li>Built a central server using <strong>FastAPI</strong> and <strong>Celery</strong> to manage
-                        multiple robots and handle background tasks.</li>
-                    <li>Integrated <strong>Redis</strong> and <strong>WebSockets</strong> to update robot status and
-                        display real-time logs with low latency.</li>
-                    <li>Configured <strong>MinIO</strong> for storing data files for robots.</li>
-                    <li>Integrated scheduling features using <strong>APScheduler</strong>, allowing users to set
-                        automated run times for robots.</li>
-                </ul>
-            </li>
-            <li>
-                <strong>Automation Tools:</strong>
-                <ul>
-                    <li>Automated business processes using <strong>Playwright</strong>, <strong>Selenium</strong>, and
-                        <strong>OCR</strong>.
+        </section>
+
+        <section>
+            <h2>Work Experience</h2>
+
+            <div class="experience-item">
+                <div class="job-header">
+                    <span class="company-name">A.S.T.R Co., Ltd.</span>
+                    <span class="duration">03/2025 -- Present</span>
+                </div>
+                <div class="job-title">RPA Developer (Python & Flutter)</div>
+                <ul class="resume-list">
+                    <li>
+                        <strong>System Architecture:</strong>
+                        <ul>
+                            <li>Built a central server using <strong>FastAPI</strong> and <strong>Celery</strong> to
+                                manage multiple robots and handle background tasks.</li>
+                            <li>Integrated <strong>Redis</strong> and <strong>WebSockets</strong> to update robot status
+                                and display real-time logs with low latency.</li>
+                            <li>Configured <strong>MinIO</strong> for storing data files for robots.</li>
+                            <li>Integrated scheduling features using <strong>APScheduler</strong>, allowing users to set
+                                automated run times for robots.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Automation Tools:</strong>
+                        <ul>
+                            <li>Automated business processes using <strong>Playwright</strong>,
+                                <strong>Selenium</strong>, and <strong>OCR</strong>.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Desktop Application:</strong>
+                        <ul>
+                            <li>Developed a Windows application using <strong>Flutter</strong> [<strong>Fluent
+                                    UI</strong>].</li>
+                            <li>Used <strong>Provider</strong> for state management to seamlessly display real-time data
+                                directly from the server.</li>
+                        </ul>
                     </li>
                 </ul>
-            </li>
-            <li>
-                <strong>Desktop Application:</strong>
-                <ul>
-                    <li>Developed a Windows application using <strong>Flutter</strong> [<strong>Fluent UI</strong>].
+            </div>
+
+            <div class="experience-item">
+                <div class="job-header">
+                    <span class="company-name">Oryza Systems</span>
+                    <span class="duration">10/2024 -- 03/2025</span>
+                </div>
+                <div class="job-title">Backend Developer</div>
+
+                <div style="margin-bottom: 8px; font-weight: 500; font-style: italic; color: var(--text-main);">Project:
+                    Oryza AI Backend</div>
+
+                <ul class="resume-list">
+                    <li>
+                        <strong>Oryza AI Service:</strong>
+                        <ul>
+                            <li>Developed RESTful APIs to handle camera data and system configurations using
+                                <strong>FastAPI</strong>.</li>
+                            <li>Optimized API performance by implementing <strong>Redis</strong> caching for
+                                high-frequency requests.</li>
+                            <li>Established a centralized observability system using <strong>Grafana, Loki, and
+                                    Promtail</strong>.</li>
+                            <li>Containerized applications using <strong>Docker</strong> and managed deployment to the
+                                Staging environment.</li>
+                        </ul>
                     </li>
-                    <li>Used <strong>Provider</strong> for state management to seamlessly display real-time data
-                        directly from the server.</li>
-                </ul>
-            </li>
-        </ul>
-
-        <div class="mt-small"></div>
-
-        <div class="hover-block">
-            <div class="row row-bf">
-                <span>Oryza Systems</span>
-                <span>10/2024 -- 03/2025</span>
-            </div>
-            <div class="row row-it">
-                <span>Backend Developer</span>
-                <span></span>
-            </div>
-        </div>
-        <ul class="resume-list">
-            <li style="list-style: none; margin-left: -15px;">
-                <span class="underline">Project: Oryza AI Backend</span>
-            </li>
-            <li>
-                <strong>Oryza AI Service:</strong>
-                <ul>
-                    <li>Developed RESTful APIs to handle camera data and system configurations using
-                        <strong>FastAPI</strong>.
+                    <li>
+                        <strong>OA-Tools Service:</strong>
+                        <ul>
+                            <li>Integrated <strong>MinIO (S3)</strong> for large-scale image storage management.</li>
+                            <li>Implemented Face Recognition features using the <strong>Yunet</strong> engine.</li>
+                        </ul>
                     </li>
-                    <li>Optimized API performance by implementing <strong>Redis</strong> caching for high-frequency
-                        requests.</li>
-                    <li>Established a centralized observability system using <strong>Grafana, Loki, and
-                            Promtail</strong>.</li>
-                    <li>Containerized applications using <strong>Docker</strong> and managed deployment to the Staging
-                        environment.</li>
                 </ul>
-            </li>
-            <li>
-                <strong>OA-Tools Service:</strong>
-                <ul>
-                    <li>Integrated <strong>MinIO (S3)</strong> for large-scale image storage management.</li>
-                    <li>Implemented Face Recognition features using the <strong>Yunet</strong> engine.</li>
+            </div>
+        </section>
+
+        <section>
+            <h2>Key Projects</h2>
+
+            <div class="experience-item">
+                <div class="job-header">
+                    <span class="company-name">
+                        Hang Duong Cemetery
+                        <a href="https://nghiatranghangduong.digifund.tech/vi/home" target="_blank"
+                            class="project-link">Website</a>
+                    </span>
+                </div>
+                <div class="duration" style="margin-bottom: 5px;">Technologies: NestJS, Prisma, PostgreSQL</div>
+            </div>
+
+            <div class="experience-item">
+                <div class="job-header">
+                    <span class="company-name">
+                        Business Management System
+                        <a href="https://github.com/qrbusiness/qrapp-backend" target="_blank"
+                            class="project-link">GitHub</a>
+                    </span>
+                </div>
+                <div class="job-title">Backend Developer (Python/FastAPI)</div>
+                <ul class="resume-list">
+                    <li>Built a security administration system allowing business owners to <strong>flexibly assign
+                            employee permissions</strong>. Owners can grant specific rights to roles (e.g., Cashiers can
+                        sell but cannot modify prices), ensuring strict data control.</li>
+                    <li>Developed <strong>Real-time Order Processing</strong> using WebSockets, ensuring sellers receive
+                        immediate sales notifications.</li>
+                    <li>Built APIs to manage complex business data including multi-branch inventory, products, and
+                        revenue reports.</li>
                 </ul>
-            </li>
-        </ul>
-
-        <h2>Key Projects</h2>
-
-        <div class="hover-block">
-            <div class="row row-bf">
-                <span>Hang Duong Cemetery</span>
-                <span><a href="https://nghiatranghangduong.digifund.tech/vi/home">Website</a></span>
             </div>
-            <div class="row row-it">
-                <span>Technologies: NestJS, Prisma, PostgreSQL</span>
-                <span></span>
-            </div>
-        </div>
-        <div class="mt-small"></div>
 
-        <div class="hover-block">
-            <div class="row row-bf">
-                <span>Business Management System</span>
-                <span><a href="https://github.com/qrbusiness/qrapp-backend">GitHub</a></span>
+            <div class="experience-item">
+                <div class="job-header">
+                    <span class="company-name">
+                        EventHub
+                        <a href="https://github.com/nhathuyd4hp/EventHub" target="_blank"
+                            class="project-link">GitHub</a>
+                    </span>
+                </div>
+                <ul class="resume-list">
+                    <li><strong>Description:</strong> A distributed system supporting event organization and ticket
+                        sales.</li>
+                    <li><strong>Technologies:</strong> ExpressJS, FastAPI, Kafka, Docker, Tyk Gateway.</li>
+                    <li><strong>Highlights:</strong> Handled asynchronous communication via <strong>Kafka</strong>
+                        (Notification Service) and integrated the VNPay payment gateway.</li>
+                </ul>
             </div>
-            <div class="row row-it">
-                <span>Backend Developer (Python/FastAPI)</span>
-                <span></span>
-            </div>
-        </div>
-        <ul class="resume-list">
-            <li>Built a security administration system allowing business owners to <strong>flexibly assign employee
-                    permissions</strong>. Owners can grant specific rights to roles (e.g., Cashiers can sell but cannot
-                modify prices), ensuring strict data control.</li>
-            <li>Developed <strong>Real-time Order Processing</strong> using WebSockets, ensuring sellers receive
-                immediate sales notifications.</li>
-            <li>Built APIs to manage complex business data including multi-branch inventory, products, and revenue
-                reports.</li>
-        </ul>
-
-        <div class="hover-block">
-            <div class="row row-bf">
-                <span>EventHub</span>
-                <span><a href="https://github.com/nhathuyd4hp/EventHub">GitHub</a></span>
-            </div>
-        </div>
-        <ul class="resume-list">
-            <li><strong>Description:</strong> A distributed system supporting event organization and ticket sales.</li>
-            <li><strong>Technologies:</strong> ExpressJS, FastAPI, Kafka, Docker, Tyk Gateway.</li>
-            <li><strong>Highlights:</strong> Handled asynchronous communication via <strong>Kafka</strong> (Notification
-                Service) and integrated the VNPay payment gateway.</li>
-        </ul>
-
-        <div style="margin-top: 3pt;"></div>
+        </section>
     </div>
 
     <script>
@@ -471,6 +603,7 @@
             }
         }
 
+        // Check local storage
         if (localStorage.getItem('theme') === 'dark') {
             body.classList.add('dark-mode');
             updateIcon();
