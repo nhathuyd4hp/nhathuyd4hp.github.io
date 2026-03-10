@@ -13,18 +13,15 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="cv.png">
 
     <style>
         :root {
-            /* Light Theme */
             --bg-body: #f0f2f5;
             --bg-paper: #ffffff;
             --text-main: #2d3748;
             --text-secondary: #4a5568;
             --text-muted: #718096;
             --accent-primary: #0e6e55;
-            /* Teal Green */
             --accent-secondary: #e6fffa;
             --border-color: #e2e8f0;
             --shadow-paper: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -33,7 +30,6 @@
         }
 
         body.dark-mode {
-            /* Dark Theme */
             --bg-body: #1a202c;
             --bg-paper: #2d3748;
             --text-main: #edf2f7;
@@ -65,13 +61,10 @@
             min-height: 100vh;
         }
 
-        /* A4 Page Styling */
         .page {
             background-color: var(--bg-paper);
             width: 210mm;
-            /* Standard A4 width */
             min-height: 297mm;
-            /* Standard A4 height */
             padding: 40px 50px;
             box-shadow: var(--shadow-paper);
             position: relative;
@@ -91,7 +84,6 @@
             }
         }
 
-        /* Links */
         a {
             color: var(--text-main);
             text-decoration: none;
@@ -103,7 +95,6 @@
             color: var(--accent-primary);
         }
 
-        /* Header */
         header {
             text-align: center;
             margin-bottom: 30px;
@@ -150,7 +141,6 @@
             display: inline-block;
         }
 
-        /* Sections */
         h2 {
             color: var(--accent-primary);
             font-size: 16px;
@@ -164,7 +154,6 @@
             align-items: center;
         }
 
-        /* Experience Items & Timeline */
         .experience-item {
             position: relative;
             padding-left: 20px;
@@ -210,7 +199,6 @@
             margin-bottom: 8px;
         }
 
-        /* Lists */
         ul {
             list-style-type: none;
         }
@@ -230,7 +218,6 @@
             left: 0;
         }
 
-        /* Nested Lists */
         .resume-list ul {
             margin-top: 4px;
             margin-bottom: 8px;
@@ -241,7 +228,6 @@
             color: var(--text-muted);
         }
 
-        /* Skills Grid */
         .skills-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -264,7 +250,6 @@
             color: var(--text-secondary);
         }
 
-        /* Buttons (Fixed) */
         .actions-container {
             position: fixed;
             top: 20px;
@@ -298,7 +283,6 @@
             border-color: var(--accent-primary);
         }
 
-        /* Helper Classes */
         .project-link {
             font-size: 12px;
             padding: 2px 6px;
@@ -313,7 +297,19 @@
             border-color: var(--accent-primary);
         }
 
-        /* Print Styles */
+        /* Multi-language Support */
+        [lang="vi"] {
+            display: none;
+        }
+
+        html.lang-vi [lang="vi"] {
+            display: block;
+        }
+
+        html.lang-vi [lang="en"] {
+            display: none;
+        }
+
         @media print {
             body {
                 background: none;
@@ -332,7 +328,6 @@
                 display: none;
             }
 
-            /* Force colors for print */
             body,
             .page {
                 background-color: #fff !important;
@@ -350,23 +345,8 @@
             .company-name {
                 color: #000 !important;
             }
-
-            .project-link {
-                border: 1px solid #ccc;
-                color: #000 !important;
-            }
-
-            /* Break Handling */
-            h2 {
-                break-after: avoid;
-            }
-
-            .experience-item {
-                break-inside: avoid;
-            }
         }
 
-        /* Mobile Responsive */
         @media (max-width: 768px) {
             .page {
                 width: 100%;
@@ -402,6 +382,9 @@
         <button class="action-btn" onclick="window.print()" title="Download PDF">
             <i class="fas fa-file-download"></i>
         </button>
+        <button class="action-btn" id="lang-toggle" title="Chuyển ngôn ngữ">
+            <span id="lang-text" style="font-weight: bold; font-size: 13px;">VI</span>
+        </button>
         <button class="action-btn" id="theme-toggle" title="Switch Theme">
             <i class="fas fa-moon"></i>
         </button>
@@ -411,37 +394,39 @@
         <header>
             <h1>Van Ngoc Nhat Huy</h1>
             <div class="contact-info">
-                <a href="tel:0867617246">
-                    <i class="fas fa-phone-alt"></i> (+84) 86-761-7246
-                </a>
+                <a href="tel:0867617246"><i class="fas fa-phone-alt"></i> (+84) 86-761-7246</a>
                 <span class="separator"></span>
-                <a href="mailto:work.nhathuyd4hp@gmail.com">
-                    <i class="fas fa-envelope"></i> work.nhathuyd4hp@gmail.com
-                </a>
+                <a href="mailto:work.nhathuyd4hp@gmail.com"><i class="fas fa-envelope"></i>
+                    work.nhathuyd4hp@gmail.com</a>
                 <span class="separator"></span>
-                <a href="https://github.com/nhathuyd4hp" target="_blank">
-                    <i class="fab fa-github"></i> github.com/nhathuyd4hp
-                </a>
+                <a href="https://github.com/nhathuyd4hp" target="_blank"><i class="fab fa-github"></i>
+                    github.com/nhathuyd4hp</a>
             </div>
         </header>
 
         <section>
-            <h2>Education</h2>
+            <h2 lang="en">Education</h2>
+            <h2 lang="vi">Học vấn</h2>
             <div class="experience-item" style="border-left-color: transparent; padding-left: 0;">
                 <div style="border-left: 2px solid var(--accent-primary); padding-left: 15px;">
                     <div class="job-header">
                         <span class="company-name">University of Information Technology (VNU-HCM)</span>
                     </div>
-                    <div class="job-title" style="margin-bottom: 0;">Major: Data Science</div>
+                    <div class="job-title" style="margin-bottom: 0;">
+                        <span lang="en">Major: Data Science</span>
+                        <span lang="vi">Chuyên ngành: Khoa học Dữ liệu</span>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section>
-            <h2>Technical Skills</h2>
+            <h2 lang="en">Technical Skills</h2>
+            <h2 lang="vi">Kỹ năng Chuyên môn</h2>
             <div class="skills-grid">
                 <div class="skill-item">
-                    <span class="skill-label">Languages</span>
+                    <span class="skill-label" lang="en">Languages</span>
+                    <span class="skill-label" lang="vi">Ngôn ngữ</span>
                     <span class="skill-value">Python, Dart/Flutter, Javascript/Typescript</span>
                 </div>
                 <div class="skill-item">
@@ -449,7 +434,8 @@
                     <span class="skill-value">FastAPI, NestJS</span>
                 </div>
                 <div class="skill-item">
-                    <span class="skill-label">Databases</span>
+                    <span class="skill-label" lang="en">Databases</span>
+                    <span class="skill-label" lang="vi">Cơ sở dữ liệu</span>
                     <span class="skill-value">PostgreSQL, MongoDB, MySQL, Redis</span>
                 </div>
                 <div class="skill-item">
@@ -460,50 +446,77 @@
         </section>
 
         <section>
-            <h2>Work Experience</h2>
+            <h2 lang="en">Work Experience</h2>
+            <h2 lang="vi">Kinh nghiệm Làm việc</h2>
 
             <div class="experience-item">
                 <div class="job-header">
                     <span class="company-name">A.S.T.R Co., Ltd.</span>
-                    <span class="duration">03/2025 -- Present</span>
+                    <span class="duration" lang="en">03/2025 -- Present</span>
+                    <span class="duration" lang="vi">03/2025 -- Hiện tại</span>
                 </div>
                 <div class="job-title">RPA Developer</div>
+
                 <ul class="resume-list">
                     <li>
-                        <strong>System Architecture:</strong>
+                        <strong lang="en">System Architecture:</strong>
+                        <strong lang="vi">Kiến trúc Hệ thống:</strong>
                         <ul>
-                            <li>
-                                Built a central server using <strong>FastAPI</strong> and <strong>Celery</strong> to
-                                manage multiple robots,
-                                providing <strong>Web APIs</strong>, <strong>webhooks</strong>, and
-                                <strong>WebSocket</strong> for real-time
-                                communication and task orchestration.
+                            <li lang="en">Built a central server using <strong>FastAPI</strong> and
+                                <strong>Celery</strong> to manage multiple robots, providing <strong>Web APIs</strong>,
+                                <strong>webhooks</strong>, and <strong>WebSocket</strong> for real-time communication
+                                and task orchestration.
                             </li>
-                            <li>
-                                Implemented a real-time notification system using <strong>Redis Pub/Sub</strong> and
-                                <strong>WebSockets</strong> to stream logs and events from automation robots.
+                            <li lang="vi">Xây dựng server trung tâm bằng <strong>FastAPI</strong> và
+                                <strong>Celery</strong> để quản lý nhiều robot, cung cấp <strong>Web API</strong>,
+                                <strong>webhook</strong> và <strong>WebSocket</strong> để điều phối tác vụ thời gian
+                                thực.
                             </li>
-                            <li>Configured <strong>MinIO</strong> for storing data files for robots.</li>
-                            <li>Integrated scheduling features using <strong>APScheduler</strong>, allowing users to set
-                                automated run times for robots.</li>
+
+                            <li lang="en">Implemented a real-time notification system using <strong>Redis
+                                    Pub/Sub</strong> and <strong>WebSockets</strong> to stream logs and events from
+                                automation robots.</li>
+                            <li lang="vi">Triển khai hệ thống thông báo thời gian thực sử dụng <strong>Redis
+                                    Pub/Sub</strong> và <strong>WebSockets</strong> để stream log và sự kiện từ robot.
+                            </li>
+
+                            <li lang="en">Configured <strong>MinIO</strong> for storing data files for robots.</li>
+                            <li lang="vi">Cấu hình <strong>MinIO</strong> để lưu trữ tệp dữ liệu cho robot.</li>
+
+                            <li lang="en">Integrated scheduling features using <strong>APScheduler</strong>, allowing
+                                users to set automated run times for robots.</li>
+                            <li lang="vi">Tích hợp tính năng lập lịch bằng <strong>APScheduler</strong>, cho phép người
+                                dùng cài đặt thời gian chạy tự động cho robot.</li>
                         </ul>
                     </li>
                     <li>
-                        <strong>Automation:</strong>
+                        <strong lang="en">Automation:</strong>
+                        <strong lang="vi">Tự động hóa:</strong>
                         <ul>
-                            <li>
-                                Automated business workflows using <strong>Playwright</strong>,
+                            <li lang="en">Automated business workflows using <strong>Playwright</strong>,
                                 <strong>Selenium</strong>, <strong>Google App Scripts</strong>, ....
                             </li>
-                            <li>
-                                Developed <strong>OCR pipelines</strong> for document processing and data extraction.
+                            <li lang="vi">Tự động hóa quy trình nghiệp vụ bằng <strong>Playwright</strong>,
+                                <strong>Selenium</strong>, <strong>Google App Scripts</strong>, ....
                             </li>
+
+                            <li lang="en">Developed <strong>OCR pipelines</strong> for document processing and data
+                                extraction.</li>
+                            <li lang="vi">Phát triển các <strong>OCR pipelines</strong> để xử lý tài liệu và trích xuất
+                                dữ liệu.</li>
+
+                            <li lang="en">Developed AI agents powered by LLaMA for information summarization and data
+                                extraction from documents and structured sources.</li>
+                            <li lang="vi">Phát triển AI agents dựa trên LLaMA để tóm tắt thông tin và trích xuất dữ liệu
+                                từ các tài liệu và nguồn có cấu trúc.</li>
                         </ul>
                     </li>
                     <li>
-                        <strong>Desktop Application:</strong>
+                        <strong lang="en">Desktop Application:</strong>
+                        <strong lang="vi">Ứng dụng Desktop:</strong>
                         <ul>
-                            <li>Developed a Windows application using <strong>Flutter</strong> .</li>
+                            <li lang="en">Developed a Windows application using <strong>Flutter</strong>.</li>
+                            <li lang="vi">Phát triển ứng dụng Windows bằng <strong>Flutter</strong>.</li>
                         </ul>
                     </li>
                 </ul>
@@ -516,29 +529,53 @@
                 </div>
                 <div class="job-title">Backend Developer</div>
 
-                <div style="margin-bottom: 8px; font-weight: 500; font-style: italic; color: var(--text-main);">Project:
-                    Oryza AI Backend</div>
+                <div style="margin-bottom: 8px; font-weight: 500; font-style: italic; color: var(--text-main);">
+                    <span lang="en">Project: Oryza AI Backend</span>
+                    <span lang="vi">Dự án: Oryza AI Backend</span>
+                </div>
 
                 <ul class="resume-list">
                     <li>
-                        <strong>Oryza AI Service:</strong>
+                        <strong lang="en">Oryza AI Service:</strong>
+                        <strong lang="vi">Dịch vụ Oryza AI:</strong>
                         <ul>
-                            <li>Developed RESTful APIs to handle camera data and system configurations using
+                            <li lang="en">Developed RESTful APIs to handle camera data and system configurations using
                                 <strong>FastAPI</strong>.
                             </li>
-                            <li>Optimized API performance by implementing <strong>Redis</strong> caching for
+                            <li lang="vi">Phát triển RESTful API để xử lý dữ liệu camera và cấu hình hệ thống bằng
+                                <strong>FastAPI</strong>.
+                            </li>
+
+                            <li lang="en">Optimized API performance by implementing <strong>Redis</strong> caching for
                                 high-frequency requests.</li>
-                            <li>Established a centralized observability system using <strong>Grafana, Loki, and
+                            <li lang="vi">Tối ưu hiệu năng API bằng cách triển khai <strong>Redis</strong> caching cho
+                                các yêu cầu tần suất cao.</li>
+
+                            <li lang="en">Established a centralized observability system using <strong>Grafana, Loki,
+                                    and Promtail</strong>.</li>
+                            <li lang="vi">Thiết lập hệ thống quan sát tập trung sử dụng <strong>Grafana, Loki, và
                                     Promtail</strong>.</li>
-                            <li>Containerized applications using <strong>Docker</strong> and managed deployment to the
-                                Staging environment.</li>
+
+                            <li lang="en">Containerized applications using <strong>Docker</strong> and managed
+                                deployment to the Staging environment.</li>
+                            <li lang="vi">Container hóa ứng dụng bằng <strong>Docker</strong> và quản lý triển khai lên
+                                môi trường Staging.</li>
                         </ul>
                     </li>
                     <li>
-                        <strong>OA-Tools Service:</strong>
+                        <strong lang="en">OA-Tools Service:</strong>
+                        <strong lang="vi">Dịch vụ OA-Tools:</strong>
                         <ul>
-                            <li>Integrated <strong>MinIO (S3)</strong> for large-scale image storage management.</li>
-                            <li>Implemented Face Recognition features using the <strong>Yunet</strong> engine.</li>
+                            <li lang="en">Integrated <strong>MinIO (S3)</strong> for large-scale image storage
+                                management.</li>
+                            <li lang="vi">Tích hợp <strong>MinIO (S3)</strong> để quản lý lưu trữ hình ảnh quy mô lớn.
+                            </li>
+
+                            <li lang="en">Implemented Face Recognition features using the <strong>Yunet</strong> engine.
+                            </li>
+                            <li lang="vi">Triển khai tính năng nhận diện khuôn mặt sử dụng engine
+                                <strong>Yunet</strong>.
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -546,7 +583,8 @@
         </section>
 
         <section>
-            <h2>Key Projects</h2>
+            <h2 lang="en">Key Projects</h2>
+            <h2 lang="vi">Dự án Tiêu biểu</h2>
 
             <div class="experience-item">
                 <div class="job-header">
@@ -556,7 +594,10 @@
                             class="project-link">Website</a>
                     </span>
                 </div>
-                <div class="duration" style="margin-bottom: 5px;">Technologies: NestJS, Prisma, PostgreSQL</div>
+                <div class="duration" style="margin-bottom: 5px;">
+                    <span lang="en">Technologies: NestJS, Prisma, PostgreSQL</span>
+                    <span lang="vi">Công nghệ: NestJS, Prisma, PostgreSQL</span>
+                </div>
             </div>
 
             <div class="experience-item">
@@ -569,13 +610,22 @@
                 </div>
                 <div class="job-title">Backend Developer (Python/FastAPI)</div>
                 <ul class="resume-list">
-                    <li>Built a security administration system allowing business owners to <strong>flexibly assign
-                            employee permissions</strong>. Owners can grant specific rights to roles (e.g., Cashiers can
-                        sell but cannot modify prices), ensuring strict data control.</li>
-                    <li>Developed <strong>Real-time Order Processing</strong> using WebSockets, ensuring sellers receive
-                        immediate sales notifications.</li>
-                    <li>Built APIs to manage complex business data including multi-branch inventory, products, and
-                        revenue reports.</li>
+                    <li lang="en">Built a security administration system allowing business owners to <strong>flexibly
+                            assign employee permissions</strong>. Owners can grant specific rights to roles (e.g.,
+                        Cashiers can sell but cannot modify prices), ensuring strict data control.</li>
+                    <li lang="vi">Xây dựng hệ thống quản trị an ninh cho phép chủ doanh nghiệp <strong>phân quyền nhân
+                            viên linh hoạt</strong>. Chủ sở hữu có thể cấp quyền cụ thể cho các vai trò (VD: Thu ngân có
+                        thể bán nhưng không thể sửa giá), đảm bảo kiểm soát dữ liệu chặt chẽ.</li>
+
+                    <li lang="en">Developed <strong>Real-time Order Processing</strong> using WebSockets, ensuring
+                        sellers receive immediate sales notifications.</li>
+                    <li lang="vi">Phát triển <strong>Xử lý Đơn hàng Thời gian thực</strong> sử dụng WebSockets, đảm bảo
+                        người bán nhận được thông báo bán hàng tức thì.</li>
+
+                    <li lang="en">Built APIs to manage complex business data including multi-branch inventory, products,
+                        and revenue reports.</li>
+                    <li lang="vi">Xây dựng các API để quản lý dữ liệu kinh doanh phức tạp bao gồm kho hàng đa chi nhánh,
+                        sản phẩm và báo cáo doanh thu.</li>
                 </ul>
             </div>
 
@@ -588,45 +638,62 @@
                     </span>
                 </div>
                 <ul class="resume-list">
-                    <li><strong>Description:</strong> A distributed system supporting event organization and ticket
-                        sales.</li>
-                    <li><strong>Technologies:</strong> ExpressJS, FastAPI, Kafka, Docker, Tyk Gateway.</li>
-                    <li><strong>Highlights:</strong> Handled asynchronous communication via <strong>Kafka</strong>
-                        (Notification Service) and integrated the VNPay payment gateway.</li>
+                    <li lang="en"><strong>Description:</strong> A distributed system supporting event organization and
+                        ticket sales.</li>
+                    <li lang="vi"><strong>Mô tả:</strong> Hệ thống phân tán hỗ trợ tổ chức sự kiện và bán vé.</li>
+
+                    <li lang="en"><strong>Technologies:</strong> ExpressJS, FastAPI, Kafka, Docker, Tyk Gateway.</li>
+                    <li lang="vi"><strong>Công nghệ:</strong> ExpressJS, FastAPI, Kafka, Docker, Tyk Gateway.</li>
+
+                    <li lang="en"><strong>Highlights:</strong> Handled asynchronous communication via
+                        <strong>Kafka</strong> (Notification Service) and integrated the VNPay payment gateway.
+                    </li>
+                    <li lang="vi"><strong>Nổi bật:</strong> Xử lý giao tiếp bất đồng bộ qua <strong>Kafka</strong> (Dịch
+                        vụ Thông báo) và tích hợp cổng thanh toán VNPay.</li>
                 </ul>
             </div>
         </section>
     </div>
 
     <script>
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = toggleBtn.querySelector('i');
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('i');
+        const langToggle = document.getElementById('lang-toggle');
+        const langText = document.getElementById('lang-text');
         const body = document.body;
+        const html = document.documentElement;
 
-        function updateIcon() {
+        function updateThemeIcon() {
             if (body.classList.contains('dark-mode')) {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
             } else {
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
             }
         }
 
-        // Check local storage
+        // Theme logic
         if (localStorage.getItem('theme') === 'dark') {
             body.classList.add('dark-mode');
-            updateIcon();
+            updateThemeIcon();
         }
 
-        toggleBtn.addEventListener('click', () => {
+        themeToggle.addEventListener('click', () => {
             body.classList.toggle('dark-mode');
-            updateIcon();
-            if (body.classList.contains('dark-mode')) {
-                localStorage.setItem('theme', 'dark');
-            } else {
-                localStorage.setItem('theme', 'light');
-            }
+            updateThemeIcon();
+            localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        // Language logic
+        if (localStorage.getItem('lang') === 'vi') {
+            html.classList.add('lang-vi');
+            langText.innerText = 'EN';
+        }
+
+        langToggle.addEventListener('click', () => {
+            html.classList.toggle('lang-vi');
+            const isVi = html.classList.contains('lang-vi');
+            langText.innerText = isVi ? 'EN' : 'VI';
+            localStorage.setItem('lang', isVi ? 'vi' : 'en');
         });
     </script>
 </body>
