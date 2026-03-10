@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi" class="lang-vi">
 
 <head>
     <meta charset="UTF-8">
@@ -298,16 +298,24 @@
         }
 
         /* Multi-language Support */
-        [lang="vi"] {
+        [lang="en"] {
             display: none;
         }
 
-        html.lang-vi [lang="vi"] {
+        /* Mặc định ẩn Tiếng Anh */
+        [lang="vi"] {
             display: block;
         }
 
-        html.lang-vi [lang="en"] {
+        /* Mặc định hiện Tiếng Việt */
+
+        /* Khi HTML KHÔNG CÓ class lang-vi (nghĩa là đang ở chế độ Tiếng Anh) */
+        html:not(.lang-vi) [lang="vi"] {
             display: none;
+        }
+
+        html:not(.lang-vi) [lang="en"] {
+            display: block;
         }
 
         @media print {
@@ -382,8 +390,8 @@
         <button class="action-btn" onclick="window.print()" title="Download PDF">
             <i class="fas fa-file-download"></i>
         </button>
-        <button class="action-btn" id="lang-toggle" title="Chuyển ngôn ngữ">
-            <span id="lang-text" style="font-weight: bold; font-size: 13px;">VI</span>
+        <button class="action-btn" id="lang-toggle" title="Switch Language">
+            <span id="lang-text" style="font-weight: bold; font-size: 13px;">EN</span>
         </button>
         <button class="action-btn" id="theme-toggle" title="Switch Theme">
             <i class="fas fa-moon"></i>
@@ -451,7 +459,7 @@
 
             <div class="experience-item">
                 <div class="job-header">
-                    <span class="company-name">A.S.T.R Co., Ltd.</span>
+                    <span class="company-name">NSK Global</span>
                     <span class="duration" lang="en">03/2025 -- Present</span>
                     <span class="duration" lang="vi">03/2025 -- Hiện tại</span>
                 </div>
@@ -463,25 +471,25 @@
                         <strong lang="vi">Kiến trúc Hệ thống:</strong>
                         <ul>
                             <li lang="en">Built a central server using <strong>FastAPI</strong> and
-                                <strong>Celery</strong> to manage multiple modules, providing <strong>Web APIs</strong>,
+                                <strong>Celery</strong> to manage multiple robots, providing <strong>Web APIs</strong>,
                                 <strong>webhooks</strong>, and <strong>WebSocket</strong> for real-time communication
                                 and task orchestration.
                             </li>
-                            <li lang="vi">Xây dựng hệ thống bằng <strong>FastAPI</strong> và
-                                <strong>Celery</strong> để quản lý các module, cung cấp <strong>Web API</strong>,
-                                <strong>webhook</strong> và <strong>WebSocket</strong> để vận hành và tích hợp
+                            <li lang="vi">Xây dựng server bằng <strong>FastAPI</strong> và
+                                <strong>Celery</strong> để quản lý module, cung cấp <strong>Web API</strong>,
+                                <strong>webhook</strong> và <strong>WebSocket</strong> để vận hành
                             </li>
 
                             <li lang="en">Implemented a real-time notification system using <strong>Redis
                                     Pub/Sub</strong> and <strong>WebSockets</strong> to stream logs and events from
                                 automation robots.</li>
                             <li lang="vi">Triển khai hệ thống thông báo sử dụng <strong>Redis
-                                    Pub/Sub</strong> và <strong>WebSockets</strong>.
+                                    Pub/Sub</strong> và <strong>WebSockets</strong>
                             </li>
                             <li lang="en">Integrated scheduling features using <strong>APScheduler</strong>, allowing
-                                users to set automated run times for moduless.</li>
+                                users to set automated run times for robots.</li>
                             <li lang="vi">Tích hợp tính năng lập lịch bằng <strong>APScheduler</strong>, cho phép người
-                                dùng cài đặt thời gian chạy tự động cho từng module.</li>
+                                dùng cài đặt thời gian chạy tự động cho.</li>
                         </ul>
                     </li>
                     <li>
@@ -495,8 +503,7 @@
                                 <strong>Selenium</strong>, <strong>Google App Scripts</strong>, ....
                             </li>
 
-                            <li lang="en">Developed <strong>OCR pipelines</strong> for document processing and internal
-                                data
+                            <li lang="en">Developed <strong>OCR pipelines</strong> for document processing and data
                                 extraction.</li>
                             <li lang="vi">Phát triển các <strong>OCR pipelines</strong> để xử lý tài liệu và trích xuất
                                 dữ liệu.</li>
@@ -504,7 +511,7 @@
                             <li lang="en">Developed AI agents powered by LLaMA for information summarization and data
                                 extraction from documents and structured sources.</li>
                             <li lang="vi">Phát triển AI agents dựa trên LLaMA để tóm tắt thông tin và trích xuất dữ liệu
-                                từ các tài liệu nội bộ.</li>
+                                từ các tài liệu.</li>
                         </ul>
                     </li>
                     <li>
@@ -580,7 +587,7 @@
 
         <section>
             <h2 lang="en">Key Projects</h2>
-            <h2 lang="vi">DỰ ÁN / BÀI TẬP LỚN</h2>
+            <h2 lang="vi">Dự án Tiêu biểu</h2>
 
             <div class="experience-item">
                 <div class="job-header">
@@ -667,7 +674,7 @@
             }
         }
 
-        // Theme logic
+        // --- Theme Logic ---
         if (localStorage.getItem('theme') === 'dark') {
             body.classList.add('dark-mode');
             updateThemeIcon();
@@ -679,17 +686,23 @@
             localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
         });
 
-        // Language logic
-        if (localStorage.getItem('lang') === 'vi') {
+        // --- Language Logic ---
+        // Check if user has a preference, otherwise default is 'vi'
+        const savedLang = localStorage.getItem('lang') || 'vi';
+
+        if (savedLang === 'en') {
+            html.classList.remove('lang-vi');
+            langText.innerText = 'VI';
+        } else {
             html.classList.add('lang-vi');
             langText.innerText = 'EN';
         }
 
         langToggle.addEventListener('click', () => {
             html.classList.toggle('lang-vi');
-            const isVi = html.classList.contains('lang-vi');
-            langText.innerText = isVi ? 'EN' : 'VI';
-            localStorage.setItem('lang', isVi ? 'vi' : 'en');
+            const isNowVi = html.classList.contains('lang-vi');
+            langText.innerText = isNowVi ? 'EN' : 'VI';
+            localStorage.setItem('lang', isNowVi ? 'vi' : 'en');
         });
     </script>
 </body>
