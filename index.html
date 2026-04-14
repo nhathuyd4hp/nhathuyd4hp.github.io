@@ -15,6 +15,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        @media print {
+            /* ... các style cũ của bạn ... */
+
+            /* Hiển thị link bên cạnh text để người xem có thể gõ lại nếu cần */
+            a[href]:after {
+                content: " (" attr(href) ")";
+                font-size: 0.8em;
+                color: #4a5568;
+            }
+
+            /* Đảm bảo màu sắc link không bị mất */
+            a {
+                text-decoration: underline !important;
+                color: #0e6e55 !important;
+            }
+        }
+
         :root {
             --bg-body: #f0f2f5;
             --bg-paper: #ffffff;
