@@ -604,39 +604,57 @@
                         <strong lang="en">System Architecture</strong>
                         <strong lang="vi">Kiến trúc Hệ thống</strong>
                         <ul class="sub-bullets">
-                            <li lang="en">Designed a distributed task orchestration system using
-                                <strong>FastAPI</strong>, <strong>Celery</strong>, and <strong>Redis</strong> to manage
-                                large-scale automation workflows.
+                            <li lang="en">Designed a distributed RPA orchestration platform using
+                                <strong>FastAPI</strong>, <strong>Celery</strong>, and <strong>Redis</strong>
+                                to schedule, dispatch, and monitor large-scale automation workflows.
                             </li>
-                            <li lang="vi">Xây dựng hệ thống điều phối sử dụng <strong>FastAPI</strong>,
-                                <strong>Celery</strong> và <strong>Redis</strong> để quản lý các workflow tự động hóa.
-                            </li>
-
-                            <li lang="en">Implemented real-time communication via <strong>WebSockets</strong> and
-                                <strong>Redis Pub/Sub</strong> for streaming logs and execution events.
-                            </li>
-                            <li lang="vi">Triển khai giao tiếp realtime bằng <strong>WebSockets</strong> và
-                                <strong>Redis Pub/Sub</strong> để stream log và trạng thái xử lý.
+                            <li lang="vi">Thiết kế nền tảng điều phối RPA phân tán sử dụng <strong>FastAPI</strong>,
+                                <strong>Celery</strong> và <strong>Redis</strong> để lập lịch, phân phối và giám sát
+                                các workflow tự động hóa quy mô lớn.
                             </li>
 
-                            <li lang="en">Developed scheduling and retry mechanisms for long-running tasks using
-                                <strong>APScheduler</strong>.
+                            <li lang="en">Implemented real-time bidirectional communication via
+                                <strong>WebSockets</strong>
+                                and <strong>Redis Pub/Sub</strong> for live log streaming, execution events,
+                                and interactive decision prompts between workers and clients.
                             </li>
-                            <li lang="vi">Xây dựng cơ chế lập lịch và retry cho các tác vụ chạy dài sử dụng
-                                <strong>APScheduler</strong>.
+                            <li lang="vi">Triển khai giao tiếp realtime hai chiều bằng <strong>WebSockets</strong>
+                                và <strong>Redis Pub/Sub</strong> để stream log, phát sự kiện thực thi
+                                và hỗ trợ luồng xử lý có tương tác (human-in-the-loop).
+                            </li>
+
+                            <li lang="en">Built a scheduling and job persistence system using
+                                <strong>APScheduler</strong>
+                                backed by <strong>MySQL</strong>, with <strong>MinIO</strong> object storage
+                                for automated result file management and lifecycle expiration policies.
+                            </li>
+                            <li lang="vi">Xây dựng hệ thống lập lịch và lưu trữ job bằng <strong>APScheduler</strong>
+                                với <strong>MySQL</strong>, tích hợp <strong>MinIO</strong> để quản lý file kết quả
+                                và chính sách tự động xóa theo vòng đời.
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <strong lang="en">Web Automation & Data Extraction</strong>
-                        <strong lang="vi">Tự động hóa & Trích xuất dữ liệu</strong>
+                        <strong lang="en">Web Automation & Integration</strong>
+                        <strong lang="vi">Tự động hóa Web & Tích hợp hệ thống</strong>
                         <ul class="sub-bullets">
-                            <li lang="en">Built automation scripts using <strong>OCR</strong>, <strong>Google Apps
-                                    Script</strong>, <strong>Playwright</strong>, and <strong>Selenium</strong> to
-                                collect, update, and generate internal reports from dynamic websites.</li>
-                            <li lang="vi">Xây dựng script tự động hóa bằng <strong>OCR</strong>, <strong>Google Apps
-                                    Script</strong>, <strong>Playwright</strong> và <strong>Selenium</strong> để thu
-                                thập, cập nhật và xuất báo cáo nội bộ từ các website động.</li>
+                            <li lang="en">Developed 30+ robot modules using <strong>Playwright</strong> and
+                                <strong>Selenium</strong> to automate data collection, form submission,
+                                document distribution, and report generation across multiple enterprise platforms.
+                            </li>
+                            <li lang="vi">Phát triển 30+ module robot bằng <strong>Playwright</strong> và
+                                <strong>Selenium</strong> để tự động hóa thu thập dữ liệu, điền form,
+                                phân phối tài liệu và xuất báo cáo trên nhiều nền tảng doanh nghiệp.
+                            </li>
+
+                            <li lang="en">Integrated with <strong>Microsoft SharePoint</strong> (via MSAL OAuth2)
+                                and <strong>Google Drive</strong> APIs for automated file synchronization
+                                and document workflows.
+                            </li>
+                            <li lang="vi">Tích hợp <strong>Microsoft SharePoint</strong> (qua MSAL OAuth2)
+                                và <strong>Google Drive</strong> API để đồng bộ file và tự động hóa
+                                quy trình tài liệu.
+                            </li>
                         </ul>
                     </li>
                     <li>
