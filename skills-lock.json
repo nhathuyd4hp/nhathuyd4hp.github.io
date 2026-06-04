@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "cv-builder": {
+      "source": "claude-office-skills/skills",
+      "sourceType": "github",
+      "skillPath": "cv-builder/SKILL.md",
+      "computedHash": "35a1c02fd106a28e9aad913eacec56b8da4278c9af609c31b829307cc9320974"
+    }
+  }
+}
