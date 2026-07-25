@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" class="lang-vi">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -227,9 +227,10 @@
         }
 
         .entry-tech {
-            font-size: 12px;
-            color: var(--c-ink-3);
+            font-size: 13px;
+            color: var(--c-ink-2);
             grid-column: 1 / -1;
+            margin-top: 4px;
         }
 
         /* ── Bullet lists ── */
@@ -278,16 +279,16 @@
             top: 1px;
         }
 
-        /* ── Skills ── */
+        /* ── Skills & Knowledge ── */
         .skills-table {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 7px 40px;
+            gap: 10px 40px;
         }
 
         .skill-row {
             display: flex;
-            align-items: baseline;
+            align-items: flex-start;
             gap: 8px;
             font-size: 13px;
         }
@@ -301,6 +302,13 @@
 
         .skill-val {
             color: var(--c-ink-2);
+        }
+
+        .knowledge-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 6px;
         }
 
         /* ── Education (no timeline) ── */
@@ -327,19 +335,21 @@
             color: var(--c-ink-2);
         }
 
-        /* ── Badge / project link ── */
+        /* ── Badge / project link / Keywords ── */
         .badge {
+            display: inline-flex;
+            align-items: center;
             font-size: 11px;
             font-weight: 600;
-            padding: 1px 7px;
+            padding: 2px 8px;
             border: 1.5px solid var(--c-rule);
-            border-radius: 3px;
+            border-radius: 4px;
             color: var(--c-ink-3);
             transition: all .15s;
             white-space: nowrap;
         }
 
-        .badge:hover {
+        a.badge:hover {
             background: var(--c-accent);
             border-color: var(--c-accent);
             color: #fff;
@@ -379,50 +389,6 @@
             border-color: var(--c-accent);
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, .18);
-        }
-
-        .fab span {
-            font-size: 11px;
-            font-weight: 700;
-            line-height: 1;
-        }
-
-        /* ── Language gating ── */
-        [lang="en"] {
-            display: none;
-        }
-
-        [lang="vi"] {
-            display: block;
-        }
-
-        html:not(.lang-vi) [lang="vi"] {
-            display: none;
-        }
-
-        html:not(.lang-vi) [lang="en"] {
-            display: block;
-        }
-
-        /* inline elements */
-        span[lang="en"],
-        strong[lang="en"] {
-            display: none;
-        }
-
-        span[lang="vi"],
-        strong[lang="vi"] {
-            display: inline;
-        }
-
-        html:not(.lang-vi) span[lang="vi"],
-        html:not(.lang-vi) strong[lang="vi"] {
-            display: none;
-        }
-
-        html:not(.lang-vi) span[lang="en"],
-        html:not(.lang-vi) strong[lang="en"] {
-            display: inline;
         }
 
         /* ── Print ── */
@@ -515,9 +481,6 @@
         <button class="fab" onclick="window.print()" title="Download PDF">
             <i class="fas fa-download"></i>
         </button>
-        <button class="fab" id="lang-btn" title="Toggle language">
-            <span id="lang-label">EN</span>
-        </button>
         <button class="fab" id="theme-btn" title="Toggle theme">
             <i class="fas fa-moon" id="theme-icon"></i>
         </button>
@@ -537,130 +500,91 @@
 
         <!-- ══ EDUCATION ══ -->
         <section>
-            <h2>
-                <span lang="en">Education</span>
-                <span lang="vi">Học vấn</span>
-            </h2>
+            <h2>Education</h2>
             <div class="edu-block">
                 <div>
                     <div class="edu-inst">University of Information Technology (VNU-HCM)</div>
-                    <div class="edu-major">
-                        <span lang="en">Major: Data Science</span>
-                        <span lang="vi">Chuyên ngành: Khoa học Dữ liệu</span>
-                    </div>
                 </div>
             </div>
         </section>
 
         <!-- ══ TECHNICAL SKILLS ══ -->
         <section>
-            <h2>
-                <span lang="en">Technical Skills</span>
-                <span lang="vi">Kỹ năng Chuyên môn</span>
-            </h2>
+            <h2>Technical Skills</h2>
             <div class="skills-table">
                 <div class="skill-row">
-                    <span class="skill-key">
-                        <span lang="en">Languages</span>
-                        <span lang="vi">Ngôn ngữ</span>
-                    </span>
-                    <span class="skill-val">Python, Dart/Flutter, JavaScript/TypeScript</span>
+                    <span class="skill-key">Languages</span>
+                    <div class="skill-val">Python, Dart/Flutter, JavaScript/TypeScript</div>
                 </div>
                 <div class="skill-row">
                     <span class="skill-key">Backend</span>
-                    <span class="skill-val">FastAPI, NestJS</span>
+                    <div class="skill-val">FastAPI, NestJS</div>
                 </div>
                 <div class="skill-row">
-                    <span class="skill-key">
-                        <span lang="en">Databases</span>
-                        <span lang="vi">Cơ sở dữ liệu</span>
-                    </span>
-                    <span class="skill-val">PostgreSQL, MongoDB, MySQL, Redis</span>
+                    <span class="skill-key">Databases</span>
+                    <div class="skill-val">PostgreSQL, MongoDB, MySQL, Redis</div>
                 </div>
                 <div class="skill-row">
                     <span class="skill-key">Platform</span>
-                    <span class="skill-val">Docker, Cloudflare, Linux, Azure DevOps</span>
+                    <div class="skill-val">Docker, Cloudflare, Linux, Azure DevOps</div>
                 </div>
+            </div>
+        </section>
+
+        <!-- ══ KNOWLEDGE CONCEPTS ══ -->
+        <section>
+            <h2>Knowledge Concepts</h2>
+            <div class="knowledge-list">
+                <span class="badge">Object-Oriented Programming (OOP)</span>
+                <span class="badge">RESTful APIs</span>
+                <span class="badge">Event-Driven Architecture</span>
+                <span class="badge">Distributed Systems</span>
+                <span class="badge">Browser Automation</span>
+                <span class="badge">CI/CD</span>
+                <span class="badge">Real-time Streaming (WebSockets, Pub/Sub)</span>
+                <span class="badge">Task Queues</span>
             </div>
         </section>
 
         <!-- ══ WORK EXPERIENCE ══ -->
         <section>
-            <h2>
-                <span lang="en">Work Experience</span>
-                <span lang="vi">Kinh nghiệm Làm việc</span>
-            </h2>
+            <h2>Work Experience</h2>
 
             <!-- ASTR -->
             <div class="entry">
                 <span class="entry-org">ASTR Ltd</span>
-                <span class="entry-date">
-                    <span lang="en">Mar 2025 – Present</span>
-                    <span lang="vi">03/2025 – Hiện tại</span>
-                </span>
+                <span class="entry-date">Mar 2025 – Present</span>
                 <span class="entry-role">Python Developer</span>
                 <ul class="bullets">
                     <li>
-                        <strong lang="en">System Architecture</strong>
-                        <strong lang="vi">Kiến trúc Hệ thống</strong>
+                        <strong>System Architecture</strong>
                         <ul class="sub-bullets">
-                            <li lang="en">Designed a distributed RPA orchestration platform using
-                                <strong>FastAPI</strong>, <strong>Celery</strong>, and <strong>Redis</strong>
-                                to schedule, dispatch, and monitor large-scale automation workflows.
+                            <li>Designed a distributed RPA orchestration platform using <strong>FastAPI</strong>,
+                                <strong>Celery</strong>, and <strong>Redis</strong> to schedule, dispatch, and monitor
+                                workflows.
                             </li>
-                            <li lang="vi">Thiết kế nền tảng điều phối RPA phân tán sử dụng <strong>FastAPI</strong>,
-                                <strong>Celery</strong> và <strong>Redis</strong> để lập lịch, phân phối và giám sát
-                                các workflow tự động hóa quy mô lớn.
+                            <li>Implemented <strong>WebHook</strong> endpoints to receive external triggers for
+                                workflow execution.</li>
+                            <li>Implemented real-time bidirectional communication via <strong>WebSockets</strong> and
+                                <strong>Redis Pub/Sub</strong> for live log streaming, execution events, and interactive
+                                decision prompts between workers and clients.
                             </li>
-
-                            <li lang="en">Implemented real-time bidirectional communication via
-                                <strong>WebSockets</strong>
-                                and <strong>Redis Pub/Sub</strong> for live log streaming, execution events,
-                                and interactive decision prompts between workers and clients.
-                            </li>
-                            <li lang="vi">Triển khai giao tiếp realtime hai chiều bằng <strong>WebSockets</strong>
-                                và <strong>Redis Pub/Sub</strong> để stream log, phát sự kiện thực thi
-                                và hỗ trợ luồng xử lý có tương tác (human-in-the-loop).
-                            </li>
-
-                            <li lang="en">Built a scheduling and job persistence system using
-                                <strong>APScheduler</strong>
-                                backed by <strong>MySQL</strong>, with <strong>MinIO</strong> object storage
-                                for automated result file management and lifecycle expiration policies.
-                            </li>
-                            <li lang="vi">Xây dựng hệ thống lập lịch và lưu trữ job bằng <strong>APScheduler</strong>
-                                với <strong>MySQL</strong>, tích hợp <strong>MinIO</strong> để quản lý file kết quả
-                                và chính sách tự động xóa theo vòng đời.
-                            </li>
+                            <li>Built a scheduling and job persistence system using <strong>APScheduler</strong> backed
+                                by <strong>MySQL</strong>, with <strong>MinIO</strong> object storage for automated
+                                result file management and lifecycle expiration policies.</li>
                         </ul>
                     </li>
                     <li>
-                        <strong lang="en">Web Automation & Integration</strong>
-                        <strong lang="vi">Tự động hóa Web & Tích hợp hệ thống</strong>
+                        <strong>Web Automation & Integration</strong>
                         <ul class="sub-bullets">
-                            <li lang="en">Developed 30+ robot modules using <strong>Playwright</strong> and
-                                <strong>Selenium</strong> to automate data collection, form submission,
-                                document distribution, and report generation across multiple enterprise platforms.
-                            </li>
-                            <li lang="vi">Phát triển 30+ module robot bằng <strong>Playwright</strong> và
-                                <strong>Selenium</strong> để tự động hóa thu thập dữ liệu, điền form,
-                                phân phối tài liệu và xuất báo cáo trên nhiều nền tảng doanh nghiệp.
-                            </li>
-
-                            <li lang="en">Integrated with <strong>Microsoft SharePoint</strong> (via MSAL OAuth2)
-                                and <strong>Google Drive</strong> APIs for automated file synchronization
-                                and document workflows.
-                            </li>
-                            <li lang="vi">Tích hợp <strong>Microsoft SharePoint</strong> (qua MSAL OAuth2)
-                                và <strong>Google Drive</strong> API để đồng bộ file và tự động hóa
-                                quy trình tài liệu.
+                            <li>Developed workflow modules using <strong>Playwright</strong>, <strong>Selenium</strong>
+                                , <strong>Google App Scripts</strong>,... to automate data collection, form submission,
+                                document
+                                distribution, and report generation across multiple enterprise platforms.
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <span lang="en">Developed a Windows desktop application using <strong>Flutter</strong>.</span>
-                        <span lang="vi">Phát triển ứng dụng desktop Windows bằng <strong>Flutter</strong>.</span>
-                    </li>
+                    <li><strong>Developed a Windows desktop application using Flutter</strong>.</li>
                 </ul>
             </div>
 
@@ -669,49 +593,27 @@
                 <span class="entry-org">Oryza Systems</span>
                 <span class="entry-date">Oct 2024 – Mar 2025</span>
                 <span class="entry-role">Backend Developer</span>
-                <span class="entry-sub">
-                    <span lang="en">Project: Oryza AI Backend</span>
-                    <span lang="vi">Dự án: Oryza AI Backend</span>
-                </span>
+                <span class="entry-sub">Project: Oryza AI Backend</span>
                 <ul class="bullets">
                     <li>
                         <strong>Oryza AI Service</strong>
                         <ul class="sub-bullets">
-                            <li lang="en">Developed RESTful APIs for camera data and system configurations using
+                            <li>Developed RESTful APIs for camera data and system configurations using
                                 <strong>FastAPI</strong>.
                             </li>
-                            <li lang="vi">Phát triển RESTful API xử lý dữ liệu camera và cấu hình hệ thống bằng
-                                <strong>FastAPI</strong>.
-                            </li>
-
-                            <li lang="en">Optimized performance by implementing <strong>Redis</strong> caching for
-                                high-frequency requests.</li>
-                            <li lang="vi">Tối ưu hiệu năng bằng <strong>Redis</strong> caching cho các yêu cầu tần suất
-                                cao.</li>
-
-                            <li lang="en">Established centralized observability using <strong>Grafana, Loki, and
+                            <li>Optimized performance by implementing <strong>Redis</strong> caching for high-frequency
+                                requests.</li>
+                            <li>Established centralized observability using <strong>Grafana, Loki, and
                                     Promtail</strong>.</li>
-                            <li lang="vi">Thiết lập hệ thống quan sát tập trung sử dụng <strong>Grafana, Loki, và
-                                    Promtail</strong>.</li>
-
-                            <li lang="en">Containerized applications using <strong>Docker</strong> and managed Staging
+                            <li>Containerized applications using <strong>Docker</strong> and managed Staging
                                 deployments.</li>
-                            <li lang="vi">Container hóa ứng dụng bằng <strong>Docker</strong> và quản lý triển khai lên
-                                môi trường Staging.</li>
                         </ul>
                     </li>
                     <li>
                         <strong>OA-Tools Service</strong>
                         <ul class="sub-bullets">
-                            <li lang="en">Integrated <strong>MinIO (S3)</strong> for large-scale image storage
-                                management.</li>
-                            <li lang="vi">Tích hợp <strong>MinIO (S3)</strong> để quản lý lưu trữ hình ảnh quy mô lớn.
-                            </li>
-
-                            <li lang="en">Implemented Face Recognition features using the <strong>Yunet</strong> engine.
-                            </li>
-                            <li lang="vi">Triển khai tính năng nhận diện khuôn mặt bằng engine <strong>Yunet</strong>.
-                            </li>
+                            <li>Integrated <strong>MinIO (S3)</strong> for large-scale image storage management.</li>
+                            <li>Implemented Face Recognition features using the <strong>Yunet</strong> engine.</li>
                         </ul>
                     </li>
                 </ul>
@@ -720,22 +622,31 @@
 
         <!-- ══ KEY PROJECTS ══ -->
         <section>
-            <h2>
-                <span lang="en">Key Projects</span>
-                <span lang="vi">Đồ án / Bài tập lớn</span>
-            </h2>
-
+            <h2>Key Projects</h2>
+            <!-- HHMS -->
+            <div class="entry">
+                <span class="entry-org">
+                    HHMS - Hotel Agency
+                    <a href="https://nhathuy.online" target="_blank" class="badge">Website</a>
+                </span>
+                <ul class="bullets">
+                    <li><strong>Description:</strong> Developed a comprehensive hotel management platform designed to
+                        coordinate housekeeping cleaning service assignments, manage employee payroll calculations, and
+                        track secure staff attendance using facial recognition check-in/check-out verification.</li>
+                    <li><strong>Stack:</strong> NextJS, NestJS</li>
+                </ul>
+            </div>
             <!-- Hang Duong -->
             <div class="entry">
                 <span class="entry-org">
                     Hang Duong Cemetery
                     <a href="https://nghiatranghangduong.tphcm.gov.vn" target="_blank" class="badge">Website</a>
                 </span>
-                <span class="entry-tech">
-                    <span lang="en">Stack:</span>
-                    <span lang="vi">Công nghệ:</span>
-                    NestJS · Prisma · PostgreSQL · OSRM
-                </span>
+                <ul class="bullets">
+                    <li><strong>Description:</strong> Core features include managing records, grave locations, and
+                        providing routing directions for visitors.</li>
+                    <li><strong>Stack:</strong> NextJS, NestJS</li>
+                </ul>
             </div>
 
             <!-- Business Management -->
@@ -746,21 +657,12 @@
                 </span>
                 <span class="entry-role">Backend Developer — Python / FastAPI</span>
                 <ul class="bullets">
-                    <li lang="en">Built a security administration system with <strong>flexible role-based
-                            permissions</strong> (e.g., Cashiers can sell but cannot modify prices), ensuring strict
-                        data control.</li>
-                    <li lang="vi">Xây dựng hệ thống quản trị an ninh với <strong>phân quyền vai trò linh hoạt</strong>
-                        (VD: Thu ngân có thể bán nhưng không thể sửa giá), đảm bảo kiểm soát dữ liệu chặt chẽ.</li>
-
-                    <li lang="en">Implemented <strong>real-time order processing</strong> via WebSockets for instant
-                        sales notifications.</li>
-                    <li lang="vi">Phát triển <strong>xử lý đơn hàng thời gian thực</strong> qua WebSockets, đảm bảo
-                        thông báo tức thì cho người bán.</li>
-
-                    <li lang="en">Built APIs for complex business data: multi-branch inventory, products, and revenue
-                        reports.</li>
-                    <li lang="vi">Xây dựng API quản lý dữ liệu kinh doanh phức tạp: kho hàng đa chi nhánh, sản phẩm và
-                        báo cáo doanh thu.</li>
+                    <li>Built a security administration system with <strong>flexible role-based permissions</strong>
+                        (e.g., Cashiers can sell but cannot modify prices), ensuring strict data control.</li>
+                    <li>Implemented <strong>real-time order processing</strong> via WebSockets for instant sales
+                        notifications.</li>
+                    <li>Built APIs for complex business data: multi-branch inventory, products, and revenue reports.
+                    </li>
                 </ul>
             </div>
 
@@ -771,23 +673,10 @@
                     <a href="https://github.com/nhathuyd4hp/EventHub" target="_blank" class="badge">GitHub</a>
                 </span>
                 <ul class="bullets">
-                    <li>
-                        <span lang="en"><strong>Description:</strong> A distributed system for event organization and
-                            ticket sales.</span>
-                        <span lang="vi"><strong>Mô tả:</strong> Hệ thống phân tán hỗ trợ tổ chức sự kiện và bán
-                            vé.</span>
-                    </li>
-                    <li>
-                        <span lang="en"><strong>Stack:</strong> ExpressJS · FastAPI · Kafka · Docker · Tyk
-                            Gateway</span>
-                        <span lang="vi"><strong>Công nghệ:</strong> ExpressJS · FastAPI · Kafka · Docker · Tyk
-                            Gateway</span>
-                    </li>
-                    <li>
-                        <span lang="en">Handled async communication via <strong>Kafka</strong> (Notification Service)
-                            and integrated the <strong>VNPay</strong> payment gateway.</span>
-                        <span lang="vi">Xử lý giao tiếp bất đồng bộ qua <strong>Kafka</strong> (Dịch vụ Thông báo) và
-                            tích hợp cổng thanh toán <strong>VNPay</strong>.</span>
+                    <li><strong>Description:</strong> A distributed system for event organization and ticket sales.</li>
+                    <li><strong>Stack:</strong> ExpressJS, FastAPI, Kafka, Docker, Tyk Gateway</li>
+                    <li>Handled async communication via <strong>Kafka</strong> (Notification Service) and integrated the
+                        <strong>VNPay</strong> payment gateway.
                     </li>
                 </ul>
             </div>
@@ -813,23 +702,6 @@
             const isDark = document.body.classList.contains('dark');
             applyTheme(!isDark);
             localStorage.setItem('theme', !isDark ? 'dark' : 'light');
-        });
-
-        // ── Language ──
-        const langBtn = document.getElementById('lang-btn');
-        const langLabel = document.getElementById('lang-label');
-
-        function applyLang(vi) {
-            html.classList.toggle('lang-vi', vi);
-            langLabel.textContent = vi ? 'EN' : 'VI';
-        }
-
-        applyLang((localStorage.getItem('lang') || 'vi') === 'vi');
-
-        langBtn.addEventListener('click', () => {
-            const nowVi = html.classList.contains('lang-vi');
-            applyLang(!nowVi);
-            localStorage.setItem('lang', !nowVi ? 'vi' : 'en');
         });
     </script>
 </body>
