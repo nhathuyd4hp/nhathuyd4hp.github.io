@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Van Ngoc Nhat Huy — Resume</title>
+    <title>Van Ngoc Nhat Huy</title>
     <meta name="description" content="Resume of Van Ngoc Nhat Huy — Python & Backend Developer">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* ── Design tokens ── */
+        /* ── Design tokens (Light) ── */
         :root {
             --c-bg: #f4f5f7;
             --c-paper: #ffffff;
@@ -32,17 +32,18 @@
             --shadow: 0 2px 16px rgba(0, 0, 0, .07);
         }
 
+        /* ── Design tokens (Dark) ── */
         body.dark {
-            --c-bg: #111318;
-            --c-paper: #1c1f27;
-            --c-ink: #e8eaf0;
-            --c-ink-2: #b0b8c8;
-            --c-ink-3: #6b7688;
-            --c-accent: #3fcca8;
-            --c-accent-lt: #0e2d26;
-            --c-rule: #2e3340;
-            --c-timeline: #2e3340;
-            --shadow: 0 2px 20px rgba(0, 0, 0, .4);
+            --c-bg: #0d1117;
+            --c-paper: #161b22;
+            --c-ink: #f0f6fc;
+            --c-ink-2: #c9d1d9;
+            --c-ink-3: #8b949e;
+            --c-accent: #3fb950;
+            --c-accent-lt: rgba(63, 185, 80, 0.1);
+            --c-rule: #30363d;
+            --c-timeline: #30363d;
+            --shadow: 0 4px 24px rgba(0, 0, 0, .5);
         }
 
         /* ── Reset ── */
@@ -84,7 +85,7 @@
             min-height: 297mm;
             padding: 48px 56px 56px;
             box-shadow: var(--shadow);
-            border-radius: 3px;
+            border-radius: 6px;
             animation: rise .45s ease-out;
             transition: background .25s, box-shadow .25s;
         }
@@ -101,11 +102,39 @@
             }
         }
 
-        /* ── Header ── */
+        /* ── Header with Square Avatar ── */
         header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
             padding-bottom: 22px;
             border-bottom: 2px solid var(--c-accent);
             margin-bottom: 24px;
+        }
+
+        .avatar-container {
+            width: 76px;
+            height: 76px;
+            border-radius: 8px;
+            /* Bo góc vuông nhẹ nhàng */
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid var(--c-accent);
+            background: var(--c-accent-lt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .header-info {
+            flex: 1;
         }
 
         .name {
@@ -114,7 +143,7 @@
             font-weight: 600;
             letter-spacing: .3px;
             color: var(--c-ink);
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
 
         .contact-bar {
@@ -226,13 +255,6 @@
             margin-top: 2px;
         }
 
-        .entry-tech {
-            font-size: 13px;
-            color: var(--c-ink-2);
-            grid-column: 1 / -1;
-            margin-top: 4px;
-        }
-
         /* ── Bullet lists ── */
         .bullets {
             list-style: none;
@@ -311,7 +333,7 @@
             margin-top: 6px;
         }
 
-        /* ── Education (no timeline) ── */
+        /* ── Education ── */
         .edu-block {
             display: flex;
             justify-content: space-between;
@@ -330,12 +352,7 @@
             font-size: 14px;
         }
 
-        .edu-major {
-            font-size: 13px;
-            color: var(--c-ink-2);
-        }
-
-        /* ── Badge / project link / Keywords ── */
+        /* ── Badge / project link ── */
         .badge {
             display: inline-flex;
             align-items: center;
@@ -416,15 +433,8 @@
                 color: #000 !important;
             }
 
-            h2 {
-                color: #0e6e55 !important;
-            }
-
+            h2,
             .entry-role,
-            .edu-block {
-                color: #0e6e55 !important;
-            }
-
             a {
                 color: #0e6e55 !important;
             }
@@ -443,6 +453,11 @@
                 border-radius: 0;
             }
 
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
             .skills-table {
                 grid-template-columns: 1fr;
             }
@@ -457,11 +472,6 @@
 
             .name {
                 font-size: 24px;
-            }
-
-            .edu-block {
-                flex-direction: column;
-                gap: 4px;
             }
 
             .fab-group {
@@ -490,11 +500,17 @@
 
         <!-- ══ HEADER ══ -->
         <header>
-            <div class="name">Van Ngoc Nhat Huy</div>
-            <div class="contact-bar">
-                <a href="tel:0867617246"><i class="fas fa-phone-alt"></i>(+84) 86-761-7246</a>
-                <a href="mailto:work.nhathuyd4hp@gmail.com"><i
-                        class="fas fa-envelope"></i>work.nhathuyd4hp@gmail.com</a>
+            <div class="avatar-container">
+                <img src="avatar.jpg" alt="Van Ngoc Nhat Huy"
+                    onerror="this.closest('.avatar-container').style.display='none'">
+            </div>
+            <div class="header-info">
+                <div class="name">Van Ngoc Nhat Huy</div>
+                <div class="contact-bar">
+                    <a href="tel:0867617246"><i class="fas fa-phone-alt"></i>(+84) 86-761-7246</a>
+                    <a href="mailto:work.nhathuyd4hp@gmail.com"><i
+                            class="fas fa-envelope"></i>work.nhathuyd4hp@gmail.com</a>
+                </div>
             </div>
         </header>
 
@@ -577,8 +593,8 @@
                     <li>
                         <strong>Web Automation & Integration</strong>
                         <ul class="sub-bullets">
-                            <li>Developed workflow modules using <strong>Playwright</strong>, <strong>Selenium</strong>
-                                , <strong>Google App Scripts</strong>,... to automate data collection, form submission,
+                            <li>Developed workflow modules using <strong>Playwright</strong>, <strong>Selenium</strong>,
+                                <strong>Google App Scripts</strong>,... to automate data collection, form submission,
                                 document
                                 distribution, and report generation across multiple enterprise platforms.
                             </li>
@@ -620,7 +636,6 @@
             </div>
         </section>
 
-        <!-- ══ KEY PROJECTS ══ -->
         <!-- ══ KEY PROJECTS ══ -->
         <section>
             <h2>Key Projects</h2>
@@ -700,7 +715,8 @@
             themeIcon.className = dark ? 'fas fa-sun' : 'fas fa-moon';
         }
 
-        applyTheme(localStorage.getItem('theme') === 'dark');
+        const savedTheme = localStorage.getItem('theme');
+        applyTheme(savedTheme === 'dark');
 
         themeBtn.addEventListener('click', () => {
             const isDark = document.body.classList.contains('dark');
