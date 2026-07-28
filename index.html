@@ -4,10 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Van Ngoc Nhat Huy</title>
+    <title>Van Ngoc Nhat Huy — Resume</title>
     <meta name="description" content="Resume of Van Ngoc Nhat Huy — Python & Backend Developer">
+
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230e6e55' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='16 18 22 12 16 6'></polyline><polyline points='8 6 2 12 8 18'></polyline></svg>">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -103,7 +106,7 @@
             }
         }
 
-        /* ── Header with Square Avatar ── */
+        /* ── Header ── */
         header {
             display: flex;
             align-items: center;
@@ -117,7 +120,6 @@
             width: 76px;
             height: 76px;
             border-radius: 8px;
-            /* Bo góc vuông nhẹ nhàng */
             overflow: hidden;
             flex-shrink: 0;
             border: 2px solid var(--c-accent);
@@ -172,6 +174,9 @@
             color: var(--c-accent);
             width: 14px;
             text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* ── Section heading ── */
@@ -194,6 +199,36 @@
             flex: 1;
             height: 1px;
             background: var(--c-rule);
+        }
+
+        /* ── Improved Classic Technical Skills UI ── */
+        .skills-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: var(--c-accent-lt);
+            padding: 12px 16px;
+            border-radius: 6px;
+            border-left: 3px solid var(--c-accent);
+            transition: background .25s;
+        }
+
+        .skill-item-row {
+            display: flex;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .skill-label {
+            font-weight: 700;
+            color: var(--c-ink);
+            width: 130px;
+            flex-shrink: 0;
+        }
+
+        .skill-value {
+            color: var(--c-ink-2);
+            flex: 1;
         }
 
         /* ── Entry (experience / project) ── */
@@ -302,31 +337,7 @@
             top: 1px;
         }
 
-        /* ── Skills & Knowledge ── */
-        .skills-table {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px 40px;
-        }
-
-        .skill-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            font-size: 13px;
-        }
-
-        .skill-key {
-            font-weight: 700;
-            color: var(--c-ink);
-            min-width: 80px;
-            flex-shrink: 0;
-        }
-
-        .skill-val {
-            color: var(--c-ink-2);
-        }
-
+        /* ── Knowledge Concepts ── */
         .knowledge-list {
             display: flex;
             flex-wrap: wrap;
@@ -385,7 +396,7 @@
             z-index: 100;
         }
 
-        .fab {
+        .floating-btn {
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -401,7 +412,7 @@
             transition: all .2s;
         }
 
-        .fab:hover {
+        .floating-btn:hover {
             background: var(--c-accent);
             color: #fff;
             border-color: var(--c-accent);
@@ -431,13 +442,30 @@
             body,
             .page {
                 background: #fff !important;
-                color: #000 !important;
+                color: #1a1d23 !important;
             }
 
             h2,
             .entry-role,
             a {
                 color: #0e6e55 !important;
+            }
+
+            .skills-list {
+                background: #f9fafb !important;
+                border-left: 3px solid #0e6e55 !important;
+            }
+
+            .entry-org,
+            .edu-inst {
+                color: #1a1d23 !important;
+            }
+
+            .bullets li,
+            .skill-value,
+            .entry-sub,
+            .entry-date {
+                color: #3d4451 !important;
             }
         }
 
@@ -459,8 +487,13 @@
                 align-items: flex-start;
             }
 
-            .skills-table {
-                grid-template-columns: 1fr;
+            .skill-item-row {
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .skill-label {
+                width: 100%;
             }
 
             .entry {
@@ -489,10 +522,10 @@
 
     <!-- ── Floating buttons ── -->
     <div class="fab-group">
-        <button class="fab" onclick="window.print()" title="Download PDF">
+        <button class="floating-btn" onclick="window.print()" title="Download PDF">
             <i class="fas fa-download"></i>
         </button>
-        <button class="fab" id="theme-btn" title="Toggle theme">
+        <button class="floating-btn" id="theme-btn" title="Toggle theme">
             <i class="fas fa-moon" id="theme-icon"></i>
         </button>
     </div>
@@ -511,6 +544,8 @@
                     <a href="tel:0867617246"><i class="fas fa-phone-alt"></i>(+84) 86-761-7246</a>
                     <a href="mailto:work.nhathuyd4hp@gmail.com"><i
                             class="fas fa-envelope"></i>work.nhathuyd4hp@gmail.com</a>
+                    <a href="https://github.com/nhathuyd4hp" target="_blank"><i
+                            class="fab fa-github"></i>github.com/nhathuyd4hp</a>
                 </div>
             </div>
         </header>
@@ -525,25 +560,25 @@
             </div>
         </section>
 
-        <!-- ══ TECHNICAL SKILLS ══ -->
+        <!-- ══ TECHNICAL SKILLS (Refined Classic Style) ══ -->
         <section>
             <h2>Technical Skills</h2>
-            <div class="skills-table">
-                <div class="skill-row">
-                    <span class="skill-key">Languages</span>
-                    <div class="skill-val">Python, Dart/Flutter, JavaScript/TypeScript</div>
+            <div class="skills-list">
+                <div class="skill-item-row">
+                    <span class="skill-label">Languages</span>
+                    <span class="skill-value">Python, Dart/Flutter, JavaScript/TypeScript</span>
                 </div>
-                <div class="skill-row">
-                    <span class="skill-key">Backend</span>
-                    <div class="skill-val">FastAPI, NestJS</div>
+                <div class="skill-item-row">
+                    <span class="skill-label">Backend</span>
+                    <span class="skill-value">FastAPI, NestJS</span>
                 </div>
-                <div class="skill-row">
-                    <span class="skill-key">Databases</span>
-                    <div class="skill-val">PostgreSQL, MongoDB, MySQL, Redis</div>
+                <div class="skill-item-row">
+                    <span class="skill-label">Databases</span>
+                    <span class="skill-value">PostgreSQL, MongoDB, MySQL, Redis</span>
                 </div>
-                <div class="skill-row">
-                    <span class="skill-key">Platform</span>
-                    <div class="skill-val">Docker, Cloudflare, Linux, Azure DevOps</div>
+                <div class="skill-item-row">
+                    <span class="skill-label">Platform & Tools</span>
+                    <span class="skill-value">Docker, Cloudflare, Linux, Azure DevOps</span>
                 </div>
             </div>
         </section>
@@ -723,6 +758,21 @@
             const isDark = document.body.classList.contains('dark');
             applyTheme(!isDark);
             localStorage.setItem('theme', !isDark ? 'dark' : 'light');
+        });
+
+        // ── Fix triệt để lỗi in khi đang ở Dark Mode ──
+        window.addEventListener('beforeprint', () => {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                window.wasDarkMode = true;
+            }
+        });
+
+        window.addEventListener('afterprint', () => {
+            if (window.wasDarkMode) {
+                document.body.classList.add('dark');
+                window.wasDarkMode = false;
+            }
         });
     </script>
 </body>
