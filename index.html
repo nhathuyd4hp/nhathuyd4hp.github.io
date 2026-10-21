@@ -619,6 +619,7 @@
                 <span class="badge">WebSockets, Pub/Sub</span>
                 <span class="badge">QraphQL</span>
                 <span class="badge">Task Queues</span>
+                <span class="badge">Vibe Coding</span>
             </div>
         </section>
 
@@ -633,7 +634,7 @@
                 <span class="entry-role">Python Developer</span>
                 <ul class="bullets">
                     <li>
-                        <strong>System Architecture</strong>
+                        <strong>Internal Workflow Management Platform</strong>
                         <ul class="sub-bullets">
                             <li>Designed a distributed RPA orchestration platform using <strong>FastAPI</strong>,
                                 <strong>Celery</strong>, and <strong>Redis</strong> to schedule, dispatch, and monitor
@@ -648,15 +649,27 @@
                             <li>Built a scheduling and job persistence system using <strong>APScheduler</strong> backed
                                 by <strong>MySQL</strong>, with <strong>MinIO</strong> object storage for automated
                                 result file management and lifecycle expiration policies.</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <strong>Web Automation & Integration</strong>
-                        <ul class="sub-bullets">
                             <li>Developed workflow modules using <strong>Playwright</strong>, <strong>Selenium</strong>,
                                 <strong>Google App Scripts</strong>,... to automate data collection, form submission,
                                 document distribution, and report generation across multiple enterprise platforms.
                             </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Internal Document Management Platform</strong>
+                        <ul class="sub-bullets">
+                            <li>Built the backend of an internal platform that centralizes company documents across
+                                <strong>SharePoint</strong>, <strong>Google Drive</strong> and <strong>S3 / MinIO</strong>
+                                using <strong>FastAPI</strong> and <strong>PostgreSQL</strong>: browsing, search, uploads
+                                and copy/move between storage sources.</li>
+                            <li>Designed a storage provider abstraction over <strong>Microsoft Graph</strong>,
+                                <strong>Google Drive API</strong> and <strong>boto3</strong>, so every feature shares one
+                                code path regardless of where a file lives.</li>
+                            <li>Integrated <strong>ONLYOFFICE Docs</strong> for in-browser Word/Excel/PowerPoint editing
+                                saved back to the source, with ETag-based conflict detection and live file-change alerts
+                                over <strong>WebSockets</strong>.</li>
+                            <li>Implemented role-based access with <strong>JWT</strong> sessions, rotating refresh tokens
+                                and encrypted storage credentials.</li>
                         </ul>
                     </li>
                 </ul>
