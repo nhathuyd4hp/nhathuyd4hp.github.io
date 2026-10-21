@@ -332,13 +332,13 @@
   }
 
   /* SVG mechanism diagram: grey = a run, lime = the decision loop, blue = locking */
-  figure.diagram { margin: 0; }
+  figure.diagram { margin: 0; padding: var(--space-5); }
   .diagram-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .diagram-scroll svg { display: block; width: 100%; min-width: 880px; height: auto; }
+  .diagram-scroll svg { display: block; width: 100%; min-width: 960px; height: auto; }
   .d-box { fill: var(--surface-raised); stroke: var(--border-default); stroke-width: 1; }
-  .d-title { font-size: 13px; font-weight: 600; fill: var(--text-primary); }
-  .d-sub { font-size: 11px; fill: var(--text-secondary); }
-  .d-label { font-size: 11px; font-weight: 500; fill: var(--text-secondary); }
+  .d-title { font-size: 15px; font-weight: 600; fill: var(--text-primary); }
+  .d-sub { font-size: 12.5px; fill: var(--text-secondary); }
+  .d-label { font-size: 12.5px; font-weight: 500; fill: var(--text-secondary); }
   .d-label.hot { fill: var(--surface-strong); }
   .d-label.lock { fill: var(--text-accent); }
   .d-edge { fill: none; stroke-width: 1.5; }
@@ -540,9 +540,9 @@
 
           <figure class="diagram">
             <div class="diagram-scroll">
-              <svg viewBox="0 0 1040 440" role="img" aria-label="A trigger starts a run through FastAPI, Celery dispatches it to a worker that takes a lock and uploads results to S3. When the worker needs a decision it publishes a prompt over Redis Pub/Sub to the user's WebSocket, then blocks on BLPOP. The user answers through a REST API, and FastAPI pushes the answer into the Redis list the worker is waiting on.">
+              <svg viewBox="0 0 1040 440" role="img" aria-label="A trigger starts a run through FastAPI, which keeps job and run metadata in MySQL; S3 event notifications update that metadata when results land. Celery dispatches it to a worker that takes a lock and uploads results to S3. When the worker needs a decision it publishes a prompt over Redis Pub/Sub to the user's WebSocket, then blocks on BLPOP. The user answers through a REST API, and FastAPI pushes the answer into the Redis list the worker is waiting on.">
                 <defs>
-                  <marker id="rpa-head-run" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="d-head run" d="M0,0 L10,5 L0,10 z"/></marker>
+                  <marker id="rpa-head-run" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-head run" d="M0,0 L10,5 L0,10 z"/></marker>
                   <marker id="rpa-head-hot" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="d-head hot" d="M0,0 L10,5 L0,10 z"/></marker>
                   <marker id="rpa-head-lock" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="d-head lock" d="M0,0 L10,5 L0,10 z"/></marker>
                 </defs>
@@ -550,7 +550,11 @@
                 <!-- components -->
                 <rect class="d-box" x="665" y="12" width="150" height="56" rx="10"/>
                 <text class="d-title" x="740" y="36" text-anchor="middle">Lock</text>
-                <text class="d-sub" x="740" y="53" text-anchor="middle">prevents race conditions</text>
+                <text class="d-sub" x="740" y="53" text-anchor="middle">stops race conditions</text>
+
+                <rect class="d-box" x="225" y="12" width="150" height="56" rx="10"/>
+                <text class="d-title" x="300" y="36" text-anchor="middle">MySQL</text>
+                <text class="d-sub" x="300" y="53" text-anchor="middle">job &amp; run metadata</text>
 
                 <rect class="d-box" x="8" y="132" width="140" height="56" rx="10"/>
                 <text class="d-title" x="78" y="156" text-anchor="middle">Trigger</text>
@@ -574,7 +578,7 @@
 
                 <rect class="d-box" x="445" y="252" width="150" height="56" rx="10"/>
                 <text class="d-title" x="520" y="276" text-anchor="middle">Redis Pub/Sub</text>
-                <text class="d-sub" x="520" y="293" text-anchor="middle">logs · events · prompts</text>
+                <text class="d-sub" x="520" y="293" text-anchor="middle">logs, events, prompts</text>
 
                 <rect class="d-box" x="8" y="372" width="140" height="56" rx="10"/>
                 <text class="d-title" x="78" y="396" text-anchor="middle">User</text>
@@ -593,6 +597,10 @@
                 <text class="d-label" x="630" y="151" text-anchor="middle">dispatch</text>
                 <line class="d-edge run" x1="815" y1="160" x2="872" y2="160" marker-end="url(#rpa-head-run)"/>
                 <text class="d-label" x="845" y="151" text-anchor="middle">upload</text>
+                <line class="d-edge run" x1="300" y1="130" x2="300" y2="71" marker-start="url(#rpa-head-run)" marker-end="url(#rpa-head-run)"/>
+                <text class="d-label" x="310" y="104">read / write</text>
+                <polyline class="d-edge run" points="950,130 950,88 340,88 340,71" marker-end="url(#rpa-head-run)"/>
+                <text class="d-label" x="520" y="82" text-anchor="middle">event notification</text>
 
                 <!-- locking -->
                 <line class="d-edge lock" x1="740" y1="132" x2="740" y2="71" marker-end="url(#rpa-head-lock)"/>
@@ -632,7 +640,7 @@
               <li><strong>Real-time channel</strong> over WebSockets and Redis Pub/Sub that streams live logs, execution events and decision prompts to clients.</li>
               <li><strong>Waiting on user decisions</strong>: a worker that needs an answer blocks on a Redis <code>BLPOP</code> until the user responds through a REST API, without polling.</li>
               <li><strong>Locking</strong> to prevent race conditions between concurrent workers.</li>
-              <li><strong>Scheduling and persistence</strong> with APScheduler on MySQL, plus S3 storage for result files with lifecycle expiry.</li>
+              <li><strong>Scheduling and persistence</strong> with APScheduler on MySQL, plus S3 storage for result files with lifecycle expiry; S3 event notifications keep the metadata in MySQL up to date.</li>
               <li><strong>Workflow modules</strong> in Playwright, Selenium and Google Apps Script for data collection, form submission, document distribution and report generation.</li>
             </ul>
             <div class="stack">
