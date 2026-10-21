@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Van Ngoc Nhat Huy</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Portfolio of Van Ngoc Nhat Huy, backend developer: workflow orchestration, document platforms and real-time APIs.">
+<meta name="theme-color" content="#000000">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Van Ngoc Nhat Huy, Backend Developer">
+<meta property="og:description" content="Workflow orchestration, document platforms and real-time APIs.">
+<meta property="og:url" content="https://nhathuyd4hp.github.io/portfolio/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+<style>
+  /* Layout: dark, content-first single column. Cards sit on raised surfaces; lime is reserved for
+     primary actions, focus and the data flowing through each system diagram. Single dark theme by design. */
+  :root {
+    color-scheme: dark;
+
+    /* color */
+    --text-primary: #f1efe7;
+    --text-secondary: #a7adb0;
+    --text-on-strong: #090b0c;
+    --text-accent: #7ea2b8;
+    --surface-base: #000000;
+    --surface-muted: #151a1d;
+    --surface-raised: #101416;
+    --surface-strong: #c7f36b;
+    --border-default: #2a3135;
+
+    /* type */
+    --font-primary: "Geist", "Geist Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --fs-sm: 12px;
+    --fs-md: 14px;
+    --fs-base: 16px;
+    --fs-lg: 18px;
+    --fs-xl: 20px;
+    --fs-2xl: clamp(26px, 3.4vw, 32px);
+    --fs-3xl: clamp(36px, 6vw, 56px);
+    --fs-display: clamp(44px, 9.5vw, 104px);
+    --lh-base: 24px;
+
+    /* space */
+    --space-1: 6px;
+    --space-2: 8px;
+    --space-3: 10px;
+    --space-4: 12px;
+    --space-5: 16px;
+    --space-6: 20px;
+    --space-7: 24px;
+    --space-8: 28px;
+    --space-9: 40px;
+    --space-10: 64px;
+    --space-11: 96px;
+
+    /* shape and motion */
+    --radius: 12px;
+    --shadow-1: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --dur-instant: 150ms;
+    --dur-fast: 200ms;
+    --dur-normal: 300ms;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  body {
+    margin: 0;
+    background: var(--surface-base);
+    color: var(--text-primary);
+    font: 400 var(--fs-base)/var(--lh-base) var(--font-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: var(--surface-base);
+  }
+  h1, h2, h3, h4 { margin: 0; font-weight: 600; text-wrap: balance; }
+  p, ul, ol { margin: 0; }
+  img { max-width: 100%; }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--surface-strong); outline-offset: 2px; border-radius: 4px; }
+
+  .wrap {
+    max-width: 1120px;
+    margin-inline: auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  @media (min-width: 720px) {
+    .wrap {
+      padding-left: max(32px, env(safe-area-inset-left, 0px));
+      padding-right: max(32px, env(safe-area-inset-right, 0px));
+    }
+  }
+
+  .label {
+    font-size: var(--fs-sm);
+    line-height: 16px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--text-secondary);
+  }
+
+  /* ── Top bar ── */
+  .topbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 20;
+    background: color-mix(in srgb, var(--surface-base) 82%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-default);
+  }
+  .topbar-in { display: flex; align-items: center; gap: var(--space-7); min-height: 60px; }
+  .brand {
+    margin-right: auto;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    font-size: var(--fs-base);
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+  .nav { display: flex; gap: var(--space-1); }
+  .nav a {
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--fs-md);
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius);
+    transition: color var(--dur-fast), background var(--dur-fast);
+  }
+  .nav a:hover { color: var(--text-primary); background: var(--surface-muted); }
+  .nav a:active { background: var(--surface-raised); }
+  @media (max-width: 760px) { .nav { display: none; } }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    padding: 0 var(--space-6);
+    font: 500 var(--fs-md)/1 var(--font-primary);
+    text-decoration: none;
+    color: var(--text-primary);
+    background: var(--surface-muted);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background var(--dur-fast), border-color var(--dur-fast), transform var(--dur-instant);
+  }
+  .btn:hover { border-color: var(--text-secondary); }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled, .btn[aria-disabled="true"] { opacity: .5; cursor: not-allowed; transform: none; }
+  .btn-primary { background: var(--surface-strong); border-color: var(--surface-strong); color: var(--text-on-strong); }
+  .btn-primary:hover {
+    background: color-mix(in srgb, var(--surface-strong) 86%, var(--text-primary));
+    border-color: color-mix(in srgb, var(--surface-strong) 86%, var(--text-primary));
+  }
+
+  /* ── Hero ── */
+  .hero { padding-block: var(--space-11) var(--space-10); }
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--text-accent);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--surface-strong);
+  }
+  .hero h1 {
+    margin-top: var(--space-6);
+    font-size: var(--fs-display);
+    line-height: .95;
+    letter-spacing: -0.045em;
+    animation: rise var(--dur-normal) ease-out;
+  }
+  .hero h1 .family { display: block; color: var(--text-secondary); font-weight: 500; }
+  .hero h1 .given { display: block; }
+  @keyframes rise { from { transform: translateY(8px); } to { transform: none; } }
+  .cta { display: flex; flex-wrap: wrap; gap: var(--space-4); margin-top: var(--space-9); }
+
+  /* ── Sections ── */
+  .band { border-top: 1px solid var(--border-default); padding-block: var(--space-11); }
+  @media (max-width: 720px) { .band { padding-block: var(--space-10); } .hero { padding-block: var(--space-10); } }
+  .section-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    gap: var(--space-4) var(--space-9);
+    align-items: end;
+    margin-bottom: var(--space-9);
+  }
+  .section-head h2 { font-size: var(--fs-2xl); line-height: 1.15; letter-spacing: -0.025em; }
+  .section-head p { color: var(--text-secondary); max-width: 56ch; }
+  @media (max-width: 860px) { .section-head { grid-template-columns: minmax(0, 1fr); } }
+
+  /* ── Systems ── */
+  .systems { display: grid; gap: var(--space-8); }
+  .system {
+    padding: var(--space-8);
+    background: var(--surface-raised);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-1);
+  }
+  @media (max-width: 560px) { .system { padding: var(--space-5); } }
+  .system-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    gap: var(--space-4) var(--space-9);
+    align-items: end;
+    margin-bottom: var(--space-7);
+  }
+  .kicker { color: var(--text-accent); margin-bottom: var(--space-2); }
+  .system h3 { font-size: var(--fs-xl); line-height: 28px; letter-spacing: -0.01em; }
+  .system-sum { color: var(--text-secondary); max-width: 58ch; }
+
+  .diagram {
+    padding: var(--space-7);
+    background-color: var(--surface-muted);
+    background-image: radial-gradient(var(--border-default) 1px, transparent 1.2px);
+    background-size: 16px 16px;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius);
+  }
+  @media (max-width: 560px) { .diagram { padding: var(--space-5); } }
+  .flow {
+    --gap: 36px;
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    column-gap: var(--gap);
+  }
+  .node {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--space-1);
+    padding: var(--space-4) var(--space-5);
+    background: var(--surface-raised);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius);
+  }
+  .node .label { color: var(--text-accent); }
+  .node-tech { font-size: var(--fs-md); line-height: 20px; font-weight: 600; color: var(--text-primary); }
+  .node-note { font-size: var(--fs-sm); line-height: 18px; color: var(--text-secondary); }
+  /* connector: a dashed line moving toward the next step, then an arrowhead */
+  .node:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: calc(var(--gap) - 6px);
+    height: 2px;
+    margin-top: -1px;
+    background: linear-gradient(90deg, var(--surface-strong) 0 50%, transparent 50% 100%) 0 0 / 8px 2px repeat-x;
+    animation: flow-x .9s linear infinite;
+  }
+  .node:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: calc(100% + var(--gap) - 7px);
+    margin-top: -5px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 7px solid var(--surface-strong);
+  }
+  @keyframes flow-x { to { background-position: 8px 0; } }
+  @keyframes flow-y { to { background-position: 0 8px; } }
+  .return {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-4);
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px dashed var(--border-default);
+    font-size: var(--fs-md);
+    line-height: 20px;
+    color: var(--text-secondary);
+  }
+  .return .label { color: var(--text-accent); }
+  .return span:last-child { flex: 1 1 280px; min-width: 0; }
+  @media (max-width: 900px) {
+    .flow { --gap: 28px; grid-template-columns: minmax(0, 1fr); column-gap: 0; row-gap: var(--gap); }
+    .node:not(:last-child)::after {
+      top: 100%;
+      left: 24px;
+      width: 2px;
+      height: calc(var(--gap) - 6px);
+      margin-top: 0;
+      background: linear-gradient(180deg, var(--surface-strong) 0 50%, transparent 50% 100%) 0 0 / 2px 8px repeat-y;
+      animation-name: flow-y;
+    }
+    .node:not(:last-child)::before {
+      top: calc(100% + var(--gap) - 7px);
+      left: 20px;
+      margin-top: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 7px solid var(--surface-strong);
+      border-bottom: 0;
+    }
+  }
+
+  .system-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    gap: var(--space-8) var(--space-9);
+    margin-top: var(--space-8);
+  }
+  .points { list-style: none; padding: 0; display: grid; gap: var(--space-3); }
+  .points li { position: relative; padding-left: var(--space-6); color: var(--text-secondary); }
+  .points li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 8px;
+    height: 2px;
+    background: var(--text-accent);
+  }
+  .points strong { color: var(--text-primary); font-weight: 500; }
+  .stack { display: grid; align-content: start; gap: var(--space-4); }
+  .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1); }
+  .tag {
+    padding: 2px var(--space-3);
+    font-size: var(--fs-sm);
+    line-height: 20px;
+    color: var(--text-secondary);
+    background: var(--surface-muted);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius);
+  }
+  @media (max-width: 860px) {
+    .system-head, .system-body { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  /* ── Experience and education ── */
+  .timeline { list-style: none; padding: 0; }
+  .row {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: var(--space-1) var(--space-9);
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--border-default);
+  }
+  .timeline .row:last-child { border-bottom: 1px solid var(--border-default); }
+  .when { font-size: var(--fs-md); line-height: 26px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  .what h3 { font-size: var(--fs-lg); line-height: 26px; font-weight: 500; }
+  .what h3 .at { color: var(--text-secondary); font-weight: 400; }
+  @media (max-width: 720px) { .row { grid-template-columns: minmax(0, 1fr); } }
+
+  /* ── Projects ── */
+  .projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); }
+  .project {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-7);
+    background: var(--surface-raised);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius);
+    transition: border-color var(--dur-fast);
+  }
+  .project:hover { border-color: color-mix(in srgb, var(--border-default) 60%, var(--text-secondary)); }
+  .project-top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-4); }
+  .project h3 { font-size: var(--fs-lg); line-height: 26px; letter-spacing: -0.01em; }
+  .ext {
+    flex-shrink: 0;
+    font-size: var(--fs-md);
+    font-weight: 500;
+    color: var(--text-accent);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color var(--dur-fast);
+  }
+  .ext:hover { color: var(--text-primary); text-decoration: underline; text-underline-offset: 3px; }
+  .project .desc { color: var(--text-secondary); }
+  .project .tags { margin-top: auto; padding-top: var(--space-1); }
+  @media (max-width: 760px) { .projects { grid-template-columns: minmax(0, 1fr); } }
+
+  /* ── Toolkit ── */
+  .toolkit { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-8); }
+  .kit { padding-top: var(--space-4); border-top: 1px solid var(--border-default); }
+  .kit .label { color: var(--text-accent); }
+  .kit p { margin-top: var(--space-2); }
+  .concepts { margin-top: var(--space-9); display: grid; gap: var(--space-4); }
+  .concepts .label { color: var(--text-accent); }
+  @media (max-width: 900px) { .toolkit { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 520px) { .toolkit { grid-template-columns: minmax(0, 1fr); } }
+
+  /* ── Contact ── */
+  .contact h2 { font-size: var(--fs-3xl); line-height: 1.05; letter-spacing: -0.035em; }
+  .contact .intro { margin-top: var(--space-5); color: var(--text-secondary); max-width: 52ch; }
+  .contact-rows { margin-top: var(--space-9); border-top: 1px solid var(--border-default); }
+  .contact-row {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-2) var(--space-5);
+    padding-block: var(--space-5);
+    border-bottom: 1px solid var(--border-default);
+  }
+  .contact-row .value {
+    font-size: var(--fs-xl);
+    line-height: 28px;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    transition: color var(--dur-fast);
+  }
+  .contact-row a.value:hover { color: var(--surface-strong); }
+  .copy { min-height: 36px; padding: 0 var(--space-4); }
+  @media (max-width: 560px) {
+    .contact-row { grid-template-columns: minmax(0, 1fr) auto; }
+    .contact-row .label { grid-column: 1 / -1; }
+    .contact-row .value { font-size: var(--fs-lg); }
+  }
+
+  footer { border-top: 1px solid var(--border-default); padding-block: var(--space-8); }
+  footer p { font-size: var(--fs-sm); color: var(--text-secondary); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="#top">Nhat Huy</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#systems">Systems</a>
+      <a href="#experience">Experience</a>
+      <a href="#education">Education</a>
+      <a href="#projects">Projects</a>
+      <a href="#toolkit">Toolkit</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <p class="label eyebrow">Backend Developer</p>
+      <h1><span class="family">Van Ngoc</span><span class="given">Nhat Huy</span></h1>
+      <div class="cta">
+        <a class="btn btn-primary" href="#systems">See the systems</a>
+        <a class="btn" href="https://nhathuyd4hp.github.io/" target="_blank" rel="noopener">Printable CV ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="systems">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Systems</h2>
+        <p>Two internal platforms I build at ASTR Ltd. They run inside the company, so instead of a link,
+          each one is drawn as the flow it handles.</p>
+      </div>
+
+      <div class="systems">
+
+        <article class="system">
+          <div class="system-head">
+            <div>
+              <p class="label kicker">Internal · ASTR Ltd</p>
+              <h3>Internal RPA Platform</h3>
+            </div>
+            <p class="system-sum">Schedules, dispatches and monitors automation workflows. Its bots collect data,
+              submit forms, distribute documents and generate reports across the company's enterprise platforms.</p>
+          </div>
+
+          <div class="diagram">
+            <ol class="flow" style="--n: 5" aria-label="How a workflow run moves through the platform">
+              <li class="node"><span class="label">Trigger</span><span class="node-tech">Webhooks · APScheduler</span><span class="node-note">external events and schedules, jobs kept in MySQL</span></li>
+              <li class="node"><span class="label">Orchestrator</span><span class="node-tech">FastAPI</span><span class="node-note">accepts runs and tracks their status</span></li>
+              <li class="node"><span class="label">Queue</span><span class="node-tech">Celery · Redis</span><span class="node-note">dispatches jobs to workers</span></li>
+              <li class="node"><span class="label">Workers</span><span class="node-tech">Playwright · Selenium · Apps Script</span><span class="node-note">run the automation</span></li>
+              <li class="node"><span class="label">Results</span><span class="node-tech">MinIO</span><span class="node-note">output files with lifecycle expiry</span></li>
+            </ol>
+            <p class="return"><span class="label">Return path</span><span>Live logs, execution events and decision prompts stream back to the client over WebSockets and Redis Pub/Sub.</span></p>
+          </div>
+
+          <div class="system-body">
+            <ul class="points">
+              <li><strong>Distributed orchestration</strong> with FastAPI, Celery and Redis to schedule, dispatch and monitor workflows.</li>
+              <li><strong>Webhook endpoints</strong> so external systems can trigger workflow runs.</li>
+              <li><strong>Two-way real-time channel</strong> over WebSockets and Redis Pub/Sub for live logs, execution events and interactive decision prompts between workers and clients.</li>
+              <li><strong>Scheduling and persistence</strong> with APScheduler on MySQL, plus MinIO storage for result files with lifecycle expiry.</li>
+              <li><strong>Workflow modules</strong> in Playwright, Selenium and Google Apps Script for data collection, form submission, document distribution and report generation.</li>
+            </ul>
+            <div class="stack">
+              <h4 class="label">Stack</h4>
+              <ul class="tags">
+                <li class="tag">Python</li><li class="tag">FastAPI</li><li class="tag">Celery</li><li class="tag">Redis</li><li class="tag">MySQL</li><li class="tag">APScheduler</li><li class="tag">MinIO</li><li class="tag">Playwright</li><li class="tag">Selenium</li><li class="tag">WebSockets</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="system">
+          <div class="system-head">
+            <div>
+              <p class="label kicker">Internal · ASTR Ltd</p>
+              <h3>Internal Document Management Platform</h3>
+            </div>
+            <p class="system-sum">Brings company documents from SharePoint, Google Drive and S3 / MinIO into one place to
+              browse, search, edit and move, without changing where the files live.</p>
+          </div>
+
+          <div class="diagram">
+            <ol class="flow" style="--n: 4" aria-label="How a document moves from its source to the editor">
+              <li class="node"><span class="label">Sources</span><span class="node-tech">SharePoint · Google Drive · S3 / MinIO</span><span class="node-note">where the files already live</span></li>
+              <li class="node"><span class="label">Provider layer</span><span class="node-tech">Microsoft Graph · Drive API · boto3</span><span class="node-note">one interface for every source</span></li>
+              <li class="node"><span class="label">Platform API</span><span class="node-tech">FastAPI · PostgreSQL</span><span class="node-note">browse, search, upload, copy and move</span></li>
+              <li class="node"><span class="label">Editor</span><span class="node-tech">ONLYOFFICE Docs</span><span class="node-note">edit Office files in the browser, saved back to the source</span></li>
+            </ol>
+            <p class="return"><span class="label">Return path</span><span>File-change alerts reach everyone who has the document open, over WebSockets.</span></p>
+          </div>
+
+          <div class="system-body">
+            <ul class="points">
+              <li><strong>One place for company documents</strong> across SharePoint, Google Drive and S3 / MinIO: browse, search, upload, and copy or move between sources.</li>
+              <li><strong>Storage provider abstraction</strong> over Microsoft Graph, Google Drive API and boto3, so every feature shares one code path wherever a file lives.</li>
+              <li><strong>In-browser editing</strong> of Word, Excel and PowerPoint through ONLYOFFICE Docs, saved back to the source with ETag-based conflict detection.</li>
+              <li><strong>Access and security</strong> with role-based access, JWT sessions with rotating refresh tokens, and encrypted storage credentials.</li>
+            </ul>
+            <div class="stack">
+              <h4 class="label">Stack</h4>
+              <ul class="tags">
+                <li class="tag">Python</li><li class="tag">FastAPI</li><li class="tag">SQLAlchemy</li><li class="tag">PostgreSQL</li><li class="tag">Microsoft Graph</li><li class="tag">Google Drive API</li><li class="tag">boto3</li><li class="tag">ONLYOFFICE</li><li class="tag">WebSockets</li><li class="tag">Docker</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="experience">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Experience</h2>
+        <p>Backend work since 2024, from camera and AI services to the automation and document platforms I run today.</p>
+      </div>
+
+      <ol class="timeline">
+        <li class="row">
+          <p class="when">Mar 2025 – Present</p>
+          <div class="what">
+            <h3>Python Developer <span class="at">· ASTR Ltd</span></h3>
+          </div>
+        </li>
+        <li class="row">
+          <p class="when">Oct 2024 – Mar 2025</p>
+          <div class="what">
+            <h3>Backend Developer Intern <span class="at">· Oryza Systems</span></h3>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band" id="education">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Education</h2>
+      </div>
+
+      <div class="timeline">
+        <div class="row">
+          <p class="when">VNU-HCM</p>
+          <div class="what">
+            <h3>University of Information Technology</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="projects">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Projects</h2>
+        <p>Backends built outside the day job: hospitality, public archives, retail operations and event ticketing.</p>
+      </div>
+
+      <div class="projects">
+        <article class="project">
+          <div class="project-top">
+            <h3>HHMS – Hotel Agency</h3>
+            <a class="ext" href="https://one.hitohikari.net/" target="_blank" rel="noopener">Website ↗</a>
+          </div>
+          <p class="label">Backend · NestJS</p>
+          <p class="desc">Hotel management backend for housekeeping task delegation, automated payroll calculation, and
+            staff attendance verified through facial recognition APIs.</p>
+          <ul class="tags"><li class="tag">NestJS</li></ul>
+        </article>
+
+        <article class="project">
+          <div class="project-top">
+            <h3>Hang Duong Cemetery</h3>
+            <a class="ext" href="https://nghiatranghangduong.tphcm.gov.vn" target="_blank" rel="noopener">Website ↗</a>
+          </div>
+          <p class="label">Backend · NestJS</p>
+          <p class="desc">Public archive and mapping backend: large-scale historical records, a digital grave map
+            database, and geospatial routing APIs that guide visitors.</p>
+          <ul class="tags"><li class="tag">NestJS</li></ul>
+        </article>
+
+        <article class="project">
+          <div class="project-top">
+            <h3>Business Management System</h3>
+            <a class="ext" href="https://github.com/qrbusiness/qrapp-backend" target="_blank" rel="noopener">GitHub ↗</a>
+          </div>
+          <p class="label">Backend · FastAPI</p>
+          <p class="desc">Administration core with granular role-based access (down to cashier limits), a real-time
+            order pipeline over WebSockets, and aggregation APIs for multi-branch inventory and financial reports.</p>
+          <ul class="tags"><li class="tag">Python</li><li class="tag">FastAPI</li><li class="tag">WebSockets</li><li class="tag">PostgreSQL</li><li class="tag">Docker</li></ul>
+        </article>
+
+        <article class="project">
+          <div class="project-top">
+            <h3>EventHub</h3>
+            <a class="ext" href="https://github.com/nhathuyd4hp/EventHub" target="_blank" rel="noopener">GitHub ↗</a>
+          </div>
+          <p class="label">Backend · Node.js &amp; Python microservices</p>
+          <p class="desc">Microservices platform for event organization and high-concurrency flash-sale ticketing, with
+            Kafka-driven notifications and VNPay payment callbacks.</p>
+          <ul class="tags"><li class="tag">ExpressJS</li><li class="tag">FastAPI</li><li class="tag">Kafka</li><li class="tag">Docker</li><li class="tag">Tyk Gateway</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="toolkit">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Toolkit</h2>
+        <p>What I reach for when building and running backend services.</p>
+      </div>
+
+      <div class="toolkit">
+        <div class="kit"><h3 class="label">Languages</h3><p>Python, Dart, JavaScript / TypeScript</p></div>
+        <div class="kit"><h3 class="label">Frameworks</h3><p>FastAPI, NestJS, Flutter</p></div>
+        <div class="kit"><h3 class="label">Databases</h3><p>PostgreSQL, MongoDB, MySQL, Redis</p></div>
+        <div class="kit"><h3 class="label">Platform &amp; tools</h3><p>Docker, Docker Swarm, Cloudflare, Linux, Azure DevOps</p></div>
+      </div>
+
+      <div class="concepts">
+        <h3 class="label">Concepts</h3>
+        <ul class="tags">
+          <li class="tag">OOP</li><li class="tag">RESTful APIs</li><li class="tag">Event-driven architecture</li><li class="tag">Distributed systems</li><li class="tag">Browser automation</li><li class="tag">CI/CD</li><li class="tag">WebSockets &amp; Pub/Sub</li><li class="tag">GraphQL</li><li class="tag">Task queues</li><li class="tag">Vibe coding</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band contact" id="contact">
+    <div class="wrap">
+      <h2>Get in touch</h2>
+      <p class="intro">Reach me by email or phone, or see more of my code on GitHub.</p>
+      <div class="contact-rows">
+        <div class="contact-row">
+          <span class="label">Email</span>
+          <a class="value" id="contact-email" href="mailto:work.nhathuyd4hp@gmail.com">work.nhathuyd4hp@gmail.com</a>
+          <button class="btn copy" type="button" data-copy="work.nhathuyd4hp@gmail.com" aria-controls="contact-email">Copy</button>
+        </div>
+        <div class="contact-row">
+          <span class="label">Phone</span>
+          <a class="value" id="contact-phone" href="tel:+84867617246">(+84) 86-761-7246</a>
+          <button class="btn copy" type="button" data-copy="+84 86 761 7246" aria-controls="contact-phone">Copy</button>
+        </div>
+        <div class="contact-row">
+          <span class="label">GitHub</span>
+          <a class="value" href="https://github.com/nhathuyd4hp" target="_blank" rel="noopener">github.com/nhathuyd4hp ↗</a>
+        </div>
+        <div class="contact-row">
+          <span class="label">CV</span>
+          <a class="value" href="https://nhathuyd4hp.github.io/" target="_blank" rel="noopener">nhathuyd4hp.github.io ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap"><p>Van Ngoc Nhat Huy · Backend Developer</p></div>
+</footer>
+
+<script>
+  (function () {
+    document.querySelectorAll('[data-copy]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var text = button.getAttribute('data-copy');
+        function show(message) {
+          button.textContent = message;
+          setTimeout(function () { button.textContent = 'Copy'; }, 1600);
+        }
+        function selectInstead() {
+          var target = document.getElementById(button.getAttribute('aria-controls'));
+          if (target && window.getSelection) {
+            var range = document.createRange();
+            range.selectNodeContents(target);
+            var selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+          }
+          show('Selected');
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () { show('Copied'); }, selectInstead);
+        } else {
+          selectInstead();
+        }
+      });
+    });
+  })();
+</script>
+</body>
+</html>
