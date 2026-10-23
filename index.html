@@ -24,7 +24,8 @@
             padding-bottom: env(safe-area-inset-bottom, 0px);
         }
 
-        @media (prefers-color-scheme: dark) {
+        /* screen only: dark vars would otherwise beat the print overrides and print light text on white */
+        @media screen and (prefers-color-scheme: dark) {
             :root:not([data-theme="light"]) {
                 --bg: #14181f;
                 --paper: #1e2430;
@@ -36,14 +37,16 @@
             }
         }
 
-        :root[data-theme="dark"] {
-            --bg: #14181f;
-            --paper: #1e2430;
-            --ink: #e4e7ec;
-            --navy: #b9c6dc;
-            --muted: #9aa3b2;
-            --rule: #3a4252;
-            color-scheme: dark;
+        @media screen {
+            :root[data-theme="dark"] {
+                --bg: #14181f;
+                --paper: #1e2430;
+                --ink: #e4e7ec;
+                --navy: #b9c6dc;
+                --muted: #9aa3b2;
+                --rule: #3a4252;
+                color-scheme: dark;
+            }
         }
 
         html {
@@ -202,7 +205,36 @@
             font-style: italic;
         }
 
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            max-width: 210mm;
+            margin: 16px auto 0;
+            padding: 0 16px;
+        }
+
+        .actions a,
+        .actions button {
+            font: inherit;
+            color: var(--navy);
+            background: var(--paper);
+            border: 1px solid var(--rule);
+            padding: 4px 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .actions button:focus-visible {
+            outline: 2px solid var(--navy);
+            outline-offset: 2px;
+        }
+
         @media (max-width: 640px) {
+            .actions {
+                margin-bottom: 16px;
+            }
+
             .page {
                 margin: 0;
                 padding: 22px 18px;
@@ -233,7 +265,7 @@
 
         @page {
             size: A4;
-            margin: 12mm 14mm;
+            margin: 8mm 12mm;
         }
 
         @media print {
@@ -246,9 +278,62 @@
                 padding: 0;
             }
 
+            .actions {
+                display: none;
+            }
+
+            /* sized to fit the whole CV on one A4 page */
             body {
                 background: #fff;
-                font-size: 10.6pt;
+                font-size: 9.6pt;
+                line-height: 1.3;
+            }
+
+            ul {
+                padding-left: 26px;
+            }
+
+            ul ul {
+                padding-left: 18px;
+            }
+
+            header {
+                padding-bottom: 8px;
+                margin-bottom: 10px;
+            }
+
+            h1 {
+                font-size: 28pt;
+            }
+
+            .role {
+                margin: 2px 0 6px;
+                font-size: 14pt;
+            }
+
+            h2 {
+                margin-bottom: 4px;
+                font-size: 14pt;
+            }
+
+            section {
+                margin-bottom: 10px;
+            }
+
+            .entry {
+                margin-bottom: 8px;
+            }
+
+            .entry-head {
+                font-size: 12pt;
+            }
+
+            .skills p {
+                margin-bottom: 1px;
+            }
+
+            li {
+                margin: 1px 0;
             }
 
             .page {
@@ -271,6 +356,10 @@
 </head>
 
 <body>
+    <nav class="actions" aria-label="CV actions">
+        <button type="button" onclick="print()">Export PDF</button>
+        <a href="cv.pdf" download="Van-Ngoc-Nhat-Huy-CV.pdf">Download CV</a>
+    </nav>
     <main class="page">
 
         <header>
@@ -297,8 +386,9 @@
                 <p><b>Frameworks:</b> FastAPI, NestJS, Flutter</p>
                 <p><b>Databases:</b> PostgreSQL, MongoDB, MySQL, Redis</p>
                 <p><b>Platform &amp; Tools:</b> Docker, Docker Swarm, Cloudflare, Linux, Azure DevOps</p>
-                <p><b>Concepts:</b> OOP, RESTful APIs, Event-Driven Architecture, Distributed Systems, Browser
-                    Automation, CI/CD, WebSockets, Pub/Sub, GraphQL, Task Queues, Vibe Coding</p>
+                <p><b>Concepts:</b> Web APIs, Event-Driven Architecture, Distributed Task Queues, Real-time
+                    Messaging (WebSockets, Pub/Sub), Auth (JWT, RBAC), Browser Automation, CI/CD, AI-assisted
+                    Development</p>
             </section>
         </div>
 

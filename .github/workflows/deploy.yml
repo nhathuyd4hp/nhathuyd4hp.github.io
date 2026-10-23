@@ -26,7 +26,13 @@ jobs:
       
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      
+
+      - name: Build CV PDF
+        run: |
+          google-chrome --headless --no-sandbox --disable-gpu --no-pdf-header-footer \
+            --virtual-time-budget=10000 --print-to-pdf=cv.pdf "file://$PWD/index.html"
+          grep -aqE "/Count 1([^0-9]|$)" cv.pdf || { echo "::error::cv.pdf is longer than one page"; exit 1; }
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
