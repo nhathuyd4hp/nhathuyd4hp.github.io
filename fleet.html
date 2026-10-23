@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FleetOps Architecture</title>
+<meta name="description" content="Architecture of FleetOps, a self-hosted platform that enrolls, monitors and runs approved jobs on Windows and Linux endpoints.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='0.5' y='0.5' width='31' height='31' rx='8' fill='%23000' stroke='%232a3135'/%3E%3Cpolyline points='13 10 7 16 13 22' fill='none' stroke='%23c7f36b' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpolyline points='19 10 25 16 19 22' fill='none' stroke='%23c7f36b' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+<style>
+  /* Same tokens as /portfolio. Lime stays reserved for the flow being shown; each layer gets its own hue. */
+  :root {
+    color-scheme: dark;
+    --text-primary: #f1efe7;
+    --text-secondary: #a7adb0;
+    --text-on-strong: #090b0c;
+    --surface-base: #000000;
+    --surface-muted: #151a1d;
+    --surface-raised: #101416;
+    --surface-strong: #c7f36b;
+    --border-default: #2a3135;
+
+    --font-primary: "Geist", "Geist Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-code: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    --radius: 12px;
+    --dur-fast: 200ms;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  body {
+    margin: 0;
+    background: var(--surface-base);
+    color: var(--text-primary);
+    font: 400 16px/24px var(--font-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { margin: 0; font-weight: 600; text-wrap: balance; }
+  p, ul, ol { margin: 0; }
+  a { color: inherit; }
+  code {
+    padding: 1px 5px;
+    font: 500 .86em/1 var(--font-code);
+    background: var(--surface-muted);
+    border: 1px solid var(--border-default);
+    border-radius: 6px;
+  }
+  :focus-visible { outline: 2px solid var(--surface-strong); outline-offset: 2px; border-radius: 4px; }
+
+  /* Every band is a grid: text sits in the content column, .bleed figures take the full width. */
+  .band {
+    display: grid;
+    grid-template-columns: [full-start] minmax(16px, 1fr) [content-start] minmax(0, 1180px) [content-end] minmax(16px, 1fr) [full-end];
+    row-gap: 24px;
+    padding-block: 64px;
+    border-top: 1px solid var(--border-default);
+  }
+  .band > * { grid-column: content; min-width: 0; }
+  .band > .bleed { grid-column: full; width: calc(100% - 32px); max-width: 1600px; justify-self: center; }
+  @media (min-width: 720px) {
+    .band { grid-template-columns: [full-start] minmax(32px, 1fr) [content-start] minmax(0, 1180px) [content-end] minmax(32px, 1fr) [full-end]; }
+  }
+
+  .top { border-top: 0; padding-block: 20px 0; }
+  .top a { font-size: 14px; font-weight: 500; color: var(--text-secondary); text-decoration: none; }
+  .top a:hover { color: var(--text-primary); }
+
+  .intro { border-top: 0; padding-block: 56px 72px; }
+  .intro h1 { font-size: clamp(48px, 9vw, 104px); line-height: .95; letter-spacing: -0.045em; }
+  .lede { max-width: 62ch; font-size: 18px; line-height: 28px; color: var(--text-secondary); }
+  .lede strong { color: var(--text-primary); font-weight: 500; }
+  .status { max-width: 62ch; font-size: 14px; color: var(--text-secondary); padding-left: 12px; border-left: 2px solid var(--border-default); }
+
+  h2 { font-size: clamp(26px, 3.4vw, 32px); line-height: 1.15; letter-spacing: -0.025em; }
+  .band-sum { max-width: 64ch; color: var(--text-secondary); }
+
+  /* Diagrams */
+  .diagram {
+    margin: 0;
+    padding: 16px;
+    background-color: var(--surface-muted);
+    background-image: radial-gradient(var(--border-default) 1px, transparent 1.2px);
+    background-size: 16px 16px;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius);
+  }
+  .diagram-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .diagram-scroll svg { display: block; width: 100%; height: auto; }
+  #overview svg { min-width: 960px; }
+  #map { min-width: 1300px; }
+  .diagram figcaption {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border-default);
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--text-secondary);
+    max-width: 90ch;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 14px;
+    font: 500 14px/1 var(--font-primary);
+    color: var(--text-primary);
+    background: var(--surface-muted);
+    border: 1px solid var(--border-default);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color var(--dur-fast), background var(--dur-fast);
+  }
+  .btn:hover { border-color: var(--text-secondary); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+  /* Mermaid */
+  .code { position: relative; }
+  .code pre {
+    margin: 0;
+    padding: 20px;
+    overflow-x: auto;
+    font: 400 13px/20px var(--font-code);
+    color: var(--text-primary);
+    background: var(--surface-raised);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius);
+  }
+  .code .btn { position: absolute; top: 12px; right: 12px; }
+
+  /* Decisions */
+  .adr { list-style: none; padding: 0; display: grid; gap: 1px; background: var(--border-default); border: 1px solid var(--border-default); border-radius: var(--radius); overflow: hidden; }
+  .adr li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); gap: 8px 32px; padding: 20px 24px; background: var(--surface-raised); }
+  @media (max-width: 860px) { .adr li { grid-template-columns: minmax(0, 1fr); } }
+  .adr h3 { font-size: 16px; line-height: 24px; }
+  .adr p { font-size: 15px; color: var(--text-secondary); }
+  .adr b { color: var(--text-primary); font-weight: 500; }
+  .growth { max-width: 72ch; color: var(--text-secondary); }
+  .growth + .growth { margin-top: -8px; }
+
+  /* Interactive diagram styles (same block in /fleet.html and /portfolio/index.html). The page supplies
+     the base tokens: --text-*, --surface-*, --border-default, --font-*, --radius, --dur-fast. */
+  :root {
+    --surface-chip: #1b2125;
+    --fe: #7fb2e5;
+    --cp: #a99cf0;
+    --data: #e6b450;
+    --agent: #5fd0b0;
+    --obs: #e08ad0;
+    --infra: #a7adb0;
+    --trust: #f07a6a;
+  }
+
+  .d-svg text { font-family: var(--font-primary); }
+  .d-zone rect { fill: none; stroke: var(--trust); stroke-opacity: .75; stroke-dasharray: 6 5; }
+  .d-zone text { fill: var(--trust); font-size: 12.5px; font-weight: 500; }
+  .d-node .d-box { fill: var(--surface-raised); stroke: var(--border-default); stroke-width: 1; }
+  .d-node.k-chip .d-box, .d-node.k-shell .d-box { fill: var(--surface-chip); stroke: transparent; }
+  .d-node.k-shell .d-box { fill: none; stroke: var(--border-default); stroke-dasharray: 4 4; }
+  .d-node.k-shell text { opacity: .7; }
+  .d-bar { fill: var(--c); }
+  .l-fe { --c: var(--fe); }
+  .l-cp { --c: var(--cp); }
+  .l-data { --c: var(--data); }
+  .l-agent { --c: var(--agent); }
+  .l-obs { --c: var(--obs); }
+  .l-infra { --c: var(--infra); }
+  .d-t { fill: var(--text-primary); font-size: 13.5px; font-weight: 600; }
+  .d-t.big { font-size: 14.5px; }
+  .d-s { fill: var(--text-secondary); font-size: 12.5px; }
+  .d-dev { fill: var(--surface-chip); }
+  .d-dot { fill: var(--agent); }
+  .d-pill rect { fill: none; stroke: var(--data); stroke-opacity: .6; }
+  .d-pill.none rect { stroke: var(--border-default); stroke-dasharray: 3 3; stroke-opacity: 1; }
+  .d-pill text { fill: var(--text-secondary); font-size: 11px; }
+  .d-rail { fill: none; stroke: var(--agent); stroke-opacity: .5; stroke-dasharray: 2 4; }
+
+  .d-edge polyline { fill: none; stroke: var(--text-secondary); stroke-width: 1.5; }
+  .d-edge.async polyline { stroke-dasharray: 6 5; }
+  .d-edge text {
+    fill: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 500;
+    paint-order: stroke;
+    stroke: var(--surface-muted);
+    stroke-width: 4px;
+    stroke-linejoin: round;
+  }
+  .d-mh { fill: var(--text-secondary); }
+  .d-mh.on { fill: var(--surface-strong); }
+
+  /* Interaction */
+  .d-svg.live .d-node { cursor: pointer; transition: opacity var(--dur-fast); }
+  .d-svg.live .d-edge { transition: opacity var(--dur-fast); }
+  .d-svg.live .d-node:hover .d-box { stroke: var(--text-secondary); }
+  .d-svg .d-node:focus { outline: none; }
+  .d-svg .d-node:focus-visible .d-box { stroke: var(--surface-strong); stroke-width: 2; }
+  .d-svg .d-node.sel .d-box { stroke: var(--text-primary); stroke-width: 1.5; }
+  .d-svg .d-node.on .d-box { stroke: var(--surface-strong); stroke-width: 1.5; }
+  .d-svg.focus .d-node:not(.on):not(.sel), .d-svg.focus .d-edge:not(.on) { opacity: .2; }
+  .d-svg .d-edge.on polyline { stroke: var(--surface-strong); }
+  .d-svg .d-edge.on text { fill: var(--surface-strong); }
+  .d-svg .d-edge.on.async polyline { animation: d-dash 1s linear infinite; }
+  @keyframes d-dash { to { stroke-dashoffset: -11; } }
+  .d-badge { cursor: pointer; }
+  .d-badge circle { fill: var(--surface-base); stroke: var(--surface-strong); stroke-width: 1.5; }
+  .d-badge text { fill: var(--surface-strong); font-size: 11.5px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+  .d-badge.cur circle { fill: var(--surface-strong); }
+  .d-badge.cur text { fill: var(--text-on-strong); }
+  @media (prefers-reduced-motion: reduce) {
+    .d-svg .d-edge.on.async polyline { animation: none; }
+    .d-svg.live .d-node, .d-svg.live .d-edge { transition: none; }
+  }
+
+  /* Legend */
+  .d-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 12px; font-size: 13px; color: var(--text-secondary); }
+  .d-lg { display: inline-flex; align-items: center; gap: 8px; }
+  .d-lg i { display: inline-block; flex: none; }
+  .d-lg .ln { width: 22px; height: 0; border-top: 2px solid var(--text-secondary); }
+  .d-lg .ln.async { border-top-style: dashed; }
+  .d-lg .ln.on { border-top-color: var(--surface-strong); }
+  .d-lg .zn { width: 18px; height: 12px; border: 1.5px dashed var(--trust); border-radius: 3px; }
+  .d-lg .sw { width: 4px; height: 14px; border-radius: 2px; background: var(--c); }
+  .d-lg .bx { width: 18px; height: 12px; border: 1px solid var(--text-secondary); border-radius: 3px; }
+  .d-lg .ch { width: 18px; height: 12px; background: var(--surface-chip); border-radius: 3px; box-shadow: inset 0 0 0 1px #333b40; }
+  .d-lg .pl { width: 22px; height: 10px; border: 1px solid var(--data); border-radius: 5px; }
+
+  /* Toolbar and panel */
+  .d-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .d-toolbar .btn .n { font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+  .d-toolbar .btn[aria-pressed="true"] { background: var(--surface-strong); border-color: var(--surface-strong); color: var(--text-on-strong); }
+  .d-toolbar .btn[aria-pressed="true"] .n { color: inherit; }
+
+  .d-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 16px; margin-top: 16px; }
+  .d-panel[hidden], .d-card[hidden] { display: none; }
+  .d-card { position: relative; min-width: 0; padding: 24px; background: var(--surface-raised); border: 1px solid var(--border-default); border-radius: var(--radius); }
+  .d-card h3 { margin: 0; font-size: 19px; line-height: 28px; font-weight: 600; letter-spacing: -0.01em; }
+  .d-details h3 { padding-right: 80px; }
+  .d-close { position: absolute; top: 16px; right: 16px; min-height: 32px !important; padding: 0 12px !important; font-size: 13px !important; }
+  .d-muted { margin: 4px 0 0; color: var(--text-secondary); font-size: 15px; }
+  .d-layer { display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 13px; color: var(--text-secondary); }
+  .d-layer::before { content: ""; width: 4px; height: 14px; border-radius: 2px; background: var(--c); }
+  .d-what { margin: 12px 0 0; }
+  .d-notes { margin: 12px 0 0; padding-left: 18px; color: var(--text-secondary); font-size: 15px; }
+  .d-notes li + li { margin-top: 6px; }
+  .d-inflows { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 16px; font-size: 14px; color: var(--text-secondary); }
+  .d-inflows .btn, .d-stepnav .btn { min-height: 34px; padding: 0 12px; font-size: 13px; }
+
+  .d-steps-list { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 4px; }
+  .d-steps-list button {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    gap: 12px;
+    width: 100%;
+    padding: 10px 12px;
+    text-align: left;
+    font: 400 15px/22px var(--font-primary);
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .d-steps-list button:hover { background: var(--surface-muted); color: var(--text-primary); }
+  .d-steps-list button[aria-current="step"] { color: var(--text-primary); background: var(--surface-muted); border-color: var(--surface-strong); }
+  .d-steps-list .num {
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--surface-strong);
+    border: 1.5px solid var(--surface-strong);
+    border-radius: 50%;
+  }
+  .d-steps-list button[aria-current="step"] .num { background: var(--surface-strong); color: var(--text-on-strong); }
+  .d-stepnav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; font-size: 14px; color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<nav class="band top"><a href="/portfolio/">Van Ngoc Nhat Huy</a></nav>
+
+<header class="band intro">
+  <h1>FleetOps</h1>
+  <p class="lede">A self-hosted platform that <strong>enrolls Windows and Linux machines</strong> across private networks, tracks their health, runs approved jobs on them and rolls out agent updates in stages. A FastAPI control plane keeps the record in PostgreSQL, hands commands to NATS JetStream, and talks to a Go agent that only ever dials out.</p>
+  <p class="status">This is a design document, not a running system. Intervals and limits on this page are defaults, not measurements.</p>
+</header>
+
+<main>
+  <section class="band" id="overview" aria-labelledby="overview-h">
+    <h2 id="overview-h">System at a glance</h2>
+    <p class="band-sum">Admins and agents both reach the control plane through one TLS proxy on port 443. Nothing connects into an endpoint.</p>
+    <figure class="diagram">
+      <div class="diagram-scroll">
+        <svg class="d-svg" viewBox="0 0 1200 440" role="img" aria-label="The admin dashboard and the Go agents on managed endpoints both connect outbound to a reverse proxy on port 443. The proxy forwards HTTP to the FastAPI control plane and NATS over WebSocket to NATS JetStream. The control plane stores state in PostgreSQL, uses Redis for cache and locks, and exchanges commands and events with NATS. Prometheus, Grafana and Loki observe the host.">
+          <defs>
+            <marker id="o-h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-mh" d="M0,0 L10,5 L0,10 z"/></marker>
+          </defs>
+          <g class="d-zone"><rect x="16" y="20" width="214" height="120" rx="14"/><text x="28" y="40">Administrator browser</text></g>
+          <g class="d-zone"><rect x="260" y="20" width="660" height="404" rx="14"/><text x="272" y="40">Control plane host (VPS, Docker Compose)</text></g>
+          <g class="d-zone"><rect x="950" y="20" width="234" height="404" rx="14"/><text x="962" y="40">Managed endpoints</text></g>
+
+          <g class="d-node l-fe"><rect class="d-box" x="32" y="52" width="182" height="70" rx="10"/><rect class="d-bar" x="32" y="60" width="3" height="24" rx="1.5"/><text class="d-t big" x="46" y="76">Admin dashboard</text><text class="d-s" x="46" y="94">React + TypeScript</text></g>
+          <g class="d-node l-infra"><rect class="d-box" x="280" y="52" width="620" height="70" rx="10"/><rect class="d-bar" x="280" y="60" width="3" height="24" rx="1.5"/><text class="d-t big" x="294" y="76">Reverse proxy (Caddy)</text><text class="d-s" x="294" y="94">TLS termination, serves the dashboard, the only published port (:443)</text></g>
+          <g class="d-node l-cp"><rect class="d-box" x="280" y="160" width="520" height="90" rx="10"/><rect class="d-bar" x="280" y="168" width="3" height="24" rx="1.5"/><text class="d-t big" x="294" y="184">Control plane: FastAPI modular monolith</text><text class="d-s" x="294" y="204">api: REST, WebSocket, RBAC, enrollment, inventory, jobs, audit</text><text class="d-s" x="294" y="222">worker: outbox relay, offline sweeper, job reconciler, rollouts</text></g>
+          <g class="d-node l-data"><rect class="d-box" x="280" y="290" width="160" height="60" rx="10"/><rect class="d-bar" x="280" y="298" width="3" height="24" rx="1.5"/><text class="d-t big" x="294" y="314">PostgreSQL</text><text class="d-s" x="294" y="332">source of truth</text></g>
+          <g class="d-node l-data"><rect class="d-box" x="460" y="290" width="160" height="60" rx="10"/><rect class="d-bar" x="460" y="298" width="3" height="24" rx="1.5"/><text class="d-t big" x="474" y="314">Redis</text><text class="d-s" x="474" y="332">cache, locks, last_seen</text></g>
+          <g class="d-node l-data"><rect class="d-box" x="640" y="290" width="260" height="60" rx="10"/><rect class="d-bar" x="640" y="298" width="3" height="24" rx="1.5"/><text class="d-t big" x="654" y="314">NATS JetStream</text><text class="d-s" x="654" y="332">durable commands, events</text></g>
+          <g class="d-node l-obs"><rect class="d-box" x="280" y="376" width="620" height="36" rx="10"/><rect class="d-bar" x="280" y="382" width="3" height="24" rx="1.5"/><text class="d-t" x="294" y="399">Observability: Prometheus, Grafana, Loki via Alloy</text></g>
+          <g class="d-node l-agent"><rect class="d-box" x="968" y="52" width="198" height="64" rx="10"/><rect class="d-bar" x="968" y="60" width="3" height="24" rx="1.5"/><text class="d-t" x="982" y="76">RPA workstations</text><text class="d-s" x="982" y="96">Windows, LAN A, Go agent</text></g>
+          <g class="d-node l-agent"><rect class="d-box" x="968" y="132" width="198" height="64" rx="10"/><rect class="d-bar" x="968" y="140" width="3" height="24" rx="1.5"/><text class="d-t" x="982" y="156">Office workstations</text><text class="d-s" x="982" y="176">Windows, LAN B, Go agent</text></g>
+          <g class="d-node l-agent"><rect class="d-box" x="968" y="212" width="198" height="64" rx="10"/><rect class="d-bar" x="968" y="220" width="3" height="24" rx="1.5"/><text class="d-t" x="982" y="236">Linux servers</text><text class="d-s" x="982" y="256">server LAN, Go agent</text></g>
+          <g class="d-node"><text class="d-s" x="968" y="314">Agents open HTTPS and</text><text class="d-s" x="968" y="332">NATS over WSS to :443.</text><text class="d-s" x="968" y="350">Endpoints listen on no ports.</text></g>
+
+          <g class="d-edge"><polyline points="214,84 280,84" marker-end="url(#o-h)"/><text x="247" y="76" text-anchor="middle">HTTPS, WSS</text></g>
+          <g class="d-edge"><polyline points="540,122 540,160" marker-end="url(#o-h)"/><text x="546" y="146">HTTP</text></g>
+          <g class="d-edge async"><polyline points="870,122 870,290" marker-start="url(#o-h)" marker-end="url(#o-h)"/><text x="862" y="146" text-anchor="end">NATS over WS</text></g>
+          <g class="d-edge"><polyline points="360,250 360,290" marker-end="url(#o-h)"/><text x="366" y="274">SQL</text></g>
+          <g class="d-edge"><polyline points="540,250 540,290" marker-end="url(#o-h)"/><text x="546" y="274">cache, locks</text></g>
+          <g class="d-edge async"><polyline points="720,250 720,290" marker-start="url(#o-h)" marker-end="url(#o-h)"/><text x="726" y="274">commands, events</text></g>
+          <g class="d-edge"><polyline points="450,376 450,250" marker-end="url(#o-h)"/><text x="456" y="368">scrape /metrics, collect logs</text></g>
+          <g class="d-edge"><polyline points="968,84 935,84"/><polyline points="968,164 935,164"/><polyline points="968,244 935,244"/><polyline points="935,244 935,84 900,84" marker-end="url(#o-h)"/><text x="929" y="164" text-anchor="middle" transform="rotate(-90 929 164)">outbound :443</text></g>
+        </svg>
+      </div>
+      <figcaption>The control plane is one FastAPI codebase run as two processes. PostgreSQL holds every record that must survive, NATS JetStream delivers commands to agents, and Redis only holds short-lived state.</figcaption>
+    </figure>
+  </section>
+
+  <section class="band" id="flows" aria-labelledby="flows-h">
+    <h2 id="flows-h">Components and flows</h2>
+    <p class="band-sum">Pick a flow to number its steps on the diagram, then step through it. Click any component to see what it does and how it is secured.</p>
+    <div class="bleed">
+      <div class="d-toolbar" role="toolbar" aria-label="Flows"></div>
+      <figure class="diagram">
+        <div class="diagram-scroll">
+          <svg id="map" viewBox="0 0 1560 880" role="group" aria-labelledby="map-cap"></svg>
+        </div>
+        <figcaption id="map-cap">
+          Detailed components. Solid arrows are request and response calls, dashed arrows are asynchronous messages. Dashed coral outlines are trust boundaries; only the proxy is reachable from outside the host.
+          <div class="d-legend">
+            <span class="d-lg"><i class="ln"></i>Request / response</span>
+            <span class="d-lg"><i class="ln async"></i>Async message</span>
+            <span class="d-lg"><i class="ln on"></i>Selected flow</span>
+            <span class="d-lg"><i class="zn"></i>Trust boundary</span>
+            <span class="d-lg"><i class="bx"></i>Container or process</span>
+            <span class="d-lg"><i class="ch"></i>Module inside a process</span>
+            <span class="d-lg"><i class="pl"></i>Persistent volume</span>
+            <span class="d-lg l-fe"><i class="sw"></i>Management UI</span>
+            <span class="d-lg l-cp"><i class="sw"></i>Control plane</span>
+            <span class="d-lg l-data"><i class="sw"></i>Data and messaging</span>
+            <span class="d-lg l-agent"><i class="sw"></i>Endpoint agent</span>
+            <span class="d-lg l-obs"><i class="sw"></i>Observability</span>
+            <span class="d-lg l-infra"><i class="sw"></i>Edge</span>
+          </div>
+        </figcaption>
+      </figure>
+      <div class="d-panel" hidden>
+        <div class="d-card d-steps"></div>
+        <div class="d-card d-details"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="readme" aria-labelledby="readme-h">
+    <h2 id="readme-h">Mermaid source for the README</h2>
+    <p class="band-sum">GitHub renders this block as a diagram. It keeps the same boundaries and protocols as the drawings above, without the flow numbering.</p>
+    <div class="code">
+      <pre><code id="mmd"></code></pre>
+      <button type="button" class="btn" id="copy">Copy</button>
+    </div>
+  </section>
+
+  <section class="band" id="decisions" aria-labelledby="decisions-h">
+    <h2 id="decisions-h">Decisions and trade-offs</h2>
+    <ul class="adr">
+      <li><h3>A modular monolith, not microservices</h3><p><b>Gain:</b> one image, one deploy, shared transactions (which the outbox needs) and simple local development.</p><p><b>Cost:</b> api and worker share a failure domain, and module boundaries hold only by convention: each module owns its tables.</p></li>
+      <li><h3>PostgreSQL is the record; JetStream delivers, through an outbox</h3><p><b>Gain:</b> no dual write. A job exists in PostgreSQL before any agent can receive it.</p><p><b>Cost:</b> an extra relay loop and an outbox table to prune; dispatch waits for the relay's next pass.</p></li>
+      <li><h3>Agents dial out on :443, NATS over WebSocket</h3><p><b>Gain:</b> works through NAT and strict firewalls, with no inbound ports and no VPN in phase 1.</p><p><b>Cost:</b> the proxy is the single ingress and a single point of failure; WebSocket adds a hop compared with native NATS on :4222.</p></li>
+      <li><h3>A certificate and scoped NATS credentials per device</h3><p><b>Gain:</b> a stolen credential reads only that device's commands and can be revoked on its own.</p><p><b>Cost:</b> running a small internal CA: issuing, renewing and revoking certificates.</p></li>
+      <li><h3>Allowlisted operations instead of a remote shell</h3><p><b>Gain:</b> small blast radius, typed parameters, and audit entries that say what actually happened.</p><p><b>Cost:</b> a new kind of task needs an agent release. The gated shell covers rare exceptions.</p></li>
+      <li><h3>Heartbeats land in Redis; PostgreSQL gets state changes</h3><p><b>Gain:</b> database writes do not grow with heartbeat frequency.</p><p><b>Cost:</b> a Redis restart loses <code>last_seen</code>, so the sweeper waits one full timeout before marking anything offline.</p></li>
+      <li><h3>Signed releases, canary first, then waves</h3><p><b>Gain:</b> a compromised server cannot ship a malicious agent, and a bad release stops at the canary group.</p><p><b>Cost:</b> signing is a manual step off the server; rollback depends on agents keeping the previous binary.</p></li>
+      <li><h3>Docker Compose on one host</h3><p><b>Gain:</b> one command to run it, and one machine to back up and reason about.</p><p><b>Cost:</b> no high availability. Losing the host means downtime until it is restored from backups.</p></li>
+    </ul>
+  </section>
+
+  <section class="band" id="growth" aria-labelledby="growth-h">
+    <h2 id="growth-h">From 10 test machines to 100+ endpoints</h2>
+    <p class="growth">Nothing here has been benchmarked. Each endpoint costs one heartbeat request per interval, one NATS WebSocket connection and one durable consumer, and PostgreSQL is written only on change, so the same layout should carry the first hundred machines.</p>
+    <p class="growth">When measurements say it is needed, the next steps in order are: more api replicas behind the proxy (they are already stateless), a longer heartbeat interval or batched metric snapshots, a three-node NATS cluster, and WireGuard or a relay gateway for sites that block outbound WebSocket.</p>
+  </section>
+</main>
+
+<script type="text/plain" id="mmd-src">```mermaid
+flowchart LR
+  ui["Admin dashboard<br/>React + TypeScript"]
+
+  subgraph endpoints["Managed endpoints (outbound only)"]
+    rpa["Go agent<br/>Windows RPA workstations"]
+    office["Go agent<br/>Windows workstations"]
+    linux["Go agent<br/>Linux servers"]
+  end
+
+  subgraph host["Control plane host (Docker Compose)"]
+    proxy["Reverse proxy<br/>TLS termination, only :443"]
+    subgraph cp["Control plane: one FastAPI codebase"]
+      api["api process<br/>REST, WebSocket, RBAC, enrollment,<br/>inventory, jobs, policy, lifecycle, audit"]
+      worker["worker process<br/>outbox relay, offline sweeper,<br/>job reconciler, rollouts"]
+    end
+    pg[("PostgreSQL<br/>source of truth")]
+    redis[("Redis<br/>cache, locks, last_seen")]
+    nats[["NATS JetStream<br/>commands, events"]]
+    obs["Observability<br/>Prometheus, Grafana, Loki via Alloy"]
+  end
+
+  ui -->|"HTTPS + WSS"| proxy
+  endpoints -->|"HTTPS + mTLS"| proxy
+  endpoints <-.->|"NATS over WSS"| proxy
+  proxy -->|"HTTP"| api
+  proxy <-.->|"NATS WebSocket"| nats
+  api -->|"SQL"| pg
+  worker -->|"SQL"| pg
+  api -->|"cache, rate limits"| redis
+  worker -->|"locks"| redis
+  worker -.->|"commands via outbox"| nats
+  api <-.->|"events"| nats
+  cp -.->|"/metrics, stdout logs"| obs
+```</script>
+
+<script>
+/* Interactive SVG diagrams drawn from data: nodes, edges, trust zones and numbered flows.
+   The same engine is inlined in /fleet.html and /portfolio/index.html; change both together.
+   Call mountDiagram(root, spec); root holds an <svg viewBox>,
+   a .d-toolbar, and a .d-panel containing .d-steps and .d-details. */
+(function () {
+  'use strict';
+  const NS = 'http://www.w3.org/2000/svg';
+  let count = 0;
+
+  function el(tag, attrs, parent, text) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const fmt = s => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>');
+
+  // spec.nodes: { id, k: box|chip|shell|lan, l: layer, x, y, w, h, t, s, ta, list, dev, foot, pill, pillNone, b, what, notes }
+  // spec.edges: { id, p: [[x,y],...], x: extra paths, a: async, both, nohead, lab, lx, ly, la, b: [x, y, dx, dy] }
+  // spec.modes: { name, sum, steps: [{ t, n, e, at }], list: true for a plain checklist without numbering on the diagram }
+  window.mountDiagram = function (root, spec) {
+    const uid = 'dg' + ++count;
+    const svg = root.querySelector('svg');
+    const toolbar = root.querySelector('.d-toolbar');
+    const panel = root.querySelector('.d-panel');
+    const stepsEl = root.querySelector('.d-steps');
+    const detailsEl = root.querySelector('.d-details');
+    const { nodes, edges, modes } = spec;
+    const layers = spec.layers || {};
+
+    const byId = new Map(), gOf = new Map();
+    nodes.forEach(n => { n.w = n.w || 205; n.h = n.h || 40; byId.set(n.id, n); });
+    edges.forEach(e => byId.set(e.id, e));
+
+    // Self-check: every id a step points at must exist in the drawing.
+    for (const m of modes) for (const s of m.steps)
+      for (const id of [...s.n, ...(s.e || []), s.at].filter(Boolean)) console.assert(byId.has(id), 'Unknown diagram id:', id);
+
+    svg.classList.add('d-svg', 'live');
+    const defs = el('defs', {}, svg);
+    for (const on of [false, true]) {
+      const m = el('marker', { id: uid + (on ? '-on' : ''), viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' }, defs);
+      el('path', { class: on ? 'd-mh on' : 'd-mh', d: 'M0,0 L10,5 L0,10 z' }, m);
+    }
+    const gZones = el('g', {}, svg), gNodes = el('g', {}, svg), gEdges = el('g', {}, svg), gBadges = el('g', {}, svg);
+
+    for (const z of spec.zones || []) {
+      const g = el('g', { class: 'd-zone' }, gZones);
+      el('rect', { x: z.x, y: z.y, width: z.w, height: z.h, rx: 14 }, g);
+      el('text', z.rot ? { x: z.lx, y: z.ly, 'text-anchor': 'middle', transform: `rotate(-90 ${z.lx} ${z.ly})` } : { x: z.lx, y: z.ly }, g, z.lab);
+    }
+    for (const pts of spec.deco || []) el('polyline', { class: 'd-rail', points: pts }, gZones);
+
+    for (const n of nodes) {
+      const g = el('g', { class: `d-node k-${n.k} l-${n.l}`, tabindex: 0, role: 'button', 'aria-label': n.t }, gNodes);
+      gOf.set(n.id, g);
+      g.dataset.id = n.id;
+      const small = n.k === 'chip' || n.k === 'shell';
+      el('rect', { class: 'd-box', x: n.x, y: n.y, width: n.w, height: n.h, rx: small ? 8 : 10 }, g);
+      el('rect', { class: 'd-bar', x: n.x, y: n.y + 8, width: 3, height: 24, rx: 1.5 }, g);
+      const end = n.ta === 'end';
+      const tx = end ? n.x + n.w - 12 : n.x + 14;
+      const anchor = end ? 'end' : 'start';
+      let y = n.y + (small ? 17 : 22);
+      el('text', { class: small ? 'd-t' : 'd-t big', x: tx, y, 'text-anchor': anchor }, g, n.t);
+      for (const s of [].concat(n.s || [])) {
+        y += small ? 16 : 17;
+        el('text', { class: 'd-s', x: tx, y, 'text-anchor': anchor }, g, s);
+      }
+      (n.list || []).forEach((p, i) => el('text', { class: 'd-s', x: n.x + 14, y: n.y + 72 + i * 24 }, g, p));
+      (n.dev || []).forEach((d, i) => {
+        const dy = n.y + 70 + i * 36;
+        el('rect', { class: 'd-dev', x: n.x + 12, y: dy, width: n.w - 24, height: 28, rx: 6 }, g);
+        el('text', { class: 'd-s', x: n.x + 22, y: dy + 18 }, g, d);
+        el('circle', { class: 'd-dot', cx: n.x + n.w - 64, cy: dy + 14, r: 3.5 }, g);
+        el('text', { class: 'd-s', x: n.x + n.w - 56, y: dy + 18 }, g, 'agent');
+      });
+      (n.foot || []).forEach((f, i, a) => el('text', { class: 'd-s', x: n.x + 14, y: n.y + n.h - 14 - (a.length - 1 - i) * 17 }, g, f));
+      if (n.pill) {
+        const pg = el('g', { class: n.pillNone ? 'd-pill none' : 'd-pill' }, g);
+        el('rect', { x: n.x + 14, y: n.y + n.h - 26, width: n.pill.length * 6.4 + 16, height: 17, rx: 8.5 }, pg);
+        el('text', { x: n.x + 22, y: n.y + n.h - 14 }, pg, n.pill);
+      }
+    }
+
+    for (const e of edges) {
+      const g = el('g', { class: e.a ? 'd-edge async' : 'd-edge' }, gEdges);
+      gOf.set(e.id, g);
+      [e.p, ...(e.x || [])].forEach((pts, i) => {
+        const line = el('polyline', { points: pts.join(' ') }, g);
+        if (!(i === 0 && e.nohead)) line.dataset.end = '1';
+        if (i === 0 && e.both) line.dataset.start = '1';
+      });
+      el('text', { x: e.lx, y: e.ly, 'text-anchor': e.la || 'middle' }, g, e.lab);
+    }
+
+    toolbar.innerHTML = modes.map((m, i) =>
+      `<button type="button" class="btn" data-mode="${i}" aria-pressed="false">${m.list ? '' : `<span class="n">${i + 1}</span>`}${esc(m.name)}</button>`).join('');
+
+    let mode = -1, step = -1, sel = null;
+
+    function render() {
+      const M = modes[mode];
+      const onN = new Set(), onE = new Set();
+      const lit = s => { s.n.forEach(id => onN.add(id)); (s.e || []).forEach(id => onE.add(id)); };
+      if (M) (step >= 0 ? [M.steps[step]] : M.list ? [] : M.steps).forEach(lit);
+
+      svg.classList.toggle('focus', onN.size + onE.size > 0);
+      for (const n of nodes) {
+        const g = gOf.get(n.id);
+        g.classList.toggle('on', onN.has(n.id));
+        g.classList.toggle('sel', n.id === sel);
+      }
+      for (const e of edges) {
+        const g = gOf.get(e.id), on = onE.has(e.id);
+        g.classList.toggle('on', on);
+        g.querySelectorAll('polyline').forEach(p => {
+          const m = `url(#${uid}${on ? '-on' : ''})`;
+          if (p.dataset.end) p.setAttribute('marker-end', m);
+          if (p.dataset.start) p.setAttribute('marker-start', m);
+        });
+      }
+
+      gBadges.replaceChildren();
+      if (M && !M.list) {
+        const used = {};
+        M.steps.forEach((s, i) => {
+          const at = s.at || (s.e && s.e[0]) || s.n[0];
+          const k = used[at] = (used[at] || 0) + 1;
+          const item = byId.get(at);
+          const [bx, by, dx, dy] = item.p ? item.b : [...(item.b || [item.x + item.w - 13, item.y + 13]), -20, 0];
+          const g = el('g', { class: i === step ? 'd-badge cur' : 'd-badge', transform: `translate(${bx + dx * (k - 1)} ${by + dy * (k - 1)})` }, gBadges);
+          el('circle', { r: 9 }, g);
+          el('text', {}, g, String(i + 1));
+          g.addEventListener('click', () => { step = i; render(); });
+        });
+      }
+
+      toolbar.querySelectorAll('.btn').forEach(b => b.setAttribute('aria-pressed', +b.dataset.mode === mode));
+      renderSteps(M);
+      renderDetails();
+      panel.hidden = stepsEl.hidden && detailsEl.hidden;
+    }
+
+    function renderSteps(M) {
+      stepsEl.hidden = !M;
+      if (!M) return;
+      const last = M.steps.length - 1;
+      stepsEl.innerHTML = `<h3>${M.list ? '' : `${mode + 1}. `}${esc(M.name)}</h3><p class="d-muted">${fmt(M.sum)}</p>
+        <ol class="d-steps-list">${M.steps.map((s, i) => `<li><button type="button" data-step="${i}"${i === step ? ' aria-current="step"' : ''}><span class="num">${i + 1}</span><span>${fmt(s.t)}</span></button></li>`).join('')}</ol>
+        ${M.list ? '' : `<div class="d-stepnav"><button type="button" class="btn" data-nav="-1"${step < 0 ? ' disabled' : ''}>Previous</button><span aria-live="polite">${step < 0 ? `All ${M.steps.length} steps` : `Step ${step + 1} of ${M.steps.length}`}</span><button type="button" class="btn" data-nav="1"${step >= last ? ' disabled' : ''}>Next</button></div>`}`;
+    }
+
+    function renderDetails() {
+      const n = byId.get(sel);
+      detailsEl.hidden = !n;
+      if (!n) return;
+      const inModes = modes.map((m, i) => !m.list && m.steps.some(s => s.n.includes(n.id)) ? i : -1).filter(i => i >= 0);
+      detailsEl.innerHTML = `<button type="button" class="btn d-close" data-close>Close</button>
+        <h3>${esc(n.t)}</h3>${layers[n.l] ? `<div class="d-layer l-${n.l}">${esc(layers[n.l])}</div>` : ''}
+        <p class="d-what">${fmt(n.what || '')}</p>
+        ${n.notes && n.notes.length ? `<ul class="d-notes">${n.notes.map(x => `<li>${fmt(x)}</li>`).join('')}</ul>` : ''}
+        ${inModes.length ? `<div class="d-inflows">Appears in${inModes.map(i => `<button type="button" class="btn" data-goflow="${i}">${i + 1}. ${esc(modes[i].name)}</button>`).join('')}</div>` : ''}`;
+    }
+
+    toolbar.addEventListener('click', ev => {
+      const b = ev.target.closest('[data-mode]');
+      if (!b) return;
+      mode = +b.dataset.mode === mode ? -1 : +b.dataset.mode;
+      step = -1;
+      render();
+    });
+
+    stepsEl.addEventListener('click', ev => {
+      const b = ev.target.closest('button');
+      if (!b) return;
+      let focus;
+      if (b.dataset.step != null) {
+        step = +b.dataset.step === step ? -1 : +b.dataset.step;
+        focus = `[data-step="${b.dataset.step}"]`;
+      } else if (b.dataset.nav) {
+        const last = modes[mode].steps.length - 1;
+        step = Math.max(-1, Math.min(last, step + +b.dataset.nav));
+        focus = `[data-nav="${b.dataset.nav}"]`;
+        // The button just pressed may now be disabled; keep focus on the other one.
+        if ((b.dataset.nav === '1' && step === last) || (b.dataset.nav === '-1' && step < 0)) focus = `[data-nav="${-b.dataset.nav}"]`;
+      }
+      render();
+      if (focus) stepsEl.querySelector(focus)?.focus();
+    });
+
+    detailsEl.addEventListener('click', ev => {
+      const go = ev.target.closest('[data-goflow]');
+      if (go) { mode = +go.dataset.goflow; step = -1; render(); }
+      if (ev.target.closest('[data-close]')) { const g = gOf.get(sel); sel = null; render(); g?.focus(); }
+    });
+
+    const pick = g => { sel = g.dataset.id === sel ? null : g.dataset.id; render(); };
+    svg.addEventListener('click', ev => {
+      const g = ev.target.closest('.d-node');
+      if (g) pick(g);
+    });
+    svg.addEventListener('keydown', ev => {
+      const g = ev.target.closest('.d-node');
+      if (g && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); pick(g); }
+    });
+    document.addEventListener('keydown', ev => {
+      if (ev.key === 'Escape' && (mode >= 0 || sel)) { mode = step = -1; sel = null; render(); }
+    });
+
+    render();
+  };
+})();
+</script>
+<script>
+(() => {
+  const LAYER = { fe: 'Management UI', cp: 'Control plane', data: 'Data and messaging', agent: 'Endpoint agent', obs: 'Observability', infra: 'Edge and deployment' };
+
+  // k: box = container/process/store, chip = module inside a process, shell = disabled capability, lan = endpoint group
+  const NODES = [
+    { id: 'n-dash', k: 'box', l: 'fe', x: 40, y: 72, w: 170, h: 210, t: 'Admin dashboard', s: ['React + TypeScript'],
+      list: ['Device inventory', 'Device groups', 'Live health', 'Remote jobs', 'Agent versions', 'Audit log'],
+      what: 'Single-page app served by the proxy. It calls the control plane over HTTPS and receives live updates over one WebSocket.',
+      notes: ['Holds no secrets; the session cookie is HttpOnly and SameSite=Strict.', 'Before a job runs, it shows the exact devices it targets and whether approval is needed.'] },
+
+    { id: 'n-proxy', k: 'box', l: 'infra', x: 280, y: 66, w: 710, h: 56, t: 'Reverse proxy (Caddy)',
+      s: ['TLS termination, serves the React build, checks agent client certificates, routes /api /ws /nats'],
+      what: 'The only published port (:443). Routes `/api` and `/ws` to the api process and `/nats` to the NATS WebSocket listener.',
+      notes: ['On the agent hostname it requires a client certificate signed by the FleetOps CA and forwards the verified device identity.', 'Strips identity headers that arrive from outside, so they cannot be spoofed.'] },
+
+    { id: 'n-cp', k: 'box', l: 'cp', x: 285, y: 162, w: 690, h: 358, t: 'Control plane (FastAPI)', s: ['one codebase, two processes'], ta: 'end', b: [301, 178],
+      what: 'One FastAPI codebase deployed as two processes from the same image. Modules are packages with their own tables and service functions, not separate services.',
+      notes: ['Splitting a module out later means putting its package behind a NATS subject; the others do not change.', 'Secrets (database password, CA key, NATS signing key) arrive as Docker secrets, never in the image or an env file.'] },
+    { id: 'n-api', k: 'box', l: 'cp', x: 300, y: 210, w: 465, h: 295, t: 'api process',
+      what: 'Uvicorn running FastAPI. It keeps no state in memory, so more replicas can run behind the proxy later.',
+      notes: ['Dashboard fan-out across replicas goes through NATS events, not in-process state.'] },
+    { id: 'n-worker', k: 'box', l: 'cp', x: 780, y: 210, w: 185, h: 295, t: 'worker process', foot: ['Same image as api.', 'Runs the background loops.'],
+      what: 'Runs the periodic loops: outbox relay, offline sweeper, job reconciler and rollout controller.',
+      notes: ['Each loop takes a Redis lock, so a second worker replica cannot run it twice.'] },
+
+    { id: 'm-rest', k: 'chip', l: 'cp', x: 315, y: 246, t: 'REST API', s: 'Pydantic v2 validation',
+      what: 'Versioned routes for the dashboard (`/api/v1`) and for agents (`/agent/v1`). Request and response models are Pydantic v2.',
+      notes: ['Job parameters are validated against the chosen operation\'s schema before anything is stored.', 'Per-user and per-device rate limits are Redis counters.'] },
+    { id: 'm-ws', k: 'chip', l: 'cp', x: 545, y: 246, t: 'WebSocket gateway', s: 'live dashboard events',
+      what: 'Pushes device status and job events to open dashboards. Subscribes to `fleet.evt.>` and filters by what the user\'s role may see.',
+      notes: ['Receive-only for the browser: no commands are accepted over this socket.'] },
+    { id: 'm-auth', k: 'chip', l: 'cp', x: 315, y: 296, t: 'AuthN + RBAC', s: 'sessions, roles, scopes',
+      what: 'Admin login, sessions and roles. Permissions are scoped to device groups: an operator on `rpa-windows` can run `restart_service` there and nowhere else.',
+      notes: ['New users start with read-only inventory access.', 'Agents authenticate with certificates, never with user sessions.'] },
+    { id: 'm-audit', k: 'chip', l: 'cp', x: 545, y: 296, t: 'Audit log', s: 'append-only records',
+      what: 'Records who did what to which devices: logins, token creation, job requests, approvals, results and rollouts.',
+      notes: ['The application\'s database role can INSERT into audit tables but not UPDATE or DELETE.'] },
+    { id: 'm-enroll', k: 'chip', l: 'cp', x: 315, y: 346, t: 'Enrollment', s: 'tokens, device certs',
+      what: 'Creates enrollment tokens and turns a valid token plus a CSR into a device: a certificate, NATS credentials and an inventory row.',
+      notes: ['Tokens are random, stored only as hashes, bound to one group, expire within hours and have a use limit.', 'Certificates are signed by an internal CA whose key is a Docker secret.'] },
+    { id: 'm-inv', k: 'chip', l: 'cp', x: 545, y: 346, t: 'Inventory & groups', s: 'devices, hardware, tags',
+      what: 'Devices, hardware facts, OS, agent version, tags and group membership. Groups are the unit for permissions, jobs and rollouts.' },
+    { id: 'm-hb', k: 'chip', l: 'cp', x: 315, y: 396, t: 'Heartbeat & status', s: 'last_seen, online state',
+      what: 'Accepts heartbeats, keeps `last_seen` and the latest metrics in Redis, and writes PostgreSQL only on state changes and periodic snapshots.',
+      notes: ['The heartbeat reply carries the desired agent version and config revision.'] },
+    { id: 'm-jobs', k: 'chip', l: 'cp', x: 545, y: 396, t: 'Job orchestration', s: 'jobs, job_runs, outbox',
+      what: 'Turns an approved request into a job with one `job_run` per device, writes the outbox rows in the same transaction, and records results.',
+      notes: ['Every job has a timeout, an `expires_at` and a concurrency limit (how many devices run it at once).', 'Commands are signed with a control-plane key, so access to NATS alone cannot forge one.', 'Results are idempotent by `job_run` id.'] },
+    { id: 'm-policy', k: 'chip', l: 'cp', x: 315, y: 446, t: 'Policy & approval', s: 'allowlist, 4-eyes rules',
+      what: 'Decides whether an operation is allowed on a target and whether a second admin must approve it first.',
+      notes: ['Raw shell is not in the catalog. Enabling it needs the `shell:run` permission, approval per job and an opt-in in the device\'s local config.'] },
+    { id: 'm-life', k: 'chip', l: 'cp', x: 545, y: 446, t: 'Agent lifecycle', s: 'releases, rollouts',
+      what: 'Stores signed agent releases, tracks the version on each device and defines rollouts: canary group, wave sizes and health gate.',
+      notes: ['Verifies a release\'s signature on upload. The signing key itself never lives on the server.'] },
+
+    { id: 'w-outbox', k: 'chip', l: 'cp', x: 792, y: 246, w: 160, t: 'Outbox relay', s: 'Postgres → NATS',
+      what: 'Reads unsent outbox rows, publishes them to JetStream with `Nats-Msg-Id` set to the `job_run` id, then marks them sent.',
+      notes: ['If it crashes between publishing and marking, JetStream drops the retried message as a duplicate.'] },
+    { id: 'w-sweeper', k: 'chip', l: 'cp', x: 792, y: 296, w: 160, t: 'Offline sweeper', s: 'missed heartbeats',
+      what: 'Marks devices offline when `last_seen` is older than three heartbeat intervals and records the transition.',
+      notes: ['After a Redis restart it waits one full timeout before marking anyone offline, because every `last_seen` key is gone.'] },
+    { id: 'w-reconcile', k: 'chip', l: 'cp', x: 792, y: 346, w: 160, t: 'Job reconciler', s: 'timeouts, expiry',
+      what: 'Moves `job_run`s past their timeout or `expires_at` to `timed_out` or `expired`, so late deliveries are refused.' },
+    { id: 'w-rollout', k: 'chip', l: 'cp', x: 792, y: 396, w: 160, t: 'Rollout controller', s: 'canary, then waves',
+      what: 'Advances a rollout from canary to waves while the health gate holds; halts and restores the previous desired version when it fails.' },
+
+    { id: 'n-pg', k: 'box', l: 'data', x: 285, y: 560, w: 205, h: 100, t: 'PostgreSQL', s: ['source of truth', 'devices, jobs, audit, outbox'], pill: 'pgdata',
+      what: 'Holds everything that must survive: devices, groups, users, roles, jobs, `job_run`s, policies, releases, audit and outbox.',
+      notes: ['Volume `pgdata`, backed up with scheduled `pg_dump`.', 'Stores token hashes and certificate fingerprints, never device private keys.'] },
+    { id: 'n-redis', k: 'box', l: 'data', x: 510, y: 560, w: 190, h: 100, t: 'Redis', s: ['last_seen, latest metrics', 'rate limits, locks'], pill: 'no volume', pillNone: true,
+      what: 'Short-lived state: `last_seen` and latest metrics per device, rate-limit counters, cache, and locks for the worker loops.',
+      notes: ['Redis never holds the only copy of business state, so it runs without a volume.'] },
+    { id: 'n-nats', k: 'box', l: 'data', x: 720, y: 560, w: 240, h: 100, t: 'NATS JetStream', s: ['fleet.cmd.<device> stream', 'fleet.evt.> events'], pill: 'js-store',
+      what: 'Delivers commands durably and carries events. The `FLEET_CMD` stream keeps `fleet.cmd.<device_id>` until acked or past its max age; core subjects `fleet.evt.>` carry status and job events.',
+      notes: ['Each device\'s credentials may subscribe only to its own command subject.', 'Delivery is at least once; agents skip `job_run` ids they have already run.'] },
+
+    { id: 'n-alloy', k: 'box', l: 'obs', x: 285, y: 720, w: 150, h: 80, t: 'Grafana Alloy', s: ['log collector'],
+      what: 'Reads stdout from every container through the Docker API, adds service labels and pushes to Loki.',
+      notes: ['`device_id` stays a log field, not a Loki label, to keep label cardinality low.'] },
+    { id: 'n-loki', k: 'box', l: 'obs', x: 475, y: 720, w: 140, h: 80, t: 'Loki', s: ['log store'], pill: 'loki-data',
+      what: 'Log store for the control plane, the infrastructure and uploaded agent logs. Internal only.',
+      notes: ['Volume `loki-data` with a retention period.'] },
+    { id: 'n-graf', k: 'box', l: 'obs', x: 655, y: 720, w: 140, h: 80, t: 'Grafana', s: ['dashboards, alerts'], pill: 'grafana-data',
+      what: 'Dashboards and alert rules over Prometheus and Loki: agents offline, job failure rate, JetStream backlog, disk space.',
+      notes: ['Reached through the proxy, behind its own admin login.'] },
+    { id: 'n-prom', k: 'box', l: 'obs', x: 835, y: 720, w: 125, h: 80, t: 'Prometheus', s: ['metrics'], pill: 'prom-data',
+      what: 'Scrapes `/metrics` from api and worker and from exporters for NATS, PostgreSQL, Redis and the host.',
+      notes: ['Endpoints are never scraped. Their metrics arrive in heartbeats, and the API exposes fleet totals.'] },
+
+    { id: 'n-agent', k: 'box', l: 'agent', x: 1115, y: 66, w: 215, h: 634, t: 'Go agent', s: ['Windows Service or systemd unit'], foot: ['Dials out on :443 only.', 'No listening ports.'],
+      what: 'One static binary per OS and architecture, installed as a Windows Service or systemd unit under a dedicated account. Every connection it makes is outbound to :443.',
+      notes: ['Endpoints need no inbound firewall rules.'] },
+    { id: 'a-config', k: 'chip', l: 'agent', x: 1130, y: 122, w: 185, t: 'Local configuration', s: 'server URL, CA pin',
+      what: 'Server URL, pinned CA certificate, heartbeat interval and an optional list that narrows, but never widens, the built-in allowlist.',
+      notes: ['Writable only by the machine\'s administrators.'] },
+    { id: 'a-ident', k: 'chip', l: 'agent', x: 1130, y: 172, w: 185, t: 'Identity & keys', s: 'key pair in OS keystore',
+      what: 'Generates the device key pair, keeps it in the OS keystore (Windows certificate store, root-only file on Linux) and renews the certificate before it expires.',
+      notes: ['The private key never leaves the device.'] },
+    { id: 'a-enroll', k: 'chip', l: 'agent', x: 1130, y: 222, w: 185, t: 'Enrollment client', s: 'token + CSR, once',
+      what: 'Runs once: sends the token and a CSR, and stores the certificate and NATS credentials it gets back.',
+      notes: ['Refuses to enroll if the server certificate does not chain to the pinned CA.'] },
+    { id: 'a-hb', k: 'chip', l: 'agent', x: 1130, y: 272, w: 185, t: 'Heartbeat client', s: 'backoff with jitter',
+      what: 'Sends health on an interval and reads the desired version and config revision from the reply.',
+      notes: ['Reconnects with exponential backoff and full jitter, capped at a few minutes.'] },
+    { id: 'a-metrics', k: 'chip', l: 'agent', x: 1130, y: 322, w: 185, t: 'Metrics collector', s: 'CPU, RAM, disk, uptime',
+      what: 'Gathers CPU, memory, disk, uptime, OS and hardware facts locally for each heartbeat.' },
+    { id: 'a-cmd', k: 'chip', l: 'agent', x: 1130, y: 372, w: 185, t: 'Command receiver', s: 'JetStream pull consumer',
+      what: 'Pull consumer on the device\'s own subject. Checks each command\'s signature and expiry before handing it to the executor.',
+      notes: ['Remembers recently run `job_run` ids so redeliveries are skipped.'] },
+    { id: 'a-exec', k: 'chip', l: 'agent', x: 1130, y: 422, w: 185, t: 'Job executor', s: 'allowlist, timeouts',
+      what: 'Runs only operations built into its allowlist, each with typed parameters, a timeout and its own privilege level.',
+      notes: ['Example operations: `restart_service`, `collect_diagnostics`, `install_package` from an approved source.'] },
+    { id: 'a-upload', k: 'chip', l: 'agent', x: 1130, y: 472, w: 185, t: 'Result & log uploader', s: 'chunked, retried',
+      what: 'Sends exit status, output and logs in chunks over HTTPS, retrying until accepted, then acks the command.' },
+    { id: 'a-update', k: 'chip', l: 'agent', x: 1130, y: 522, w: 185, t: 'Update manager', s: 'verify, swap, roll back',
+      what: 'Downloads the desired version, checks its signature and hash against a public key built into the agent, swaps binaries and restarts through the service manager.',
+      notes: ['Keeps the previous binary and rolls back on its own if the new one fails to start.'] },
+    { id: 'a-shell', k: 'shell', l: 'agent', x: 1130, y: 582, w: 185, t: 'Raw shell', s: 'off, separately gated',
+      what: 'Not available by default. Running arbitrary commands is a separate privileged capability, switched off in the default config.',
+      notes: ['Turning it on needs a local opt-in on the device, the `shell:run` permission and approval for each job.'] },
+
+    { id: 'l-rpa', k: 'lan', l: 'agent', x: 1350, y: 66, w: 178, h: 200, t: 'Office LAN A', s: ['group: rpa-windows', 'Windows 10/11'], dev: ['rpa-ws-01', 'rpa-ws-02', 'rpa-ws-03'],
+      what: 'Windows RPA workstations, grouped as `rpa-windows`.', notes: ['Groups can follow office, role or both.'] },
+    { id: 'l-office', k: 'lan', l: 'agent', x: 1350, y: 286, w: 178, h: 200, t: 'Office LAN B', s: ['group: office-windows', 'Windows 10/11'], dev: ['office-pc-14', 'office-pc-15', 'office-pc-16'],
+      what: 'General Windows workstations, grouped as `office-windows`.' },
+    { id: 'l-linux', k: 'lan', l: 'agent', x: 1350, y: 506, w: 178, h: 194, t: 'Server LAN', s: ['group: linux-servers', 'Ubuntu, Debian'], dev: ['app-srv-01', 'app-srv-02', 'db-srv-01'],
+      what: 'Linux servers, grouped as `linux-servers`.' },
+  ];
+
+  // a: async (dashed), both: arrowheads at both ends, b: badge anchor [x, y, dx, dy] where dx/dy offsets repeats
+  const EDGES = [
+    { id: 'dash-proxy', p: [[210, 88], [280, 88]], lab: 'HTTPS', lx: 245, ly: 79, b: [232, 88, 18, 0] },
+    { id: 'proxy-dash', a: 1, p: [[280, 106], [210, 106]], lab: 'WSS', lx: 245, ly: 124, b: [232, 106, 18, 0] },
+    { id: 'proxy-rest', p: [[417, 122], [417, 246]], lab: 'HTTP', lx: 423, ly: 146, la: 'start', b: [417, 182, 0, 20] },
+    { id: 'proxy-ws', a: 1, p: [[647, 122], [647, 246]], lab: 'WS', lx: 653, ly: 146, la: 'start', b: [647, 182, 0, 20] },
+    { id: 'agent-https', p: [[1115, 88], [990, 88]], lab: 'HTTPS + mTLS', lx: 1052, ly: 78, b: [1100, 88, -18, 0] },
+    { id: 'agent-nats', a: 1, both: 1, p: [[1115, 106], [990, 106]], lab: 'NATS over WSS', lx: 1052, ly: 126, b: [1100, 106, -18, 0] },
+    { id: 'proxy-nats', a: 1, both: 1, p: [[985, 122], [985, 610], [960, 610]], lab: 'NATS over WS', lx: 978, ly: 146, la: 'end', b: [985, 300, 0, 22] },
+    { id: 'cp-pg', p: [[395, 520], [395, 560]], lab: 'SQL', lx: 381, ly: 544, la: 'end', b: [395, 540, 18, 0] },
+    { id: 'cp-redis', p: [[600, 520], [600, 560]], lab: 'cache, locks', lx: 591, ly: 544, la: 'end', b: [600, 540, 18, 0] },
+    { id: 'api-nats', a: 1, both: 1, p: [[745, 505], [745, 560]], lab: 'events', lx: 757, ly: 544, la: 'start', b: [745, 540, 0, 0] },
+    { id: 'worker-nats', a: 1, p: [[875, 505], [875, 560]], lab: 'commands', lx: 887, ly: 544, la: 'start', b: [875, 540, 0, 0] },
+    { id: 'scrape', p: [[897, 720], [897, 690], [395, 690]], nohead: 1,
+      x: [[[395, 690], [395, 660]], [[600, 690], [600, 660]], [[845, 690], [845, 660]], [[710, 690], [710, 520]]],
+      lab: 'scrape /metrics (pull)', lx: 445, ly: 707, la: 'start', b: [560, 690, 0, 0] },
+    { id: 'logs', a: 1, p: [[285, 470], [277, 470], [277, 760], [285, 760]], lab: 'stdout logs', lx: 283, ly: 544, la: 'start', b: [277, 620, 0, 20] },
+    { id: 'alloy-loki', p: [[435, 760], [475, 760]], lab: 'push', lx: 455, ly: 749, b: [455, 760, 0, 0] },
+    { id: 'graf-loki', p: [[655, 760], [615, 760]], lab: 'LogQL', lx: 635, ly: 749, b: [635, 760, 0, 0] },
+    { id: 'graf-prom', p: [[795, 760], [835, 760]], lab: 'PromQL', lx: 815, ly: 749, b: [815, 760, 0, 0] },
+  ];
+
+  const ZONES = [
+    { x: 20, y: 30, w: 210, h: 270, lab: 'Administrator browser', lx: 32, ly: 50 },
+    { x: 250, y: 30, w: 770, h: 830, lab: 'Control plane host: VPS with Docker Compose, only :443 published', lx: 262, ly: 50 },
+    { x: 270, y: 134, w: 740, h: 712, lab: 'Internal service network, not published', lx: 282, ly: 836 },
+    { x: 1040, y: 30, w: 40, h: 690, lab: 'Internet, or WireGuard / relay in phase 2', lx: 1064, ly: 375, rot: true },
+    { x: 1100, y: 30, w: 440, h: 690, lab: 'Managed endpoints on private LANs', lx: 1112, ly: 50 },
+  ];
+
+  // Steps: t = text (`code` allowed), n = nodes lit, e = edges lit, at = where the number sits (defaults to e[0], then n[0])
+  const FLOWS = [
+    { name: 'Enrollment', sum: 'How a new machine gets its own identity without anyone copying secrets around.', steps: [
+      { t: 'An admin creates an enrollment token for a device group. The server stores only its hash, an expiry and a use limit, and audits the request.', n: ['n-dash', 'm-rest', 'm-auth', 'm-enroll', 'm-audit', 'n-pg'], e: ['dash-proxy', 'proxy-rest', 'cp-pg'] },
+      { t: 'The installer puts the token, the server URL and the pinned CA certificate on the endpoint. The agent generates its key pair locally.', n: ['a-config', 'a-ident'] },
+      { t: 'The enrollment client calls `POST /agent/v1/enroll` over HTTPS, checks the server certificate against the pinned CA, and sends the token with a CSR.', n: ['a-enroll', 'n-proxy', 'm-rest'], e: ['agent-https', 'proxy-rest'] },
+      { t: 'The enrollment service checks the token\'s hash, expiry and remaining uses, and consumes it in the same transaction that creates the device.', n: ['m-enroll', 'm-inv', 'm-audit', 'n-pg'], e: ['cp-pg'], at: 'm-enroll' },
+      { t: 'The reply carries a short-lived device certificate and NATS credentials limited to this device\'s subjects. From here on, calls use mTLS.', n: ['m-enroll', 'a-ident'], e: ['agent-https'] },
+      { t: 'A `device.enrolled` event reaches open dashboards over the WebSocket, and the device appears in its group.', n: ['m-ws', 'm-inv', 'n-nats', 'n-dash'], e: ['api-nats', 'proxy-ws', 'proxy-dash'] },
+    ] },
+    { name: 'Heartbeat and metrics', sum: 'How the dashboard knows what is online without writing every heartbeat to PostgreSQL.', steps: [
+      { t: 'Every 30 seconds by default, the agent sends CPU, memory, disk, uptime and its version over HTTPS with its client certificate.', n: ['a-metrics', 'a-hb'], e: ['agent-https'] },
+      { t: 'The proxy checks the certificate against the FleetOps CA and passes the verified device identity to the API.', n: ['n-proxy', 'm-rest'], e: ['proxy-rest'], at: 'n-proxy' },
+      { t: 'The heartbeat service updates `last_seen` and the latest metrics in Redis.', n: ['m-hb', 'n-redis'], e: ['cp-redis'] },
+      { t: 'PostgreSQL is written only when something changes (offline to online, new hardware facts) and for periodic metric snapshots.', n: ['m-hb', 'm-inv', 'n-pg'], e: ['cp-pg'] },
+      { t: 'Status changes are published as events, and the WebSocket gateway pushes them to dashboards that are open.', n: ['m-ws', 'n-nats', 'n-dash'], e: ['api-nats', 'proxy-ws', 'proxy-dash'] },
+      { t: 'The reply tells the agent its desired version and config revision. That is how updates and config changes reach it.', n: ['a-hb', 'm-hb'], e: ['agent-https'], at: 'a-hb' },
+    ] },
+    { name: 'Remote job', sum: 'How an approved operation reaches exactly the machines it should, and runs once on each.', steps: [
+      { t: 'An admin picks an operation from the catalog, such as `restart_service`, and a target group. The parameters are checked against that operation\'s Pydantic schema.', n: ['n-dash', 'm-rest'], e: ['dash-proxy', 'proxy-rest'] },
+      { t: 'RBAC confirms the role may run that operation on that group. Policy decides whether a second admin must approve it first.', n: ['m-auth', 'm-policy'] },
+      { t: 'The job, one `job_run` per device and the outbox rows are written in one transaction, with a timeout, an expiry and a concurrency limit. The request is audited.', n: ['m-jobs', 'm-audit', 'n-pg'], e: ['cp-pg'] },
+      { t: 'The outbox relay publishes each signed command to `fleet.cmd.<device_id>`, with the `job_run` id as message id so a retried publish is dropped as a duplicate.', n: ['w-outbox', 'n-nats'], e: ['worker-nats'] },
+      { t: 'The agent\'s pull consumer receives it over the WebSocket. It checks the signature, the expiry, its allowlist and the parameters, and skips `job_run` ids it has already run.', n: ['a-cmd', 'n-proxy', 'n-nats'], e: ['proxy-nats', 'agent-nats'], at: 'agent-nats' },
+      { t: 'The executor runs the operation within its timeout. Raw shell is not an allowlisted operation.', n: ['a-exec'] },
+      { t: 'Exit status, output and logs are uploaded over HTTPS. Only after the upload is accepted does the agent ack the message.', n: ['a-upload', 'm-rest'], e: ['agent-https', 'proxy-rest', 'agent-nats'] },
+      { t: 'The job service records the result, the audit log gets the outcome, and a job event updates the dashboard.', n: ['m-jobs', 'm-audit', 'n-pg', 'm-ws', 'n-dash'], e: ['cp-pg', 'api-nats', 'proxy-ws', 'proxy-dash'] },
+    ] },
+    { name: 'Offline recovery', sum: 'What happens when an endpoint drops off the network and comes back.', steps: [
+      { t: 'The endpoint loses its network. Heartbeats stop, and `last_seen` in Redis stops moving.', n: ['a-hb', 'n-redis'] },
+      { t: 'The offline sweeper, holding a Redis lock so only one copy runs, marks the device offline after three missed intervals and records it in PostgreSQL.', n: ['w-sweeper', 'n-redis', 'n-pg'], e: ['cp-redis', 'cp-pg'], at: 'w-sweeper' },
+      { t: 'Commands sent meanwhile wait in JetStream. The job reconciler marks `job_run`s past their expiry as expired, so they can no longer run.', n: ['w-reconcile', 'n-nats', 'n-pg'] },
+      { t: 'The agent retries with exponential backoff and full jitter, capped at a few minutes, so a recovering site is not flooded by every agent at once.', n: ['a-hb'] },
+      { t: 'Once the server is reachable, the agent reconnects with its certificate, renewing it if it is close to expiry. An expired certificate means enrolling again.', n: ['a-ident', 'n-proxy'], e: ['agent-https', 'agent-nats'] },
+      { t: 'Its durable consumer resumes and pending commands are redelivered. Before running one, the agent asks the API for that `job_run`\'s state; expired or cancelled ones are acked and dropped.', n: ['a-cmd', 'm-jobs', 'n-nats'], e: ['proxy-nats', 'agent-nats', 'agent-https', 'proxy-rest'] },
+      { t: 'The next heartbeat flips the status back to online, and the dashboard updates.', n: ['m-hb', 'm-ws', 'n-dash'], e: ['api-nats', 'proxy-ws', 'proxy-dash'] },
+    ] },
+    { name: 'Observability', sum: 'How the platform watches itself, and the one path agent logs take to Loki.', steps: [
+      { t: 'Prometheus pulls `/metrics` from api and worker, and from exporters for NATS, PostgreSQL, Redis and the host.', n: ['n-prom', 'n-cp', 'n-pg', 'n-redis', 'n-nats'], e: ['scrape'] },
+      { t: 'Fleet totals such as devices online and jobs by state come from the API. Endpoints are never scraped; their numbers arrive in heartbeats.', n: ['n-api', 'm-hb', 'a-metrics'] },
+      { t: 'Alloy reads every container\'s stdout through the Docker API and pushes it to Loki.', n: ['n-alloy', 'n-loki'], e: ['logs', 'alloy-loki'] },
+      { t: 'Agent logs are uploaded to the API over HTTPS, written as JSON with `device_id` as a field, then shipped by Alloy. Loki is never exposed.', n: ['a-upload', 'm-rest', 'n-alloy', 'n-loki'], e: ['agent-https', 'proxy-rest', 'logs', 'alloy-loki'] },
+      { t: 'Grafana queries both and runs the alert rules: agents offline, job failure rate, JetStream backlog, disk space.', n: ['n-graf', 'n-prom', 'n-loki'], e: ['graf-prom', 'graf-loki'] },
+    ] },
+    { name: 'Agent update', sum: 'How a new agent version reaches the fleet without trusting the server to sign it.', steps: [
+      { t: 'A release is signed off the server, with a key the server never holds. The admin uploads the binary and signature; the lifecycle service verifies them before storing.', n: ['n-dash', 'm-life', 'n-pg'], e: ['dash-proxy', 'proxy-rest', 'cp-pg'] },
+      { t: 'The rollout controller sets the new desired version for the canary group only.', n: ['w-rollout', 'm-life', 'n-pg'] },
+      { t: 'Canary agents see the desired version in their heartbeat reply, download it over HTTPS, check the signature and hash, swap binaries and restart through the service manager.', n: ['a-hb', 'a-update'], e: ['agent-https'] },
+      { t: 'Health gate: canaries must report the new version and keep heartbeating cleanly for a soak period.', n: ['m-hb', 'w-rollout', 'n-redis'], e: ['cp-redis'] },
+      { t: 'If the gate holds, the rollout widens in waves. If not, it stops and points the group back to the previous version. An agent whose new binary fails to start rolls itself back.', n: ['w-rollout', 'a-update'], at: 'a-update' },
+    ] },
+  ];
+
+  const SECURITY = [
+    { t: 'HTTPS everywhere with certificate validation; agents pin the FleetOps CA.', n: ['n-proxy', 'a-config'], e: ['dash-proxy', 'proxy-dash', 'agent-https', 'agent-nats'] },
+    { t: 'Enrollment tokens are random, hashed, bound to one group, short-lived and limited in uses.', n: ['m-enroll', 'n-pg', 'a-enroll'] },
+    { t: 'Each device has its own certificate and NATS credential, and NATS permissions limit it to its own subjects.', n: ['a-ident', 'm-enroll', 'n-nats'], e: ['agent-nats', 'proxy-nats'] },
+    { t: 'RBAC scoped to device groups; new users start read-only.', n: ['m-auth', 'n-dash'] },
+    { t: 'Operations are allowlisted on both sides; parameters are validated by Pydantic on the server and again by the agent.', n: ['m-rest', 'm-policy', 'a-cmd', 'a-exec'] },
+    { t: 'Every job has a timeout, an expiry and a concurrency limit.', n: ['m-jobs', 'w-reconcile', 'a-exec'] },
+    { t: 'An append-only audit log for every privileged action.', n: ['m-audit', 'n-pg'] },
+    { t: 'Agent releases are signed off the server, verified on upload and again on the device, and go to a canary group first.', n: ['m-life', 'w-rollout', 'a-update'] },
+    { t: 'The CA key, NATS signing key and database password are Docker secrets; no device private key is stored on the server.', n: ['n-cp', 'n-pg', 'a-ident'] },
+    { t: 'Raw shell is off by default and gated separately.', n: ['a-shell', 'm-policy'] },
+    { t: 'One published port; the databases, NATS and observability stay on the internal network.', n: ['n-proxy'], e: ['proxy-rest', 'proxy-ws', 'proxy-nats'] },
+  ];
+
+  mountDiagram(document.getElementById('flows'), {
+    layers: LAYER, nodes: NODES, edges: EDGES, zones: ZONES,
+    // Dotted rail: the agent drawn in detail is the one running in every endpoint group.
+    deco: ['1330,383 1340,383', '1350,166 1340,166 1340,603 1350,603', '1340,386 1350,386'],
+    modes: [...FLOWS, { name: 'Security controls', sum: 'Click a control to light up where it is enforced.', list: true, steps: SECURITY }],
+  });
+
+  // Mermaid source, shown and copied from one place
+  const src = document.getElementById('mmd-src').textContent.trim();
+  document.getElementById('mmd').textContent = src;
+  const copy = document.getElementById('copy');
+  copy.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(src);
+      copy.textContent = 'Copied';
+    } catch {
+      copy.textContent = 'Copy failed: select the text instead';
+    }
+    setTimeout(() => { copy.textContent = 'Copy'; }, 2000);
+  });
+})();
+</script>
+</body>
+</html>
