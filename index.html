@@ -3,811 +3,415 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Van Ngoc Nhat Huy</title>
-    <meta name="description" content="Resume of Van Ngoc Nhat Huy — Python & Backend Developer">
-    <!-- SEO -->
-    <meta name="description" content="Resume of Van Ngoc Nhat Huy — Python & Backend Developer" />
-
-    <!-- Open Graph / Link Preview -->
-    <meta property="og:type" content="profile">
-    <meta property="og:title" content="Van Ngoc Nhat Huy — Python & Backend Developer">
-    <meta property="og:description"
-        content="Python & Backend Developer — FastAPI, RPA, Automation, Docker, PostgreSQL, Redis" />
-    <meta property="og:url" content="https://nhathuyd4hp.github.io/">
-    <meta property="og:site_name" content="Van Ngoc Nhat Huy — CV">
-
-    <!-- Preview image -->
-    <meta property="og:image" content="https://nhathuyd4hp.github.io/preview.png" />
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Van Ngoc Nhat Huy — Python & Backend Developer">
-
-    <!-- Twitter / X -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Van Ngoc Nhat Huy — Python & Backend Developer">
-    <meta name="twitter:description"
-        content="Python & Backend Developer — FastAPI, RPA, Automation, Docker, PostgreSQL, Redis" />
-    <meta name="twitter:image" content="https://nhathuyd4hp.github.io/preview.png" />
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230e6e55' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='16 18 22 12 16 6'></polyline><polyline points='8 6 2 12 8 18'></polyline></svg>">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Van Ngoc Nhat Huy – Backend Developer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
-        /* ── Design tokens (Light) ── */
         :root {
-            --c-bg: #f4f5f7;
-            --c-paper: #ffffff;
-            --c-ink: #1a1d23;
-            --c-ink-2: #3d4451;
-            --c-ink-3: #6b7280;
-            --c-accent: #0e6e55;
-            --c-accent-lt: #e6f4f0;
-            --c-rule: #d1d5db;
-            --c-dot: #0e6e55;
-            --c-timeline: #d1d5db;
-            --f-body: 'Source Sans 3', sans-serif;
-            --f-serif: 'Source Serif 4', serif;
-            --shadow: 0 2px 16px rgba(0, 0, 0, .07);
+            --bg: #e9ebee;
+            --paper: #ffffff;
+            --ink: #1d2430;
+            --navy: #2f3b4f;
+            --muted: #5a6474;
+            --rule: #c9ced6;
+            color-scheme: light;
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
         }
 
-        /* ── Design tokens (Dark) ── */
-        body.dark {
-            --c-bg: #0d1117;
-            --c-paper: #161b22;
-            --c-ink: #f0f6fc;
-            --c-ink-2: #c9d1d9;
-            --c-ink-3: #8b949e;
-            --c-accent: #3fb950;
-            --c-accent-lt: rgba(63, 185, 80, 0.1);
-            --c-rule: #30363d;
-            --c-timeline: #30363d;
-            --shadow: 0 4px 24px rgba(0, 0, 0, .5);
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #14181f;
+                --paper: #1e2430;
+                --ink: #e4e7ec;
+                --navy: #b9c6dc;
+                --muted: #9aa3b2;
+                --rule: #3a4252;
+                color-scheme: dark;
+            }
         }
 
-        /* ── Reset ── */
+        :root[data-theme="dark"] {
+            --bg: #14181f;
+            --paper: #1e2430;
+            --ink: #e4e7ec;
+            --navy: #b9c6dc;
+            --muted: #9aa3b2;
+            --rule: #3a4252;
+            color-scheme: dark;
+        }
+
+        html {
+            scroll-padding-top: env(safe-area-inset-top, 0px);
+        }
+
         *,
         *::before,
         *::after {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
         body {
-            background: var(--c-bg);
-            color: var(--c-ink);
-            font-family: var(--f-body);
-            font-size: 13.5px;
-            line-height: 1.65;
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: "EB Garamond", Garamond, "Times New Roman", Georgia, serif;
+            font-size: 15px;
+            line-height: 1.45;
+        }
+
+        .page {
+            max-width: 210mm;
+            margin: 24px auto;
+            padding: 18mm 16mm;
+            background: var(--paper);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 8px 24px rgba(0, 0, 0, .06);
+        }
+
+        /* Header */
+        header {
+            padding-bottom: 14px;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 44px;
+            font-weight: 600;
+            letter-spacing: .06em;
+            line-height: 1.1;
+            color: var(--navy);
+        }
+
+        .role {
+            margin: 4px 0 12px;
+            font-size: 22px;
+            letter-spacing: .08em;
+            color: var(--muted);
+        }
+
+        .contact {
             display: flex;
-            justify-content: center;
-            padding: 48px 20px 64px;
-            min-height: 100vh;
-            transition: background .25s, color .25s;
+            flex-wrap: wrap;
+            gap: 4px 28px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            color: var(--muted);
+        }
+
+        .contact a {
+            color: inherit;
         }
 
         a {
-            color: var(--c-accent);
-            text-decoration: none;
-            transition: opacity .15s;
+            color: var(--navy);
+            text-underline-offset: 2px;
         }
 
-        a:hover {
-            opacity: .75;
+        a:focus-visible {
+            outline: 2px solid var(--navy);
+            outline-offset: 2px;
         }
 
-        /* ── Paper ── */
-        .page {
-            background: var(--c-paper);
-            width: 210mm;
-            min-height: 297mm;
-            padding: 48px 56px 56px;
-            box-shadow: var(--shadow);
-            border-radius: 6px;
-            animation: rise .45s ease-out;
-            transition: background .25s, box-shadow .25s;
-        }
-
-        @keyframes rise {
-            from {
-                opacity: 0;
-                transform: translateY(14px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ── Header ── */
-        header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding-bottom: 22px;
-            border-bottom: 2px solid var(--c-accent);
-            margin-bottom: 24px;
-        }
-
-        .avatar-container {
-            width: 76px;
-            height: 76px;
-            border-radius: 8px;
-            overflow: hidden;
-            flex-shrink: 0;
-            border: 2px solid var(--c-accent);
-            background: var(--c-accent-lt);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .avatar-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .header-info {
-            flex: 1;
-        }
-
-        .name {
-            font-family: var(--f-serif);
-            font-size: 30px;
-            font-weight: 600;
-            letter-spacing: .3px;
-            color: var(--c-ink);
-            margin-bottom: 6px;
-        }
-
-        .contact-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px 18px;
-            font-size: 12.5px;
-            color: var(--c-ink-2);
-        }
-
-        .contact-bar a {
-            color: var(--c-ink-2);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .contact-bar a:hover {
-            color: var(--c-accent);
-            opacity: 1;
-        }
-
-        .contact-bar i {
-            font-size: 11px;
-            color: var(--c-accent);
-            width: 14px;
-            text-align: center;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* ── Section heading ── */
+        /* Sections */
         h2 {
-            font-family: var(--f-body);
-            font-size: 11px;
+            margin: 0 0 8px;
+            font-size: 24px;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            color: var(--c-accent);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 28px;
-            margin-bottom: 14px;
+            color: var(--navy);
+            letter-spacing: .01em;
         }
 
-        h2::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--c-rule);
+        section {
+            margin-bottom: 16px;
         }
 
-        /* ── Improved Classic Technical Skills UI ── */
-        .skills-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            background: var(--c-accent-lt);
-            padding: 12px 16px;
-            border-radius: 6px;
-            border-left: 3px solid var(--c-accent);
-            transition: background .25s;
-        }
-
-        .skill-item-row {
-            display: flex;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .skill-label {
-            font-weight: 700;
-            color: var(--c-ink);
-            width: 130px;
-            flex-shrink: 0;
-        }
-
-        .skill-value {
-            color: var(--c-ink-2);
-            flex: 1;
-        }
-
-        /* ── Entry (experience / project) ── */
-        .entry {
+        .two-col {
             display: grid;
-            grid-template-columns: 1fr auto;
-            column-gap: 12px;
-            row-gap: 2px;
-            margin-bottom: 18px;
-            padding-left: 14px;
-            border-left: 2px solid var(--c-timeline);
-            position: relative;
+            grid-template-columns: 1fr 1.15fr;
+            gap: 28px;
         }
 
-        .entry::before {
-            content: '';
-            position: absolute;
-            left: -5px;
-            top: 7px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--c-paper);
-            border: 2px solid var(--c-dot);
-            transition: background .25s;
+        .skills p {
+            margin: 0 0 4px;
+            letter-spacing: .02em;
         }
 
-        .entry-org {
-            font-size: 14.5px;
+        .skills b {
             font-weight: 700;
-            color: var(--c-ink);
-            grid-column: 1;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .entry-date {
-            font-size: 12px;
-            color: var(--c-ink-3);
-            font-style: italic;
-            grid-column: 2;
-            white-space: nowrap;
-            padding-top: 2px;
+        /* Entries */
+        .entry {
+            margin-bottom: 12px;
         }
 
-        .entry-role {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--c-accent);
-            grid-column: 1 / -1;
-        }
-
+        .entry-head,
         .entry-sub {
-            font-size: 12.5px;
-            font-weight: 600;
-            font-style: italic;
-            color: var(--c-ink-2);
-            grid-column: 1 / -1;
-            margin-top: 2px;
-        }
-
-        /* ── Bullet lists ── */
-        .bullets {
-            list-style: none;
-            grid-column: 1 / -1;
-            margin-top: 4px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .bullets li {
-            position: relative;
-            padding-left: 14px;
-            color: var(--c-ink-2);
-            font-size: 13px;
-        }
-
-        .bullets li::before {
-            content: '–';
-            position: absolute;
-            left: 0;
-            color: var(--c-accent);
-            font-weight: 700;
-        }
-
-        .bullets .sub-bullets {
-            list-style: none;
-            margin-top: 4px;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .bullets .sub-bullets li {
-            font-size: 12.5px;
-            color: var(--c-ink-3);
-            padding-left: 14px;
-        }
-
-        .bullets .sub-bullets li::before {
-            content: '·';
-            font-size: 16px;
-            line-height: 1;
-            top: 1px;
-        }
-
-        /* ── Knowledge Concepts ── */
-        .knowledge-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 6px;
-        }
-
-        /* ── Education ── */
-        .edu-block {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
             gap: 12px;
-            padding: 10px 14px;
-            border-left: 3px solid var(--c-accent);
-            background: var(--c-accent-lt);
-            border-radius: 0 4px 4px 0;
-            transition: background .25s;
+            flex-wrap: wrap;
         }
 
-        .edu-inst {
+        .entry-head {
+            font-size: 18px;
             font-weight: 700;
-            color: var(--c-ink);
-            font-size: 14px;
         }
 
-        /* ── Badge / project link ── */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 2px 8px;
-            border: 1.5px solid var(--c-rule);
-            border-radius: 4px;
-            color: var(--c-ink-3);
-            transition: all .15s;
+        .entry-sub {
+            font-weight: 700;
+            padding-left: 14px;
+        }
+
+        .entry-sub .date,
+        .entry-head .date {
             white-space: nowrap;
         }
 
-        a.badge:hover {
-            background: var(--c-accent);
-            border-color: var(--c-accent);
-            color: #fff;
-            opacity: 1;
+        ul {
+            margin: 4px 0 0;
+            padding-left: 34px;
         }
 
-        /* ── Floating action buttons ── */
-        .fab-group {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            z-index: 100;
+        li {
+            margin: 2px 0;
+            text-align: justify;
+            hyphens: auto;
         }
 
-        .floating-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--c-paper);
-            color: var(--c-ink-2);
-            border: 1px solid var(--c-rule);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
-            transition: all .2s;
+        ul ul {
+            padding-left: 22px;
+            list-style: circle;
         }
 
-        .floating-btn:hover {
-            background: var(--c-accent);
-            color: #fff;
-            border-color: var(--c-accent);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .18);
+        .proj-title {
+            font-weight: 700;
         }
 
-        /* ── Print ── */
-        @media print {
-            body {
-                background: none;
-                padding: 0;
-            }
+        .placeholder {
+            color: var(--muted);
+            font-style: italic;
+        }
 
+        @media (max-width: 640px) {
             .page {
-                width: 100%;
+                margin: 0;
+                padding: 22px 18px;
                 box-shadow: none;
-                padding: 20px 28px;
-                border-radius: 0;
-                animation: none;
             }
 
-            .fab-group {
-                display: none;
+            h1 {
+                font-size: 32px;
             }
 
-            body,
-            .page {
-                background: #fff !important;
-                color: #1a1d23 !important;
+            .role {
+                font-size: 18px;
             }
 
-            h2,
-            .entry-role,
-            a {
-                color: #0e6e55 !important;
+            .two-col {
+                grid-template-columns: 1fr;
+                gap: 4px;
             }
 
-            .skills-list {
-                background: #f9fafb !important;
-                border-left: 3px solid #0e6e55 !important;
+            ul {
+                padding-left: 22px;
             }
 
-            .entry-org,
-            .edu-inst {
-                color: #1a1d23 !important;
-            }
-
-            .bullets li,
-            .skill-value,
-            .entry-sub,
-            .entry-date {
-                color: #3d4451 !important;
+            li {
+                text-align: left;
             }
         }
 
-        /* ── Mobile ── */
-        @media (max-width: 700px) {
-            body {
+        @page {
+            size: A4;
+            margin: 12mm 14mm;
+        }
+
+        @media print {
+            :root {
+                --paper: #fff;
+                --ink: #1d2430;
+                --navy: #2f3b4f;
+                --muted: #5a6474;
+                --rule: #c9ced6;
                 padding: 0;
             }
 
+            body {
+                background: #fff;
+                font-size: 10.6pt;
+            }
+
             .page {
-                width: 100%;
-                padding: 24px 18px;
-                min-height: auto;
-                border-radius: 0;
+                margin: 0;
+                padding: 0;
+                max-width: none;
+                box-shadow: none;
             }
 
-            header {
-                flex-direction: column;
-                align-items: flex-start;
+            .entry,
+            .proj {
+                break-inside: avoid;
             }
 
-            .skill-item-row {
-                flex-direction: column;
-                gap: 2px;
-            }
-
-            .skill-label {
-                width: 100%;
-            }
-
-            .entry {
-                grid-template-columns: 1fr;
-            }
-
-            .entry-date {
-                grid-column: 1;
-            }
-
-            .name {
-                font-size: 24px;
-            }
-
-            .fab-group {
-                top: auto;
-                bottom: 16px;
-                right: 16px;
-                flex-direction: row;
+            a {
+                text-decoration: none;
             }
         }
     </style>
 </head>
 
 <body>
+    <main class="page">
 
-    <!-- ── Floating buttons ── -->
-    <div class="fab-group">
-        <button class="floating-btn" onclick="window.print()" title="Download PDF">
-            <i class="fas fa-download"></i>
-        </button>
-        <button class="floating-btn" id="theme-btn" title="Toggle theme">
-            <i class="fas fa-moon" id="theme-icon"></i>
-        </button>
-    </div>
-
-    <div class="page">
-
-        <!-- ══ HEADER ══ -->
         <header>
-            <div class="avatar-container">
-                <img src="avatar.jpg" alt="Van Ngoc Nhat Huy"
-                    onerror="this.closest('.avatar-container').style.display='none'">
-            </div>
-            <div class="header-info">
-                <div class="name">Van Ngoc Nhat Huy</div>
-                <div class="contact-bar">
-                    <a href="tel:0867617246"><i class="fas fa-phone-alt"></i>(+84) 86-761-7246</a>
-                    <a href="mailto:work.nhathuyd4hp@gmail.com"><i
-                            class="fas fa-envelope"></i>work.nhathuyd4hp@gmail.com</a>
-                    <a href="https://github.com/nhathuyd4hp" target="_blank"><i
-                            class="fab fa-github"></i>github.com/nhathuyd4hp</a>
-                </div>
-            </div>
+            <h1>Van Ngoc Nhat Huy</h1>
+            <p class="role">Backend Developer</p>
+            <ul class="contact">
+                <li>Email: <a href="mailto:work.nhathuyd4hp@gmail.com">work.nhathuyd4hp@gmail.com</a></li>
+                <li>GitHub: <a href="https://github.com/nhathuyd4hp">github.com/nhathuyd4hp</a></li>
+                <li>Phone: (+84) 86-761-7246</li>
+            </ul>
         </header>
 
-        <!-- ══ EDUCATION ══ -->
-        <section>
-            <h2>Education</h2>
-            <div class="edu-block">
-                <div>
-                    <div class="edu-inst">University of Information Technology (VNU-HCM)</div>
+        <div class="two-col">
+            <section>
+                <h2>EDUCATION</h2>
+                <div class="entry-sub" style="padding-left:0">
+                    <span>University of Information Technology (VNU-HCM)</span>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- ══ TECHNICAL SKILLS (Refined Classic Style) ══ -->
-        <section>
-            <h2>Technical Skills</h2>
-            <div class="skills-list">
-                <div class="skill-item-row">
-                    <span class="skill-label">Languages</span>
-                    <span class="skill-value">Python, Dart, JavaScript/TypeScript</span>
-                </div>
-                <div class="skill-item-row">
-                    <span class="skill-label">Framework</span>
-                    <span class="skill-value">FastAPI, NestJS, Flutter</span>
-                </div>
-                <div class="skill-item-row">
-                    <span class="skill-label">Databases</span>
-                    <span class="skill-value">PostgreSQL, MongoDB, MySQL, Redis</span>
-                </div>
-                <div class="skill-item-row">
-                    <span class="skill-label">Platform & Tools</span>
-                    <span class="skill-value">Docker, Docker Swarm, Cloudflare, Linux, Azure DevOps</span>
-                </div>
-            </div>
-        </section>
+            <section class="skills">
+                <h2>TECHNICAL SKILLS</h2>
+                <p><b>Languages:</b> Python, Dart, JavaScript/TypeScript</p>
+                <p><b>Frameworks:</b> FastAPI, NestJS, Flutter</p>
+                <p><b>Databases:</b> PostgreSQL, MongoDB, MySQL, Redis</p>
+                <p><b>Platform &amp; Tools:</b> Docker, Docker Swarm, Cloudflare, Linux, Azure DevOps</p>
+                <p><b>Concepts:</b> OOP, RESTful APIs, Event-Driven Architecture, Distributed Systems, Browser
+                    Automation, CI/CD, WebSockets, Pub/Sub, GraphQL, Task Queues, Vibe Coding</p>
+            </section>
+        </div>
 
-        <!-- ══ KNOWLEDGE CONCEPTS ══ -->
         <section>
-            <h2>Knowledge Concepts</h2>
-            <div class="knowledge-list">
-                <span class="badge">Object-Oriented Programming (OOP)</span>
-                <span class="badge">RESTful APIs</span>
-                <span class="badge">Event-Driven Architecture</span>
-                <span class="badge">Distributed Systems</span>
-                <span class="badge">Browser Automation</span>
-                <span class="badge">CI/CD</span>
-                <span class="badge">WebSockets, Pub/Sub</span>
-                <span class="badge">QraphQL</span>
-                <span class="badge">Task Queues</span>
-                <span class="badge">Vibe Coding</span>
-            </div>
-        </section>
+            <h2>WORK EXPERIENCE</h2>
 
-        <!-- ══ WORK EXPERIENCE ══ -->
-        <section>
-            <h2>Work Experience</h2>
-
-            <!-- ASTR -->
             <div class="entry">
-                <span class="entry-org">ASTR Ltd</span>
-                <span class="entry-date">Mar 2025 – Present</span>
-                <span class="entry-role">Python Developer</span>
-                <ul class="bullets">
-                    <li>
-                        <strong>Internal RPA Platform</strong>
-                        <ul class="sub-bullets">
-                            <li>Designed the distributed orchestration backend using <strong>FastAPI</strong>,
-                                <strong>Celery</strong>, and <strong>Redis</strong> to schedule, dispatch, and monitor
-                                workflows.
+                <div class="entry-head"><span>ASTR Ltd</span></div>
+                <div class="entry-sub">
+                    <span>Python Developer | Python, FastAPI, Celery, Redis, PostgreSQL</span>
+                    <span class="date">03/2025 – Present</span>
+                </div>
+                <ul>
+                    <li><b>Internal RPA Platform</b>:
+                        <ul>
+                            <li>Designed the distributed orchestration backend using <b>FastAPI</b>, <b>Celery</b> and
+                                <b>Redis</b> to schedule, dispatch and monitor workflows</li>
+                            <li>Implemented <b>WebHook</b> endpoints to receive external triggers for workflow execution
                             </li>
-                            <li>Implemented <strong>WebHook</strong> endpoints to receive external triggers for
-                                workflow execution.</li>
-                            <li>Implemented real-time bidirectional communication via <strong>WebSockets</strong> and
-                                <strong>Redis Pub/Sub</strong> for live log streaming, execution events, and interactive
-                                decision prompts between workers and clients.
-                            </li>
-                            <li>Built a scheduling and job persistence system using <strong>APScheduler</strong> backed
-                                by <strong>MySQL</strong>, with <strong>MinIO</strong> object storage for automated
-                                result file management and lifecycle expiration policies.</li>
-                            <li>Developed workflow modules using <strong>Playwright</strong>, <strong>Selenium</strong>,
-                                <strong>Google App Scripts</strong>,... to automate data collection, form submission,
-                                document distribution, and report generation across multiple enterprise platforms.
-                            </li>
+                            <li>Implemented real-time bidirectional communication via <b>WebSockets</b> and <b>Redis
+                                    Pub/Sub</b> for live log streaming, execution events and interactive decision
+                                prompts between workers and clients</li>
+                            <li>Built a scheduling and job persistence system using <b>APScheduler</b> backed by
+                                <b>MySQL</b>, with <b>MinIO</b> object storage for automated result file management and
+                                lifecycle expiration policies</li>
+                            <li>Developed workflow modules using <b>Playwright</b>, <b>Selenium</b> and <b>Google Apps
+                                    Script</b> to automate data collection, form submission, document distribution and
+                                report generation across multiple enterprise platforms</li>
                         </ul>
                     </li>
-                    <li>
-                        <strong>Internal Document Management Platform</strong>
-                        <ul class="sub-bullets">
+                    <li><b>Internal Document Management Platform</b>:
+                        <ul>
                             <li>Built the backend of an internal platform that centralizes company documents across
-                                <strong>SharePoint</strong>, <strong>Google Drive</strong> and <strong>S3 /
-                                    MinIO</strong>
-                                using <strong>FastAPI</strong> and <strong>PostgreSQL</strong>: browsing, search,
-                                uploads
-                                and copy/move between storage sources.
-                            </li>
-                            <li>Designed a storage provider abstraction over <strong>Microsoft Graph</strong>,
-                                <strong>Google Drive API</strong> and <strong>boto3</strong>, so every feature shares
-                                one
-                                code path regardless of where a file lives.
-                            </li>
-                            <li>Integrated <strong>ONLYOFFICE Docs</strong> for in-browser Word/Excel/PowerPoint editing
-                                saved back to the source, with ETag-based conflict detection and live file-change alerts
-                                over <strong>WebSockets</strong>.</li>
-                            <li>Implemented role-based access with <strong>JWT</strong> sessions, rotating refresh
-                                tokens
-                                and encrypted storage credentials.</li>
+                                <b>SharePoint</b>, <b>Google Drive</b> and <b>S3/MinIO</b> using <b>FastAPI</b> and
+                                <b>PostgreSQL</b>: browsing, search, uploads and copy/move between storage sources</li>
+                            <li>Designed a storage provider abstraction over <b>Microsoft Graph</b>, <b>Google Drive
+                                    API</b> and <b>boto3</b>, so every feature shares one code path regardless of where
+                                a file lives</li>
+                            <li>Integrated <b>ONLYOFFICE Docs</b> for in-browser Word/Excel/PowerPoint editing saved
+                                back to the source, with <b>ETag-based</b> conflict detection and live file-change
+                                alerts over <b>WebSockets</b></li>
+                            <li>Implemented role-based access with <b>JWT</b> sessions, rotating refresh tokens and
+                                encrypted storage credentials</li>
                         </ul>
                     </li>
                 </ul>
-
             </div>
 
-            <!-- Oryza -->
             <div class="entry">
-                <span class="entry-org">Oryza Systems</span>
-                <span class="entry-date">Oct 2024 – Mar 2025</span>
-                <span class="entry-role">Backend Developer Intern</span>
-                <span class="entry-sub">Project: Oryza AI Backend</span>
-                <ul class="bullets">
-                    <li>
-                        <strong>Oryza AI Service</strong>
-                        <ul class="sub-bullets">
-                            <li>Developed RESTful APIs for camera data and system configurations using
-                                <strong>FastAPI</strong>.
+                <div class="entry-head"><span>Oryza Systems</span></div>
+                <div class="entry-sub">
+                    <span>Backend Developer Intern | FastAPI, Docker, Grafana</span>
+                    <span class="date">10/2024 – 03/2025</span>
+                </div>
+                <ul>
+                    <li><b>Oryza AI Backend – Oryza AI Service</b>:
+                        <ul>
+                            <li>Developed RESTful APIs for camera data and system configurations using <b>FastAPI</b>
                             </li>
-                            <li>Established centralized observability using <strong>Grafana, Loki, and
-                                    Promtail</strong>.</li>
-                            <li>Containerized applications using <strong>Docker</strong> and managed Staging
-                                deployments.</li>
+                            <li>Established centralized observability using <b>Grafana</b>, <b>Loki</b> and
+                                <b>Promtail</b></li>
+                            <li>Containerized applications using <b>Docker</b> and managed Staging deployments</li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </section>
 
-        <!-- ══ KEY PROJECTS ══ -->
         <section>
-            <h2>Key Projects</h2>
-            <!-- HHMS -->
-            <div class="entry">
-                <span class="entry-org">
-                    HHMS - Hotel Agency
-                    <a href="https://one.hitohikari.net/" target="_blank" class="badge">Website</a>
-                </span>
-                <span class="entry-role">Backend Developer — NestJS</span>
-                <ul class="bullets">
-                    <li><strong>Description:</strong> Architected a hotel management backend system to streamline
-                        housekeeping task delegation, automate dynamic payroll calculations, and enforce secure staff
-                        attendance tracking via facial recognition verification APIs.</li>
-                </ul>
-            </div>
-            <!-- Hang Duong -->
-            <div class="entry">
-                <span class="entry-org">
-                    Hang Duong Cemetery
-                    <a href="https://nghiatranghangduong.tphcm.gov.vn" target="_blank" class="badge">Website</a>
-                </span>
-                <span class="entry-role">Backend Developer — NestJS</span>
-                <ul class="bullets">
-                    <li><strong>Description:</strong> Engineered a public archival and mapping backend handling
-                        large-scale historical records, digital grave mapping database design, and optimized geospatial
-                        routing APIs for visitors.</li>
+            <h2>KEY PROJECTS</h2>
+
+            <div class="entry proj">
+                <div class="entry-sub" style="padding-left:0">
+                    <span>HHMS – Hotel Agency Website | NestJS</span>
+                    <a href="https://one.hitohikari.net/" target="_blank" rel="noopener">one.hitohikari.net</a>
+                </div>
+                <ul>
+                    <li>Architected a hotel management backend to streamline housekeeping task delegation, automate
+                        dynamic payroll calculations and enforce secure staff attendance tracking via facial recognition
+                        verification APIs</li>
                 </ul>
             </div>
 
-            <!-- Business Management -->
-            <div class="entry">
-                <span class="entry-org">
-                    Business Management System
-                    <a href="https://github.com/qrbusiness/qrapp-backend" target="_blank" class="badge">GitHub</a>
-                </span>
-                <span class="entry-role">Backend Developer — FastAPI</span>
-                <ul class="bullets">
-                    <li>Built a secure administration core featuring <strong>granular Role-Based Access Control
-                            (RBAC)</strong> to strictly isolate multi-tier permissions (e.g., Cashier constraints).</li>
-                    <li>Engineered <strong>real-time order pipeline</strong> using WebSockets for instantaneous
-                        multi-terminal broadcasting and sales alerts.</li>
-                    <li>Developed high-performance aggregation APIs handling multi-branch inventory synchronization and
-                        comprehensive financial reporting.</li>
-                    <li><strong>Stack:</strong> Python, FastAPI, WebSockets, PostgreSQL, Docker</li>
+            <div class="entry proj">
+                <div class="entry-sub" style="padding-left:0">
+                    <span>Hang Duong Cemetery Website | NestJS</span>
+                    <a href="https://nghiatranghangduong.tphcm.gov.vn" target="_blank"
+                        rel="noopener">nghiatranghangduong.tphcm.gov.vn</a>
+                </div>
+                <ul>
+                    <li>Engineered a public archival and mapping backend handling large-scale historical records,
+                        digital grave mapping database design and optimized geospatial routing APIs for visitors</li>
                 </ul>
             </div>
 
-            <!-- EventHub -->
-            <div class="entry">
-                <span class="entry-org">
-                    EventHub
-                    <a href="https://github.com/nhathuyd4hp/EventHub" target="_blank" class="badge">GitHub</a>
-                </span>
-                <span class="entry-role">Backend Developer — Node.js & Python / Microservices</span>
-                <ul class="bullets">
-                    <li><strong>Description:</strong> Designed a distributed microservices platform for large-scale
-                        event organization and high-concurrency flash-sale ticket booking.</li>
-                    <li>Decoupled asynchronous notification pipelines using <strong>Apache Kafka</strong> event
-                        streaming and securely integrated third-party <strong>VNPay</strong> gateway callbacks.</li>
-                    <li><strong>Stack:</strong> ExpressJS, FastAPI, Kafka, Docker, Tyk Gateway</li>
+            <div class="entry proj">
+                <div class="entry-sub" style="padding-left:0">
+                    <span>Business Management System | FastAPI</span>
+                    <a href="https://github.com/hhms-org/QRApp-BackEnd" target="_blank" rel="noopener">GitHub</a>
+                </div>
+                <ul>
+                    <li>Built a secure administration core with granular <b>Role-Based Access Control (RBAC)</b> to
+                        isolate multi-tier permissions (e.g. Cashier constraints)</li>
+                    <li>Engineered a real-time order pipeline using <b>WebSockets</b> for instant multi-terminal
+                        broadcasting and sales alerts</li>
+                    <li>Developed high-performance aggregation APIs for multi-branch inventory synchronization and
+                        financial reporting</li>
+                    <li>Stack: Python, FastAPI, WebSockets, PostgreSQL, Docker</li>
                 </ul>
             </div>
-
         </section>
-    </div><!-- /.page -->
 
-    <script>
-        const html = document.documentElement;
-
-        // ── Theme ──
-        const themeBtn = document.getElementById('theme-btn');
-        const themeIcon = document.getElementById('theme-icon');
-
-        function applyTheme(dark) {
-            document.body.classList.toggle('dark', dark);
-            themeIcon.className = dark ? 'fas fa-sun' : 'fas fa-moon';
-        }
-
-        const savedTheme = localStorage.getItem('theme');
-        applyTheme(savedTheme === 'dark');
-
-        themeBtn.addEventListener('click', () => {
-            const isDark = document.body.classList.contains('dark');
-            applyTheme(!isDark);
-            localStorage.setItem('theme', !isDark ? 'dark' : 'light');
-        });
-
-        // ── Fix triệt để lỗi in khi đang ở Dark Mode ──
-        window.addEventListener('beforeprint', () => {
-            if (document.body.classList.contains('dark')) {
-                document.body.classList.remove('dark');
-                window.wasDarkMode = true;
-            }
-        });
-
-        window.addEventListener('afterprint', () => {
-            if (window.wasDarkMode) {
-                document.body.classList.add('dark');
-                window.wasDarkMode = false;
-            }
-        });
-    </script>
+    </main>
 </body>
 
 </html>
